@@ -1,0 +1,33 @@
+/* 顶部栏右侧按钮收纳进设置圆点 */
+#headbar{
+    .orca-headbar-global-tools {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        /* padding-left:1rem; */
+    }
+
+    .orca-headbar-global-tools:not(:hover)>button:not(:last-child) {
+        margin-right: calc(-2 * var(--orca-spacing-sm) + -1 * var(--orca-fontsize-lg));
+        transform-origin: center;
+        opacity: 0;
+        scale: 0.1;
+    }
+
+    .orca-headbar-global-tools>button {
+        transition-delay: .2;
+        transition:
+            margin-right .2s ease-out,
+            opacity .2s ease-out,
+            scale .2s ease-out;
+        transition-delay: .6s;
+    }
+
+    .orca-headbar-global-tools:hover>button {
+        transition-delay: 0s;
+    }
+
+    .orca-headbar-global-tools>button:not(:hover) {
+        opacity: .5;
+    }
+
+}
