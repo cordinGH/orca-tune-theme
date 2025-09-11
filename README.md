@@ -1,5 +1,4 @@
-# orca-tune-theme
-A theme for [Orca-Note](https://github.com/sethyuan/orca-note)
+**A theme for [Orca-Note](https://github.com/sethyuan/orca-note)**
 
 > 1、纯css驱动 
 > 2、自带PingFangSC字体，字重支持范围200-600
