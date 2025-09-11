@@ -1,0 +1,184 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+        --my-bdcolor-code-editor: #444;
+        --my-bgcolor-cm-editor: #333333;
+        --my-color-cm-gutters: var(--orca-color-gray-5);
+        --my-color-cm-active-line-gutter: #fff;
+
+        --my-bgcolor-cm-active-line: rgb(255, 255, 255, 0.08);
+        --my-bdcolor-cm-cursor: #58A6FF;
+
+        --my-color-code-editor-header: #7d8799;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --my-bdcolor-code-editor: #ddd;
+        --my-bgcolor-cm-editor: #f0f0f0;
+        --my-color-cm-gutters: var(--orca-color-gray-3);
+        --my-color-cm-active-line-gutter: #000;
+
+        --my-bgcolor-cm-active-line: rgb(0, 0, 0, 0.08);
+        --my-bdcolor-cm-cursor: #0B69DA;
+
+        --my-color-code-editor-header: #9ca3af;
+    }
+}
+
+/* 【重定义】光标动画 */
+@keyframes new-cm-blink {
+    30% {
+        opacity: 1;
+        transform: scaleY(1.1);
+    }
+
+    60% {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+}
+
+@keyframes new-cm-blink2 {
+    30% {
+        opacity: 1;
+        transform: scaleY(1.1);
+    }
+
+    60% {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+}
+
+
+/* 顺滑光标+显示优化（卡片风） */
+#custom-theme-body {
+
+    /* cm编辑器颜色和圆角 */
+    /* 【重定义】边框和边距 */
+    .orca-code-editor {
+        padding: unset;
+        border: .5px solid var(--my-bdcolor-code-editor);
+    }
+
+    /* 【新增】新风格的cm-editor */
+    .orca-code-editor .cm-editor {
+        border-radius: var(--orca-radius-sm);
+        background-color: var(--my-bgcolor-cm-editor);
+
+        /* 行槽 追加模糊背景色 */
+        & .cm-gutters {
+            background-color: rgba(from var(--my-bgcolor-cm-editor) r g b / .3);
+            backdrop-filter: blur(5px);
+            border-right: unset;
+            color: var(--my-color-cm-gutters);
+        }
+
+        /* 光标所在行的行槽 */
+        & .cm-activeLineGutter {
+            background-color: unset !important;
+            color: var(--my-color-cm-active-line-gutter);
+        }
+
+        /* .cm-editor激活状态下 光标所在行*/
+        &.cm-focused .cm-activeLine {
+            background-color: var(--my-bgcolor-cm-active-line);
+            border-radius: 5px;
+            margin-right: 3px;
+        }
+
+        &:not(.cm-focused) .cm-activeLine {
+            background-color: unset;
+        }
+
+        /* 滚动区域位置和滚动条样式 */
+        &>.cm-scroller {
+            padding-top: 26px;
+            padding-bottom: 3px;
+
+
+            &::-webkit-scrollbar:vertical {
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-thumb:vertical {
+                border: 1px solid var(--my-bgcolor-cm-editor);
+                box-shadow:
+                    0px 30px 0px 0px var(--my-bgcolor-cm-editor) inset;
+            }
+
+            &::-webkit-scrollbar:horizontal {
+                height: 6px;
+            }
+
+            &::-webkit-scrollbar-thumb:horizontal {
+                border: 1px solid var(--my-bgcolor-cm-editor);
+            }
+        }
+    }
+
+
+
+    /* header栏配色和尺寸处理 */
+    .orca-code-editor-header {
+        background-color: rgba(from var(--my-bgcolor-cm-editor) r g b / .3);
+        backdrop-filter: blur(5px);
+        /* 为边框线预留空间 */
+        top: .5px;
+        right: 1px;
+        left: 1px;
+
+        &>.orca-button.orca-select-button {
+            color: var(--my-color-code-editor-header);
+            font-size: 12px;
+        }
+
+        &>.orca-button.orca-code-editor-copy {
+            font-size: 12px;
+            color: var(--my-color-code-editor-header);
+        }
+
+        &>.orca-button.orca-code-editor-delete {
+            font-size: 13px;
+        }
+
+        &>.orca-checkbox.orca-code-editor-wrap {
+            font-size: 12px;
+            color: var(--my-color-code-editor-header);
+
+            &>.orca-checkbox-box {
+                width: 13px;
+                height: 13px;
+                border-width: .5px;
+                background-color: unset;
+
+                &>.ti-check.orca-checkbox-checked {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+
+    /* 【重定义】顺滑光标 */
+    .cm-layer.cm-layer-above.cm-cursorLayer {
+        animation: unset !important;
+    }
+
+    .cm-cursorLayer>.cm-cursor {
+        transform: scaleY(1.1);
+        transition:
+            top 50ms ease-out,
+            left 50ms ease-out;
+    }
+
+    .cm-cursorLayer[style*="cm-blink"]>.cm-cursor {
+        border-left-color: var(--my-bdcolor-cm-cursor);
+        animation: new-cm-blink 1s infinite ease-in-out;
+    }
+
+    .cm-cursorLayer[style*="cm-blink2"]>.cm-cursor {
+        border-left-color: var(--my-bdcolor-cm-cursor);
+        animation: new-cm-blink2 1s infinite ease-in-out;
+    }
+}
