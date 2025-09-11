@@ -1,0 +1,300 @@
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 全局搜索模态窗基本样式 */
+.orca-modal-overlay {
+
+    /* ———————————————————————————————————————————————————————————————————————————— */
+    /* 压缩全局搜索编辑器的留白布局 */
+    .orca-search-modal-result-preview .orca-block-editor {
+        grid-template-columns: minmax(calc(var(--orca-spacing-block) - 2rem), 1fr) [editor-start] minmax(var(--orca-editor-min-width, 0), var(--orca-editor-max-width)) [editor-end post-start] minmax(calc(var(--orca-spacing-block) - 1.5rem), 1fr) [post-end];
+    }
+
+    /* ———————————————————————————————————————————————————————————————————————————— */
+    /* 区分左右栏背景色 */
+    .orca-search-modal-result-preview {
+        border-left: none;
+    }
+
+    .orca-search-modal-result-list {
+        background-color: #80808011;
+    }
+
+    /* ———————————————————————————————————————————————————————————————————————————— */
+    /* 输入框 */
+    .orca-search-modal-input>.orca-input-input {
+        border: none;
+        border-bottom: 1px solid var(--orca-color-border);
+        padding-left: .75rem;
+
+        &>.orca-input-pre {
+            margin-right: .5rem;
+        }
+    }
+
+    /* ———————————————————————————————————————————————————————————————————————————— */
+    /* 滚动条 */
+    .orca-search-modal-result-list::-webkit-scrollbar {
+        width: 5px;
+
+    }
+
+    .orca-search-modal-result-list::-webkit-scrollbar-thumb {
+        background-color: #80808050;
+    }
+
+    /* 搜索结果的面包屑缩小 */
+    .orca-search-modal-result-breadcrumb-segment {
+        font-size: 13px;
+    }
+
+    /* 优化条目边距 */
+    .orca-menu-text.orca-search-modal-text,
+    .orca-search-modal-block-item {
+        padding-left: .75rem;
+        padding-right: .75rem;
+        margin-left: .125rem;
+        margin-right: .125rem;
+
+        /* 淡化命中字体 */
+        & .highlight {
+            background-color: rgb(from var(--orca-color-result-highlight) R G B / .8)
+        }
+    }
+
+    /* 内容显示在上，面包屑在下 */
+    .orca-search-modal-block-item {
+        margin-bottom: 1px;
+        grid-template-areas:
+            "icon label"
+            "none breadcrumb"
+
+    }
+
+    /* 淡化左侧栏图标 */
+    .orca-search-modal-result-icon {
+        margin-right: .75rem;
+        color: var(--orca-color-text-2);
+    }
+
+    /* 关闭窗口阴影，dark下有视觉干扰 */
+    .orca-menu.orca-search-modal {
+        box-shadow: none;
+    }
+
+
+    /* 优化高亮框尺寸 */
+    .orca-block-highlighter {
+        left: -26px !important;
+    }
+}
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 艾特搜索窗基本样式 */
+#main .orca-popup {
+
+    /* 包含块为orca-block-editor-main */
+    /* 固化搜索框尺寸和位置 */
+    &:has(.orca-inline-reference-preview) {
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+    /* 覆盖orca过大的max-width */
+    .orca-inline-reference-with-preview {
+        max-width: 100%;
+    }
+
+    /* 预览区域布局微优化 */
+    .orca-inline-reference-with-preview>.orca-inline-reference-preview {
+        top: 0;
+        bottom: 1px;
+        right: 1px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border: none;
+
+        /* 滚动条 */
+        &::-webkit-scrollbar {
+            width: 11px !important;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: transparent !important;
+            border: 3px solid transparent;
+            box-shadow: 5px 0px var(--orca-color-win-scrollbar) inset;
+        }
+    }
+
+    /* 结果区布局微优化 */
+    .orca-inline-reference-with-preview>.orca-inline-reference-results {
+        /* 阻止滚动条贴边 */
+        width: calc(40% + 3px);
+
+        &::-webkit-scrollbar {
+            width: 5px !important;
+        }
+
+        &>.orca-block-menu-item {
+            margin-right: 3px;
+        }
+    }
+}
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 结果文本最大行数 */
+.orca-modal-overlay .orca-search-modal-result-label,
+#main .orca-popup .orca-menu-text-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+}
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 面包屑透明度 */
+.orca-modal-overlay .orca-search-modal-result-breadcrumb-segment,
+#main .orca-popup .orca-menu-text-subtitle {
+    opacity: .6;
+}
+
+
+
+/* 全局搜索和行内搜索中，显示结果编号 */
+.orca-search-modal-result-list,
+.orca-inline-reference-results {
+    counter-reset: result-id 0;
+}
+
+.orca-search-modal-result-list>.orca-search-modal-block-item,
+.orca-inline-reference-results>.orca-block-menu-item:not(:last-child, :has(.ti-hash, .ti-file)) {
+    /* last-child是“创建新块"；hash和file是标签和别名（页面） */
+    counter-increment: result-id;
+}
+
+/* icon容器 */
+.orca-inline-reference-results>.orca-block-menu-item>.orca-menu-text-icon {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.orca-search-modal-result-list>.orca-search-modal-block-item {
+    &>.orca-search-modal-result-icon {
+        position: relative;
+    }
+
+    &:not(:has(>.orca-search-modal-result-breadcrumb))>.orca-search-modal-result-icon {
+        height: 29px;
+    }
+}
+
+/* 编号 */
+/* ，同时不处理标签和页面的编号 */
+.orca-search-modal-result-list>.orca-search-modal-block-item>.orca-search-modal-result-icon:after,
+.orca-inline-reference-results>.orca-block-menu-item:not(:last-child, :has(.ti-hash, .ti-file))>.orca-menu-text-icon:after {
+    content: counter(result-id);
+    font-size: 9px;
+    line-height: 1;
+    text-align: center;
+    opacity: .2;
+    font-family:var(--orca-fontfamily-ui);
+}
+
+.orca-search-modal-result-list>.orca-search-modal-block-item>.orca-search-modal-result-icon:after {
+    opacity: .25;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 19px;
+}
+
+/* 激活条目时，恢复透明度 */
+.orca-block-menu-item {
+    &:is(:hover, .orca-key-selected)>.orca-menu-text-icon:after {
+        opacity: 1 !important;
+    }
+
+    &>.orca-menu-text-icon:after {
+        transition: opacity .1s ease-out;
+    }
+}
+
+.orca-search-modal-block-item {
+
+    &:is(:hover, .orca-key-selected)>.orca-search-modal-result-icon:after {
+        opacity: 1 !important;
+    }
+
+    &>.orca-search-modal-result-icon:after {
+        transition: opacity .1s ease-out;
+    }
+}
+
+
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 全局搜索显示一下总结果数 */
+.orca-search-modal-result-list {
+    /* 包含块还是得有，用来在滚动时遮挡总数 */
+    position: relative;
+
+    /* anchor-scope:--block-label; */
+    &>div:nth-last-child(1 of .orca-search-modal-title) {
+        anchor-name: --block-label;
+        display: inline-block;
+    }
+
+    /* 存在结果时，则显示总数 */
+    &:has(>.orca-search-modal-block-item):after {
+        content: "(" counter(result-id)")";
+        font-size: var(--orca-fontsize-xs);
+        color: var(--orca-color-text-2);
+        position: absolute;
+        position-anchor: --block-label;
+        top: anchor(top);
+        left: 2.25rem;
+        /* 上下边距1和--block-label同步 */
+        padding: var(--orca-spacing-md) 0 var(--orca-spacing-sm);
+    }
+}
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 艾特搜索窗显示块结果总数 */
+.orca-inline-reference-results:has(.orca-block-menu-item) {
+
+    /* padding-top:1rem; */
+    &:after {
+        content: "" counter(result-id)"";
+        font-size: .625rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+        width: 1.25rem;
+        text-align: center;
+        color: var(--orca-color-text-1);
+        background-color: var(--orca-color-bg-2);
+        border-radius: 999px;
+        box-shadow: var(--orca-shadow-popup);
+        position: absolute;
+        top: .25rem;
+        /* 微调.5px刚好和块标水平对齐 */
+        left:calc(-1.5rem + .5px);
+        pointer-events:none;
+    }
+}
+
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 拉一条分割线在页面&标签 和 块之间，且不是第一个块（指没有匹配到页面&标签） */
+.orca-inline-reference-results>.orca-block-menu-item:nth-child(1 of :not(:has(.ti-hash, .ti-file))):not(:first-child) {
+    position: relative;
+    margin-top: .75rem;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: calc(-.75rem * .5 - 1px);
+        left: .5rem;
+        right: .5rem;
+        border-top: 2px solid;
+        opacity: .2;
+    }
+}
