@@ -1,0 +1,88 @@
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 修复分割线块标不对齐的问题（margin分配错误） */
+.orca-repr-hr-content hr {
+    --hr-height: 2px;
+    height: var(--hr-height);
+    margin: calc(.5 * (var(--orca-block-line-height) - var(--hr-height) - 2 * var(--orca-spacing-md))) 0;
+}
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 修复大块折叠按钮hover时的抖动 */
+.orca-no-editable-container>.orca-no-editable-btn.orca-button {
+    border: 0 !important;
+}
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 修复折叠按钮不对齐的问题(orca忽视了padding */
+.orca-block-folding-handle {
+    top: calc((var(--orca-block-line-height) - var(--orca-spacing-sm) * 2 - var(--orca-fontsize-sm)) * .5)
+}
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 修复Windows自定义图标错位的问题 */
+.orca-block-handle[data-icon]:not(:hover) {
+    width: 1rem;
+    display: inline-flex;
+    justify-content: center;
+}
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 【强迫症】缩进线向上延长一点，使得单个子块时长度上下对齐 */
+.orca-repr-scope-line {
+    top: calc(var(--orca-block-line-height) + .6em);
+}
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 【强迫症】自折叠边距微调，不需要上边距 因为非折叠也没有 */
+.orca-repr-self-fold-container {
+    margin-top: 0;
+}
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 修复，消除list查询中，单块长文条目对条目间距的影响 */
+/* 1、如果后面没有块了，才不需要mb */
+/* 2、没有块的同时，还得没有child，或者 */
+.orca-long-form:last-child>.orca-repr>.orca-repr-main {
+    &:not(:has(+.orca-repr-children)):after {
+        margin-bottom: 0;
+    }
+
+    &:has(+.orca-repr-children:empty):after {
+        margin-bottom: 0;
+    }
+}
+
+
+/* 卡片视图左侧额外 .25rem 使得icon左右留白一致 */
+.orca-query-card>.orca-block {
+    margin-left: calc(var(--orca-spacing-xl) + .25rem);
+}
+
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 链接编辑窗口的输入框需要100% */
+.orca-inline-link-edit-input>input {
+    width: 100%;
+}
+
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 优化模态窗中的边距，顺便解决模态窗中的艾特弹出窗编辑器padding被覆盖的问题 */
+.orca-inline-reference-preview>.orca-block-editor {
+    padding: var(--orca-spacing-md) 1.5rem var(--orca-spacing-md) 1.75rem;
+}
+
+
+
+/* 清除艾特弹出窗的editor-main的pb，否则会有本不该出现的垂直滚动条 */
+#main .orca-popup .orca-inline-reference-preview>.orca-block-editor>.orca-block-editor-main {
+    padding-bottom: 0;
+}
+
+
+/* —————————————————————————————————————————————————————————————————————— */
+/* 预览窗口取消最大宽度使之可以看全 */
+/* 问题似乎已被修复 */
+/* .orca-block-preview {
+        max-width: none;
+    } */
