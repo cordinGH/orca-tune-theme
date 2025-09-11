@@ -1,0 +1,186 @@
+/* 
+    ————————————————————————————————————————————————————————————————————————————————
+
+    1. 左侧边栏折叠按钮融合块标并提供缩进线
+    2. 折叠时提供一个圆角小竖条作为状态告知
+
+    ————————————————————————————————————————————————————————————————————————————————
+*/
+/* 为左侧栏条目配备缩进线 */
+.orca-fav-item-item {
+    /* 合并折叠按钮和块图标 */
+    grid-template-columns: 0px auto 1fr auto;
+    /* 延续虎鲸的设计，通过border拉开一点边距 */
+    border-left-width: 9px;
+}
+
+/* tag和别名要多一个计数器栏 */
+.orca-tags-tag-item,
+.orca-aliased-block-item {
+    grid-template-columns: 0 auto auto minmax(max-content, 1fr) auto;
+    border-left-width: 9px;
+}
+
+/* ****************创建折叠竖条*************** */
+.orca-aliased-block,
+.orca-tags-tag,
+.orca-fav-item {
+    position: relative;
+}
+
+.orca-aliased-block-item:has(>:is(.ti-chevron-down, .ti-chevron-right)):before,
+.orca-tags-tag-item:has(>:is(.ti-chevron-down, .ti-chevron-right)):before,
+.orca-fav-item-item:has(>:is(.ti-chevron-down, .ti-chevron-right)):before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+
+    translate: -5px;
+
+    /* 宽度背景色不需要过渡，不然很奇怪，有一个很大的折叠区块*/
+    transition-property: height, top, opacity, border-radius;
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 展开变成缩进线 */
+.orca-aliased-block-item:has(>.ti-chevron-down):before,
+.orca-tags-tag-item:has(>.ti-chevron-down):before,
+.orca-fav-item-item:has(>.ti-chevron-down):before {
+    top: 15px;
+    height: calc(100% - 15px);
+    width: 6.5px;
+    border-top-left-radius: 999px;
+    border-bottom-left-radius: 999px;
+    border-left: .5px solid var(--orca-color-text-1);
+    border-left-color: var(--orca-color-text-1);
+    opacity: .2;
+}
+
+/* hover变色 */
+.orca-aliased-block-item:hover:before,
+.orca-tags-tag-item:hover:before,
+.orca-fav-item-item:hover:before {
+    opacity: .5;
+}
+
+/* 折叠变成圆角小竖条 */
+.orca-aliased-block-item:has(>.ti-chevron-right):before,
+.orca-tags-tag-item:has(>.ti-chevron-right):before,
+.orca-fav-item-item:has(>.ti-chevron-right):before {
+    top: 8px;
+    height: 15px;
+    width: 2px;
+
+
+    background-color: var(--orca-color-text-1);
+    opacity: .5;
+    border-radius: 1px;
+}
+
+
+/* item-item之间是同级的，如果直接给item-item设置z-index也不行，这个只能作用于定位元素。
+        而这个元素不能设置relative，因为需要依赖上层item绘制缩进线
+        更不能absolute丢出去。。。。
+        那最优解就是重新绘制一份背景色
+    */
+.orca-aliased-block-item:hover,
+.orca-tags-tag-item:hover,
+.orca-fav-item-item:hover {
+    background-color: unset;
+}
+
+/* 重新绘制一个背景色，不然会遮挡父级缩进线 */
+.orca-aliased-block:has(>.orca-aliased-block-item:hover):after,
+.orca-tags-tag:has(>.orca-tags-tag-item:hover):after,
+.orca-fav-item:has(>.orca-fav-item-item:hover):after {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    top: 1px;
+    height: 31px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    background-color: var(--orca-color-gray-7);
+    border-radius: var(--orca-radius-sm);
+}
+
+/* 无意中发现，tags和别名中该属性会影响背景色的渲染 */
+.orca-tags-tag,
+.orca-aliased-block {
+    content-visibility: unset;
+}
+
+/* 折叠按钮和块标重叠化 */
+/* 处理第一个按钮同步块标按钮22px尺寸，从而精准对齐块标icon，使得hover时显示出来以偷取fav-icon背景色 */
+.orca-aliased-block-item>:is(.ti-chevron-right, .ti-chevron-down),
+.orca-tags-tag-item>:is(.ti-chevron-right, .ti-chevron-down),
+.orca-fav-item-item>:is(.ti-chevron-right, .ti-chevron-down) {
+    /* 变为定位元素  叠在块标上面 */
+    position: relative;
+    opacity: 0;
+    width: 22px;
+    /* 垂直对齐 */
+    line-height: 22px;
+    text-align: center;
+    transition: opacity 0.1s cubic-bezier(0.5, 0, 1, 1) 0s;
+
+    /* 扩大折叠按钮显示区域 */
+    &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        top: -4px;
+        bottom: -4px;
+        left: -8px;
+        width: 36px;
+    }
+}
+
+/* hover时 等一会儿出现透明度 */
+.orca-aliased-block-item:hover>:is(.ti-chevron-right, .ti-chevron-down),
+.orca-tags-tag-item:hover>:is(.ti-chevron-right, .ti-chevron-down),
+.orca-fav-item-item:hover>:is(.ti-chevron-right, .ti-chevron-down) {
+    opacity: 1;
+    transition: opacity 0.1s cubic-bezier(0, 0, 0.2, 1) 0.1s;
+}
+
+.orca-aliased-block-item:has(>:is(.ti-chevron-right, .ti-chevron-down))>.orca-aliased-block-icon,
+.orca-tags-tag-item:has(>:is(.ti-chevron-right, .ti-chevron-down))>.orca-tags-tag-icon,
+.orca-fav-item-item:has(>:is(.ti-chevron-right, .ti-chevron-down))>.orca-fav-item-icon {
+    /* 可折叠的条目不需要旋转放大的动画 */
+    animation: unset;
+
+    /* 等待箭头消失了再恢复 */
+    transition: color 0.1s cubic-bezier(0, 0, 0.2, 1) 0.1s;
+}
+
+.orca-aliased-block-item:has(>:is(.ti-chevron-right, .ti-chevron-down)):hover>.orca-aliased-block-icon,
+.orca-tags-tag-item:has(>:is(.ti-chevron-right, .ti-chevron-down)):hover>.orca-tags-tag-icon,
+.orca-fav-item-item:has(>:is(.ti-chevron-right, .ti-chevron-down)):hover>.orca-fav-item-icon {
+    /* hover时透明掉color，让折叠按钮露出来，并穿透 */
+    color: transparent !important;
+    pointer-events: none;
+    transition: color 0.1s cubic-bezier(0.5, 0, 1, 1) 0s;
+}
+
+
+.orca-favorites-items,
+.orca-tags-list-list,
+.orca-aliased-list {
+    padding-right: .25rem;
+}
+
+.orca-favorites-list,
+.orca-tags-list,
+.orca-aliased {
+    border: 2px solid transparent;
+}
+
+
+body:has(.orca-aliased-block-item:hover) .orca-popup:has(.orca-tooltip),
+body:has(.orca-tags-tag-item:hover) .orca-popup:has(.orca-tooltip),
+body:has(.orca-fav-item-item:hover) .orca-popup:has(.orca-tooltip) {
+    translate: 2rem 0;
+}
