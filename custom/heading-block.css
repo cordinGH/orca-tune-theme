@@ -1,0 +1,126 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* --orca-color-primary-5:#2E8B93!important; */
+        --my-color-heading: #3E7A56;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        /* --orca-color-primary-5:#2E8B93!important; */
+        --my-color-heading: #8CD3B3;
+    }
+}
+
+
+/* 标题块尺寸微调 */
+:is(h1, h2, h3, h4).orca-repr-heading-content {
+    font-family: "Songti SC", "SimSun", serif;
+}
+
+h1.orca-repr-heading-content {
+    font-size: 24px !important
+}
+
+h2.orca-repr-heading-content {
+    font-size: 22px !important
+}
+
+h3.orca-repr-heading-content {
+    font-size: 20px !important
+}
+
+h4.orca-repr-heading-content {
+    font-size: 18px !important
+}
+
+
+
+h1.orca-repr-heading-content>span {
+    &:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
+        background-image: linear-gradient(to right, var(--my-color-heading) 100%, transparent);
+        background-position: 0 bottom;
+        background-size: 100% 9px;
+        background-repeat: no-repeat;
+        padding-bottom: 2px;
+    }
+
+    &:nth-last-child(1 of :is(.orca-inline, .orca-repr-title:not(.orca-input))) {
+        background-image: linear-gradient(to right, var(--my-color-heading) 50%, transparent);
+    }
+}
+
+
+h2.orca-repr-heading-content>span {
+
+    /* .orca-none-selectable 为链接/引用起头时的占位符 */
+    &:nth-child(1 of :is(.orca-none-selectable, .orca-inline, .orca-repr-title:not(.orca-input))):before {
+        content: " ";
+        display: inline-block;
+        width: 4px;
+        line-height: 1;
+        background-color: var(--my-color-heading);
+        border-radius: 2px;
+        margin-right: .5rem;
+    }
+
+    &:nth-child(1 of :is(.orca-none-selectable, .orca-inline, .orca-repr-title:not(.orca-input))) {
+        padding-left: .25rem;
+    }
+}
+
+h3.orca-repr-heading-content {
+    box-shadow:
+        inset 0 -2px 0 0 var(--orca-color-bg-1),
+        inset 0 -2.5px 0 0 var(--my-color-heading);
+}
+
+h3.orca-repr-heading-content>:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
+    box-shadow:
+        0 2px 0 0 var(--orca-color-bg-1),
+        0 4px 0 0 var(--my-color-heading);
+}
+
+
+h4.orca-repr-heading-content>:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
+    padding-bottom: 2px;
+    padding-bottom: 4.5px;
+    background-image: linear-gradient(to right, var(--my-color-heading) 60%, transparent 60%);
+    background-position: 0 bottom;
+    background-size: 7px 2px;
+    background-repeat: repeat-x;
+}
+
+
+/* ———————————————————————————————————————————————————————————— */
+/* 标题块折叠增加一个末尾字符 */
+.orca-repr-main-collapsed>.orca-repr-heading-content>span:nth-last-child(1 of .orca-inline):after {
+    font-size: .8rem;
+    color: #80808080;
+    font-family: tabler-icons;
+    background-color: #80808030;
+    border-radius: 4px;
+    padding: 2px;
+    margin-left: 4px;
+}
+
+/* 最后一个的渐变，消去一个末尾字符的占位尺寸 */
+.orca-repr-main-collapsed>h1.orca-repr-heading-content>span:nth-last-child(1 of :is(.orca-inline, .orca-repr-title:not(.orca-input))) {
+    background-image: linear-gradient(to right, var(--my-color-heading) calc((100% - .8rem - 8px) * .5), transparent calc(100% - .8rem - 8px));
+}
+
+.orca-repr-main-collapsed>h1.orca-repr-main-content>span:nth-last-child(1 of .orca-inline):after {
+    content: "\ec94";
+}
+
+.orca-repr-main-collapsed>h2.orca-repr-main-content>span:nth-last-child(1 of .orca-inline):after {
+    content: "\ec95";
+}
+
+.orca-repr-main-collapsed>h3.orca-repr-main-content>span:nth-last-child(1 of .orca-inline):after {
+    content: "\ec96";
+}
+
+.orca-repr-main-collapsed>h4.orca-repr-main-content>span:nth-last-child(1 of .orca-inline):after {
+    content: "\ec97";
+}
