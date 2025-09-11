@@ -1,0 +1,46 @@
+#custom-theme-body {
+    /* —————————————————————————————————————————————————————————————————————— */
+    /* 定义行内引用的双括号 */
+    [data-type="r"] {
+        &>.orca-inline-r-content {
+            border-bottom: none;
+        }
+
+        &>.orca-inline-r-alias-icon:before {
+            opacity: .5;
+        }
+
+        &:before,
+        &:after {
+            color: #80808060;
+            white-space: nowrap;
+            font-family: var(--orca-fontfamily-editor);
+        }
+
+        &:after {
+            content: "]";
+            /* margin-left: .05em; */
+            margin-right: .2em;
+        }
+
+        &:before {
+            content: "[";
+            margin-left: .2em;
+            /* margin-right: .05em; */
+        }
+    }
+
+    /* 标题中的字重拉低一点 */
+    .orca-repr-heading-content>[data-type="r"] {
+
+        &:after,
+        &:before {
+            font-weight: 500;
+        }
+    }
+
+    .orca-inline-r-dots {
+        display: none
+    }
+
+}
