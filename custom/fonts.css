@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 200;
+    src: url('custom/fonts-woff2/PingFangSC-Ultralight-200.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 300;
+    src: url('custom/fonts-woff2/PingFangSC-Light-300.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 400;
+    src: url('custom/fonts-woff2/PingFangSC-Regular-400.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 500;
+    src: url('custom/fonts-woff2/PingFangSC-Medium-500.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 600;
+    src: url('custom/fonts-woff2/PingFangSC-Semibold-600.woff2') format('woff2');
+}
+
+:root {
+    --orca-fontfamily-ui: "PingFang SC", var(--orca-fontfamily-fallback);
+}
