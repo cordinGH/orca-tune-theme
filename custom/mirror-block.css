@@ -1,0 +1,85 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+        --my-bgcolor-mirror-block-handle: hsl(0 0% 25%);
+        --my-color-mirror-block-handle:hsl(0 0% 50%);
+    }
+}
+@media (prefers-color-scheme: light) {
+    :root {
+        --my-bgcolor-mirror-block-handle: hsl(0 0% 85%);
+        --my-color-mirror-block-handle:hsl(0 0% 65%);
+    }
+}
+
+/* Tana风格镜像块（无背景+虚线） */
+#custom-theme-body {
+    /* 【移除】镜像块不再需要背景底板 */
+    .orca-mirror-bg:not(.orca-repr-quote2):before {
+        display: none;
+    }
+
+    /* 统一各种情况下的镜像块icon */
+    /* 【新增】覆盖自定义icon，强制激活ti */
+    [data-type="mirror"]>.orca-repr>.orca-repr-main .orca-block-handle:not(:hover) {
+        font-family: tabler-icons !important;
+        speak: none;
+        font-style: normal;
+        font-weight: 400;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* 【同上】统一所有自定义icon */
+    [data-type="mirror"]>.orca-repr>.orca-repr-main .orca-block-handle:not(:hover) {
+        --my-size-bullet: 16px;
+        width: var(--my-size-bullet);
+        height: var(--my-size-bullet);
+        font-size: 19px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        top: calc(0.5 * (var(--orca-block-line-height) - var(--my-size-bullet)));
+
+        /* 统一icon、color、bg */
+        &:before {
+            content: "\ff8d";
+            /* 覆盖掉ul的特殊颜色，采用默认颜色 */
+            color: var(--orca-block-handle-passive-color);
+        }
+        &.orca-block-handle-collapsed:before {
+            color: var(--my-color-mirror-block-handle);
+        }
+        /* 包裹色和原生折叠包裹色一致 */
+        &.orca-block-handle-collapsed {
+            background-color: var(--my-bgcolor-mirror-block-handle);
+        }
+
+
+    }
+
+    /* 【重定义】镜像块的折叠线 */
+    [data-type="mirror"]>.orca-repr>.orca-repr-main .orca-repr-scope-line {
+        &:before {
+            border-left: 2px dashed var(--orca-color-scope-line);
+        }
+
+        &:hover {
+            background-color: unset;
+        }
+
+        &:hover:before {
+            border-left-width: 3px;
+        }
+    }
+
+    /* 【适配】引述块的镜像块，提供背景卡片虚线边框 */
+    [data-type="mirror"]>.orca-repr-quote2:before {
+        border-style: dashed;
+        border-width: 1px;
+    }
+}
