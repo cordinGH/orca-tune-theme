@@ -1,6 +1,6 @@
-**A theme for [Orca-Note](https://github.com/sethyuan/orca-note)**
+**[Orca-Note](https://github.com/sethyuan/orca-note) 主题，自用主题，一直在用，稳定运行**
 
-> 1、纯css驱动 
+> 1、纯css驱动  
 > 2、自带PingFangSC字体，字重支持范围200-600
 ## 一、块风格
 1️⃣代码块：卡片风格、顺滑式光标  
