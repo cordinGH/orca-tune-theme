@@ -1,0 +1,53 @@
+/* 
+    ————————————————————————————————————————————————————————————————————
+    图片块提供轻微边界阴影。不会包含图片描述
+    视频块同理。同时视频默认居中。
+    ————————————————————————————————————————————————————————————————————
+*/
+@media (prefers-color-scheme: dark) {
+    :root {
+        --my-shadow-img: 0 0 5px #333;
+    }
+}
+@media (prefers-color-scheme: light) {
+    :root {
+        --my-shadow-img: 0 0 5px #ccc;
+    }
+}
+#custom-theme-body {
+    .orca-image-wrapper {
+        padding: 5px;
+
+        &>img {
+            box-shadow: var(--my-shadow-img);
+            border-radius: 3px;
+        }
+    }
+
+    /* 移除上下边距，影响观感 */
+    .orca-repr-image-content>.orca-no-editable-container:not(:has(.orca-repr-self-fold-container)) {
+        padding: var(--orca-spacing-sm) 0;
+    }
+
+    .orca-image-caption {
+        margin-top: var(--orca-spacing-sm);
+    }
+
+    .orca-video {
+        margin: 0 auto;
+        display: block;
+    }
+
+    .orca-repr-video-content div:has(>.orca-video) {
+        box-shadow: var(--my-shadow-img);
+        border-radius: 3px;
+    }
+
+    .orca-video-caption {
+        margin: var(--orca-spacing-sm);
+    }
+
+    .orca-video-toolbar>.orca-select-button {
+        white-space: nowrap;
+    }
+}
