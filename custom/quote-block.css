@@ -1,0 +1,274 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+
+        --my-color-gray-1: hsl(0 0% 25% / 1);
+        --my-color-text-1: hsl(0 0% 65% / 1);
+
+        --my-bgcolor-quote-note: #323335;
+        --my-bdcolor-quote-note: #4e5660;
+
+        --my-bgcolor-quote-important: #2a2839;
+        --my-bdcolor-quote-important: #6f56b0;
+
+        --my-bgcolor-quote-tip: #243734;
+        --my-bdcolor-quote-tip: #4caa87;
+
+        --my-bgcolor-quote-error: #3d272b;
+        --my-bdcolor-quote-error: #9f5151;
+
+        --my-bgcolor-quote-warning: #3E3028;
+        --my-bdcolor-quote-warning: #AC824C;
+
+        --my-bgcolor-quote-info: #1e293b;
+        --my-bdcolor-quote-info: #3b82f6;
+
+        --my-color-text-purple: #b794f4;
+        --my-color-text-quote2-note: #a0aec0;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --my-color-gray-1: hsl(0 0% 85% / 1);
+        --my-color-text-1: hsl(0 0% 35% / 1);
+
+        --my-bgcolor-quote-note: #fafafe;
+        --my-bdcolor-quote-note: #d6d3d1;
+
+        --my-bgcolor-quote-important: #f5f3ff;
+        --my-bdcolor-quote-important: #d8b4fe;
+
+        --my-bgcolor-quote-tip: #ecfdf5;
+        --my-bdcolor-quote-tip: #6ee7b7;
+
+        --my-bgcolor-quote-error: #fef2f2;
+        --my-bdcolor-quote-error: #fca5a5;
+
+        --my-bgcolor-quote-warning: #fff7ed;
+        --my-bdcolor-quote-warning: #fdba74;
+
+        --my-bgcolor-quote-info: #eff6ff;
+        --my-bdcolor-quote-info: #93c5fd;
+
+        --my-color-text-purple: #6b46c1;
+        --my-color-text-quote2-note: #4a5568;
+    }
+}
+
+/* 卡片风格引述块，并优化了嵌套引述的显示效果 */
+#custom-theme-body {
+
+    /* 【移除】引述块原生边线 */
+    .orca-repr-quote2::after {
+        display: none;
+    }
+
+    /* 【新增】背景卡片绘制 */
+    .orca-repr-quote2::before {
+        pointer-events: none;
+        content: "";
+        display: block;
+        position: absolute;
+        left: calc(var(--orca-spacing-indent) * var(--orca-block-indent));
+        right: 0;
+        top: 3px;
+        bottom: 11px;
+        border: .5px solid;
+        border-radius: 6px;
+        transition: background-color .15s ease-out;
+    }
+
+    /* 【同上】【适配】嵌套1层引述 */
+    .orca-repr.orca-repr-quote2 .orca-repr-quote2::before {
+        left: calc(var(--orca-spacing-indent) * calc(var(--orca-block-indent) + .5));
+        right: 10px;
+    }
+
+    /* 【同上】【适配】嵌套2层 */
+    .orca-repr.orca-repr-quote2 .orca-repr-quote2 .orca-repr-quote2::before {
+        left: calc(var(--orca-spacing-indent) * calc(var(--orca-block-indent) + 1));
+        right: 20px;
+    }
+
+
+    /* 【新增】【适配】背景卡片在查询列表中时，引述卡片外部右侧做一定留白*/
+    .orca-query-list-block-block>.orca-repr.orca-repr-quote2::before {
+        right: 10px;
+    }
+
+    /* 【重定义】【微调】还原块缩进并右侧留白 */
+    .orca-repr-quote2>.orca-repr-children :is(.orca-repr-main-content, .orca-repr-main-none-editable) {
+        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + .5)) * var(--orca-spacing-indent));
+        margin-right: 10px;
+    }
+
+    /* 【同上】【适配】1层嵌套引述 */
+    .orca-repr-quote2 .orca-repr-quote2>.orca-repr-children :is(.orca-repr-main-content, .orca-repr-main-none-editable) {
+        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + 1)) * var(--orca-spacing-indent));
+        margin-right: 20px;
+    }
+
+    /* 【同上】2层 */
+    .orca-repr-quote2 .orca-repr-quote2 .orca-repr-quote2>.orca-repr-children :is(.orca-repr-main-content, .orca-repr-main-none-editable) {
+        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + 1.5)) * var(--orca-spacing-indent));
+        margin-right: 30px;
+    }
+
+    /* 【重定义】还原缩进——按钮和缩进线 */
+    .orca-repr-quote2>.orca-repr-children .orca-repr-main-none-editable {
+        &>i {
+            left: calc(max(0, calc(var(--orca-block-indent, 0) + .5)) * var(--orca-spacing-indent) - 21px);
+        }
+
+        &>.orca-repr-scope-line {
+            left: calc(max(0, calc(var(--orca-block-indent, 0) + .5)) * var(--orca-spacing-indent) - 15px);
+        }
+    }
+
+    /* 【同上】【适配】1层嵌套 */
+    .orca-repr-quote2 .orca-repr-quote2>.orca-repr-children .orca-repr-main-none-editable {
+        &>i {
+            left: calc(max(0, calc(var(--orca-block-indent, 0) + 1)) * var(--orca-spacing-indent) - 21px);
+        }
+
+        &>.orca-repr-scope-line {
+            left: calc(max(0, calc(var(--orca-block-indent, 0) + 1)) * var(--orca-spacing-indent) - 15px);
+        }
+    }
+
+    /* 【同上】【适配】2层嵌套 */
+    .orca-repr-quote2 .orca-repr-quote2 .orca-repr-quote2>.orca-repr-children .orca-repr-main-none-editable {
+        &>i {
+            left: calc(max(0, calc(var(--orca-block-indent, 0) + 1.5)) * var(--orca-spacing-indent) - 21px);
+        }
+
+        &>.orca-repr-scope-line {
+            left: calc(max(0, calc(var(--orca-block-indent, 0) + 1.5)) * var(--orca-spacing-indent) - 15px);
+        }
+    }
+
+
+    /* 【新增】类型选择器独立出层叠，消除背景卡片的层叠覆盖 */
+    .orca-repr-quote2-type-selector {
+        isolation: isolate;
+    }
+
+    /* 【新增】调节引述选择器的视觉占比 */
+    .orca-repr-quote2-type-selector {
+        padding-top: 14px;
+        padding-bottom: 11px;
+        padding-left: 15px;
+
+        &>.orca-repr-quote2-icon {
+            scale: 1.1;
+            transform-origin: bottom;
+        }
+
+        /* 统一行高，使得切换为quote不会改变布局 */
+        &>.orca-repr-quote2-type-text {
+            line-height: 1;
+            font-weight: 500;
+        }
+    }
+
+    /* 【重定义】更改icon */
+    .orca-repr-quote2-quote>.orca-repr-main .orca-repr-quote2-icon:before,
+    .orca-menu-text .ti-blockquote:before {
+        content: "\efbe";
+    }
+
+    /* 【同上】 */
+    .orca-repr-quote2-info>.orca-repr-main .orca-repr-quote2-icon:before,
+    .orca-menu-text .ti-info-circle:before {
+        content: "\f634";
+    }
+
+    /* 【同上】 */
+    .orca-repr-quote2-important>.orca-repr-main .orca-repr-quote2-icon:before,
+    .orca-menu-text .ti-alert-octagon:before {
+        content: "\ea38";
+    }
+
+    /* 【同上】 */
+    .orca-repr-quote2-error>.orca-repr-main .orca-repr-quote2-icon:before,
+    .orca-menu-text .ti-alert-circle:before {
+        content: "\ea48";
+    }
+
+    /* 【同上】 */
+    .orca-repr-quote2-note>.orca-repr-main .orca-repr-quote2-icon:before,
+    .orca-menu-text .ti-note:before {
+        content: "\f089";
+    }
+
+    /* 【新增】所有类型的quote背景卡片定义配色和边框 */
+    .orca-repr-quote2 {
+        &.orca-repr-quote2-quote::before {
+            background-color: rgb(from var(--my-color-text-1) R G B / 0.1);
+            border: .5px solid var(--my-color-gray-1);
+        }
+
+        &.orca-repr-quote2-info::before {
+            background-color: var(--my-bgcolor-quote-info);
+            border-color: var(--my-bdcolor-quote-info);
+        }
+
+        &.orca-repr-quote2-warning::before {
+            background-color: var(--my-bgcolor-quote-warning);
+            border-color: var(--my-bdcolor-quote-warning);
+        }
+
+        &.orca-repr-quote2-error::before {
+            background-color: var(--my-bgcolor-quote-error);
+            border-color: var(--my-bdcolor-quote-error);
+        }
+
+        &.orca-repr-quote2-tip::before {
+            background-color: var(--my-bgcolor-quote-tip);
+            border-color: var(--my-bdcolor-quote-tip);
+        }
+
+        &.orca-repr-quote2-important::before {
+            background-color: var(--my-bgcolor-quote-important);
+            border-color: var(--my-bdcolor-quote-important);
+        }
+
+        /* 背景色是note类型的label色0.1透明度版本 */
+        &.orca-repr-quote2-note::before {
+            background-color: var(--my-bgcolor-quote-note);
+            border-color: var(--my-bdcolor-quote-note);
+        }
+    }
+
+    /* 【新增】强行设置quote类型选择器颜色，而非继承，使得嵌套引述也能正常显示颜色 */
+    .orca-repr-quote2 {
+        &.orca-repr-quote2-quote>.orca-repr-main .orca-repr-quote2-type-selector {
+            color: var(--orca-color-text-2);
+        }
+
+        &.orca-repr-quote2-info>.orca-repr-main .orca-repr-quote2-type-selector {
+            color: var(--orca-color-text-blue);
+        }
+
+        &.orca-repr-quote2-warning>.orca-repr-main .orca-repr-quote2-type-selector {
+            color: var(--orca-color-text-yellow);
+        }
+
+        &.orca-repr-quote2-error>.orca-repr-main .orca-repr-quote2-type-selector {
+            color: var(--orca-color-text-red);
+        }
+
+        &.orca-repr-quote2-tip>.orca-repr-main .orca-repr-quote2-type-selector {
+            color: var(--orca-color-text-green);
+        }
+
+        &.orca-repr-quote2-important>.orca-repr-main .orca-repr-quote2-type-selector {
+            color: var(--my-color-text-purple);
+        }
+
+        &.orca-repr-quote2-note>.orca-repr-main .orca-repr-quote2-type-selector {
+            color: var(--my-color-text-quote2-note);
+        }
+    }
+
+}
