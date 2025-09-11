@@ -1,0 +1,260 @@
+@keyframes tovisible {
+    from {
+        opacity: 0;
+        scale: .95;
+    }
+
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+@scope(#main) to (.orca-popup) {
+
+    /* ———————————————————————————————————————————————————————————————————————————————————————————— */
+    /* 压缩编辑器的最小左侧留白 */
+    .orca-block-editor {
+        grid-template-columns: minmax(calc(var(--orca-spacing-block) - .5rem), 1fr) [editor-start] minmax(var(--orca-editor-min-width, 0), var(--orca-editor-max-width)) [editor-end post-start] minmax(var(--orca-spacing-block), 1fr) [post-end];
+    }
+
+    .orca-panel {
+        min-width: 453px !important;
+    }
+
+    /* 优化高亮框尺寸 */
+    .orca-block-highlighter {
+        left: -40px !important;
+        width: unset !important;
+        right: -0.5rem;
+    }
+
+
+    /* ***********************  面板左侧的折叠按钮非active非hover时变为小圆点   *********************** */
+    /* 虎鲸的非active透明逻辑是直接给按钮压低透明  这样的方式不适合背景色和color过渡切换，正确方式是背景色和color透明 */
+    .orca-panel:not(.active) .orca-block-editor-sidetools-btn.orca-button {
+        opacity: unset;
+    }
+
+    .orca-panel:not(.active) .orca-block-editor-sidetools-btn>i {
+        color: hsl(from var(--orca-color-text-1) h s l / .2);
+    }
+
+    .orca-panel:not(.active) .orca-block-editor-sidetools:not(:hover)>.orca-button>i {
+        color: hsl(from var(--orca-color-text-1) h s l / 0);
+        background-color: hsl(from var(--orca-color-text-1) h s l / .2);
+    }
+
+    .orca-block-editor-sidetools-btn>i {
+        border-radius: 999px;
+        transition:
+            background-color .15s ease-out,
+            color .15s ease-out;
+    }
+
+    .orca-panel .orca-block-editor-sidetools {
+        transition: scale .15s ease-out;
+        transform-origin: top;
+        scale: 1;
+    }
+
+    .orca-panel:not(.active) .orca-block-editor-sidetools:not(:hover) {
+        scale: .3;
+    }
+
+
+    /* 给一个hover背景色给侧边工具栏 */
+    .orca-block-editor-sidetools:hover {
+        background-color: hsl(from var(--orca-color-gray-5) h s l / .1);
+    }
+
+    /* 给面板抓手补个透明过渡 */
+    .orca-panel-drag-handle {
+        transition: opacity .15s ease-out;
+    }
+
+    /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+    /* 优化工具条按钮，使得拖拽抓手和侧边按钮一致 */
+    .orca-panel-drag-handle,
+    .orca-block-editor-sidetools {
+        background-color: rgba(from var(--orca-color-bg-1) R G B/.1);
+        backdrop-filter: blur(10px);
+    }
+
+    /* 让工具条按钮padding和抓手padding一致，并稍微缩小一点 */
+    .orca-block-editor-sidetools-btn.orca-button {
+        padding: var(--orca-spacing-sm) var(--orca-spacing-2xs);
+
+        /* 这几个按钮视觉上比抓手大，微调小点 */
+        &>i {
+            transform-origin: center;
+            transform: scale(.9);
+        }
+    }
+
+    /* 定位对齐也和抓手按钮一致 */
+    .orca-block-editor-sidetools {
+        right: calc(var(--orca-spacing-lg) + var(--orca-spacing-sm));
+    }
+
+
+    .orca-panel-drag-handle.ti-dots-vertical {
+        cursor: pointer;
+    }
+
+    .orca-panel-drag-handle.ti-dots-vertical:before {
+        content: "\ec01";
+    }
+
+    /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+    /* 底部引用特定情况下去除：无计数器则none（虎鲸引用计数器是瞬时响应的） */
+    .orca-block-editor-blocks:not(:has(>.orca-block[data-indent="0"]>.orca-repr>.orca-repr-main .orca-block-ref-count-marker))+div:has(.orca-selected:first-child) .orca-hideable:not(.orca-hideable-hidden) {
+        display: none;
+    }
+
+
+    /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+    /* 分屏分割线淡化 */
+    .orca-panels-row>:is(.orca-panels-column, .orca-panel):not(:last-child),
+    .orca-panels-column>:is(.orca-panels-row, .orca-panel):not(:last-child) {
+        border-width: .5px;
+    }
+
+    /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+    /* 编辑器切换时增加过渡动画 */
+    .orca-hideable:not(.orca-hideable-hidden)>.orca-block-editor>.orca-block-editor-main {
+        transform-origin: top left;
+        animation: tovisible .1s linear forwards;
+    }
+
+    @keyframes tovisible {
+        from {
+            opacity: 0;
+            scale: .95;
+        }
+
+        to {
+            opacity: 1;
+            scale: 1;
+        }
+    }
+}
+
+
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 
+    1. 回调main编辑器-1缩进（非长文）
+    2. 不处理查询 table 和 quote，因为不会存在子块。
+*/
+/* 顶层块容器整个左拉一个缩进距离以维持宽度不变 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* 顶层块缩进线 */
+        --my-color-scope-line: var(--orca-color-gray-8);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --my-color-scope-line: hsl(0 0% 90%);
+    }
+}
+
+
+/* 和次级块同缩进，并回拽一个缩进 */
+@scope(#main) to (.orca-long-form, .orca-popup) {
+
+    /* 回拽一个缩进 */
+    .orca-block-editor-blocks>[data-indent="0"]:has(>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)) {
+        margin-left: calc(-1 * var(--orca-spacing-indent));
+    }
+
+    /* 顶层块处理 */
+    .orca-block-editor-blocks>[data-indent="0"]>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)>.orca-repr-main {
+
+        /* 顶层块减少一个缩进 */
+        &>:is(.orca-repr-main-content, .orca-repr-main-none-editable) {
+            margin-left: var(--orca-spacing-indent) !important;
+        }
+
+        /* 折叠按钮和块标 */
+        &>.orca-repr-main-none-editable>i {
+            transform: translateX(var(--orca-spacing-indent));
+        }
+
+        /* 顶层块缩进线往上拉开一定距离 */
+        &>.orca-repr-main-none-editable>.orca-repr-scope-line {
+            top: calc(var(--orca-block-line-height) * .5 - 1px) !important;
+        }
+
+        /* 绘制拐弯缩进线样式 */
+        &>.orca-repr-main-none-editable>.orca-repr-scope-line:before {
+            width: calc(var(--orca-spacing-indent) - 6px);
+            pointer-events: none;
+            border-top: .5px dotted var(--my-color-scope-line);
+            border-left-color: var(--my-color-scope-line);
+            border-left-style: dotted;
+            border-left-width: .5px;
+            border-top-left-radius: 10px;
+        }
+
+        /* 更改缩进线的hover变色逻辑，改用边框 */
+        &>.orca-repr-main-none-editable>.orca-repr-scope-line:hover {
+            background-color: unset;
+        }
+
+        &>.orca-repr-main-none-editable>.orca-repr-scope-line:hover:before {
+            border-width: 3px;
+            border-left-style: solid;
+            border-top-style: solid;
+        }
+
+    }
+
+    /* fixed|适配1.31版本的css变更：orca-block增加新属性data-editable="false"，因为需要存放插入行按钮，所以额外加了margin */
+    .orca-block-editor-blocks>[data-indent="0"][data-editable="false"]:not([data-type="journal"])>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)>.orca-repr-main>.orca-repr-main-none-editable>.orca-repr-scope-line {
+        top: calc(var(--orca-block-line-height) * .5 - 1px + var(--orca-spacing-md)) !important;
+    }
+
+}
+
+/* 文本类型块聚焦放大字体，但是排除弹出框和模态层 */
+/* 2. 文本类型块-1块，标题级字体大小 */
+@scope(#main) to (.orca-popup) {
+    .orca-block-editor-blocks>[data-indent="0"]>:is(.orca-repr-text, .orca-repr-ul, .orca-repr-ol, .orca-repr-task, .orca-repr-heading)>.orca-repr-main>.orca-repr-main-content {
+
+        /* 继承原生h1字号日志块字号风格 */
+        font-size: var(--orca-fontsize-2xl);
+        /* 沿用日志顶层块的前后边距 */
+        margin: var(--orca-spacing-md) 0;
+
+        /* 取消自定义样式文本样式的大号字体 */
+        & .orca-inline.f {
+            font-size: inherit;
+        }
+    }
+}
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* ctrl tab 编辑器列表的关闭按钮扔前面，方便操作 */
+.orca-recents-menu-item>.orca-recents-menu-close {
+    order: -1;
+    padding: .125rem;
+    margin-right: .25rem;
+    margin-left: -.25rem;
+    transition-duration: .1s;
+}
+
+.orca-recents-menu-item:not(:hover)>.orca-recents-menu-close {
+    opacity: 0.1;
+}
+
+.orca-recents-menu-item:hover>.orca-recents-menu-close:not(:hover) {
+    opacity: .3;
+}
+
+/* 编辑器列表条目前缀块标 */
+.orca-menu-text-pre {
+    margin-right: .5rem;
+}
