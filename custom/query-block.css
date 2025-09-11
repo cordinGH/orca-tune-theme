@@ -1,0 +1,176 @@
+/* 2.0list查询配色 */
+:root {
+    /* 例子，gray-2a代表，基于gray-2增加5%明度 */
+    --orca-color-gray-2a: hsl(0deg 0% 90%);
+    --orca-color-gray-3a: hsl(0deg 0% 80%);
+    --orca-color-gray-6a: hsl(0deg 0% 40%);
+    --orca-color-gray-5a: hsl(0deg 0% 55%);
+    --orca-color-gray-4a: hsl(0deg 0% 70%);
+    --orca-color-gray-7a: hsl(0deg 0% 30%);
+    --my-borderwidth-query-list: 5px;
+    --my-height-orca-repr-main-after: .35rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --my-bordercolor-query-list: var(--orca-color-gray-8);
+        --my-color-query-list-breadcrumb: var(--orca-color-gray-6a);
+        --my-color-query-list-id: var(--orca-color-gray-7a);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --my-bordercolor-query-list: var(--orca-color-gray-2a);
+        --my-color-query-list-breadcrumb: var(--orca-color-gray-4a);
+        --my-color-query-list-id: var(--orca-color-gray-3a);
+    }
+}
+
+/* 通用 */
+#custom-theme-body {
+
+    /* 查询块面包屑尺寸缩小一点 */
+    .orca-query-card-breadcrumb,
+    .orca-query-list-block-breadcrumb {
+        font-size: 13.5px;
+        color: var(--my-color-mirror-block-handle);
+    }
+}
+
+/* list视图 */
+#custom-theme-body {
+    .orca-query-list {
+        counter-reset: result-id 0;
+
+        &>.orca-query-list-block {
+            counter-increment: result-id;
+        }
+    }
+
+
+    /* 【移除】移除条目原本的背景板 */
+    .orca-query-list-block::before {
+        display: none;
+    }
+
+    .orca-query-list-block-block{
+        isolation: isolate;
+    }
+    /* 【新增】块内容背景板 */
+    .orca-query-list-block-block:before {
+        content: "";
+        position: absolute;
+        /* top补偿 */
+        top: calc(-1 * var(--my-height-orca-repr-main-after));
+        bottom: 0;
+        /* 从容器padding区域的bottom开始 */
+        bottom: -1.5px;
+        /* 拉开开一个缩进+边框的距离 */
+        left: calc(-1 * var(--orca-spacing-indent) - var(--my-borderwidth-query-list));
+        right: 0;
+        background-color: transparent;
+        z-index: -1;
+        border: 1px solid var(--my-bordercolor-query-list);
+        border-left-width: var(--my-borderwidth-query-list);
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    /* 【重定义】结果内的块内容不再需要那么大的左侧留白 */
+    .orca-query-list-block-block {
+        padding-left: 3px;
+        /* 额外补一个left边框线的宽度 */
+        margin-left: calc(1px + var(--orca-spacing-indent) + var(--my-borderwidth-query-list));
+    }
+
+    .orca-query-list-block-breadcrumb {
+        font-size: .75rem;
+        color: var(--my-color-query-list-breadcrumb);
+        margin-bottom: .3rem;
+    }
+
+    /* 间距 */
+    .orca-query-list-block {
+        /* 把条目边框的2px补进去 */
+        margin-top: calc(2 * var(--my-height-orca-repr-main-after) + 2px);
+        padding-top: 0;
+        padding-bottom: 1.5px;
+    }
+
+    /* 减小和list-block的距离 */
+    .orca-query-result-list-toolbar {
+        margin-bottom: -5px !important;
+    }
+
+
+    /* 计数器 */
+    .orca-query-list-block-block>.orca-repr:after {
+        content: counter(result-id);
+        position: absolute;
+        top: calc((var(--orca-block-line-height) * .5 - 5px));
+        left: calc(-2 * var(--orca-spacing-indent));
+        /* 用来支持text-align，顺便起到微调距离的作用 */
+        width: 17px;
+        font-size: 10px;
+        line-height: 1;
+        white-space: nowrap;
+        color: var(--my-color-query-list-id);
+        text-align: right;
+    }
+
+    .orca-query-list-block-block[data-editable=false]>.orca-repr:after {
+        /* 不可编辑块存在--orca-spacing-md的padding用来放置按钮，因此要额外补一点 */
+        top: calc((var(--orca-block-line-height) * .5 - 5px + var(--orca-spacing-md)));
+    }
+
+
+    .orca-query-list-block-block>.orca-repr>.orca-repr-main .orca-block-folding-handle {
+        bottom: 0;
+        /* 把handle的padding补回去以完全水平对齐内容 */
+        top: 0;
+        /* 垂直对齐 */
+        padding-top: calc((var(--orca-block-line-height) * .5 - 8px));
+        padding-bottom: 0;
+        padding-left: 0;
+        /* 默认3px */
+        padding-right: .1875rem;
+
+        /* 新的第一级折叠按钮 */
+        &:before {
+            content: "\f624";
+            background-color: var(--orca-color-bg-1);
+            border-radius: 999px;
+            line-height: 1;
+            font-size: 16px;
+        }
+
+        &.ti-caret-down-filled:before {
+            rotate: 90deg;
+        }
+    }
+
+
+    /* 对于查询结果，只要整个结果还在hover，就始终保持第一个块的折叠按钮显示 */
+    /* 虎鲸自身的css，需要覆盖一下，从而优化折叠列表显示 */
+    .orca-repr-main:not(:hover) .orca-block-folding-handle {
+        opacity: 0;
+    }
+    .orca-query-list-block:hover>.orca-block>div>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-folding-handle {
+        opacity: 1;
+    }
+}
+
+/* card视图 */
+#custom-theme-body {
+    
+    /* 卡片视图里行卡片数文本移除左边距 和icon贴近点 */
+    .orca-query-result-card-toolbar>div>.orca-button.plain.orca-select-button {
+        padding-left: 0;
+    }
+
+    /* 行卡片数不需要自动换行 */
+    .orca-query-result-card-toolbar>div:has(>.orca-select-button) {
+        white-space: nowrap;
+    }
+}
