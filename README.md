@@ -4,7 +4,7 @@
 
 前往本仓库的 [Releases](https://github.com/cordinGH/orca-tune-theme/releases) 页面。
 
-在最新版本的 "Assets" 区域，下载 `Source code(zip)` 解压，解压后复制文件夹到 `orca\plugins`内即可。
+在最新版本的 "Assets" 区域，下载 `Source code(zip)` 解压，解压后复制文件夹到 `orca\plugins`内，**然后 退出orca-note重新打开**
 
 最终目录结构如下：
 
@@ -18,6 +18,8 @@ orca/
         ├── package.json
         └── README.md
 ```
+
+
 
 
 # （二）主题基本特征
