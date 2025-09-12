@@ -20,6 +20,15 @@ orca/
 
 **⭐️⭐️⭐️最后，最重要的，要退掉 orca-note 重新打开 orca-note ，插件才能被读取，这是现版本所有插件必须的一步。**
 
+---
+
+> [!NOTE]  
+> **Q：`orca\` 目录在哪？**  
+> A：从下图进入即可看到  
+> <img width="321" height="134" alt="image" src="https://github.com/user-attachments/assets/50cf1e64-f628-42cb-8e77-82ae4083999b" />
+
+---
+
 # （二）主题基本特征
 
 <img width="3200" height="1901" alt="image" src="https://github.com/user-attachments/assets/199f874e-2246-4172-a019-e9e8b2f4e093" />
