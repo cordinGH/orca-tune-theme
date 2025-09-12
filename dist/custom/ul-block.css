@@ -1,14 +1,14 @@
 .orca-repr-ul-content{
     /* 控制光标起始位置 */
-    padding-left: 1.1rem;
+    padding-left: 1.1em;
 }
 .orca-repr-ul-content:before {
     display: inline-block;
     content: var(--orca-ul-disc);
     text-align: left;
     /* width控制和后面内容的间距 */
-    margin-left: -1.25rem;
-    width: 1.35rem;
+    margin-left: -1.25em;
+    width: 1.35em;
 }
 .orca-repr-ul-content::before {
     font-family: tabler-icons;
