@@ -78,11 +78,3 @@
 #main .orca-popup .orca-inline-reference-preview>.orca-block-editor>.orca-block-editor-main {
     padding-bottom: 0;
 }
-
-
-/* —————————————————————————————————————————————————————————————————————— */
-/* 预览窗口取消最大宽度使之可以看全 */
-/* 问题似乎已被修复 */
-/* .orca-block-preview {
-        max-width: none;
-    } */

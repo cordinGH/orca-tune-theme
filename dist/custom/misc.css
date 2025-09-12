@@ -16,8 +16,9 @@
     [data-type="text"]:not(.orca-active):not(:last-child)>.orca-repr>.orca-repr-main>.orca-repr-text-content:empty+.orca-repr-main-none-editable>.orca-block-handle.ti-point-filled:not(.orca-block-handle-collapsed) {
         opacity: .1;
     }
+
     .orca-repr-text-content+.orca-repr-main-none-editable>.orca-block-handle:not(.orca-block-handle-collapsed) {
-        transition:opacity .1s ease-out;
+        transition: opacity .1s ease-out;
     }
 
     /* —————————————————————————————————————————————————————————————————————— */
@@ -160,7 +161,7 @@
     }
 
     /* task块的勾选框尺寸同步内容字体大小 */
-    .orca-repr-task-content:before{
+    .orca-repr-task-content:before {
         font-size: 1.25em;
         /* 消除基线对齐产生的偏离 */
         translate: 0 .125em;
