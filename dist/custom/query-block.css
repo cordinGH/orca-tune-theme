@@ -69,7 +69,8 @@
         /* 拉开开一个缩进+边框的距离 */
         left: calc(-1 * var(--orca-spacing-indent) - var(--my-borderwidth-query-list));
         right: 0;
-        background-color: transparent;
+        /* background-color: transparent; */
+        background-color: #80808009;
         z-index: -1;
         border: 1px solid var(--my-bordercolor-query-list);
         border-left-width: var(--my-borderwidth-query-list);
