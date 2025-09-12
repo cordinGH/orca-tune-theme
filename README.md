@@ -1,6 +1,6 @@
 **[Orca-Note](https://github.com/sethyuan/orca-note) 主题，自用主题**
 
-# 一、使用方法
+# （一）使用方法
 
 前往本仓库的 [Releases](https://github.com/cordinGH/orca-tune-theme/releases) 页面。
 
@@ -20,10 +20,13 @@ orca/
 ```
 
 
-# 二、主题特点
+# （二）主题基本特征
 
-> 1、纯css驱动  
-> 2、自带PingFangSC字体，字重支持范围200-600  
+<img width="3200" height="1901" alt="image" src="https://github.com/user-attachments/assets/199f874e-2246-4172-a019-e9e8b2f4e093" />
+
+
+> 1、纯 CSS 驱动  
+> 2、自带 PingFangSC 字体，字重支持范围 200-600  
 > 3、支持设置命令快捷键，快速启用和关闭主题（命令/快捷键搜索 Tune）
 
 ## 一、块风格
