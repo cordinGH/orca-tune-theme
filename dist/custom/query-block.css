@@ -7,8 +7,7 @@
     --orca-color-gray-5a: hsl(0deg 0% 55%);
     --orca-color-gray-4a: hsl(0deg 0% 70%);
     --orca-color-gray-7a: hsl(0deg 0% 30%);
-    --my-borderwidth-query-list: 5px;
-    --my-height-orca-repr-main-after: .35rem;
+    --my-size-query-block-breadcrumb: .8rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -31,10 +30,13 @@
 #custom-theme-body {
 
     /* 查询块面包屑尺寸缩小一点 */
-    .orca-query-card-breadcrumb,
-    .orca-query-list-block-breadcrumb {
-        font-size: 13.5px;
-        color: var(--my-color-mirror-block-handle);
+    :is(.orca-query-card-breadcrumb, .orca-query-list-block-breadcrumb) {
+        color: var(--my-color-query-list-breadcrumb);
+
+        &>:is(.orca-breadcrumb-sep, .orca-block-breadcrumb-segment) {
+            line-height: var(--orca-lineheight-md);
+            font-size: var(--my-size-query-block-breadcrumb);
+        }
     }
 }
 
@@ -45,6 +47,9 @@
 
         &>.orca-query-list-block {
             counter-increment: result-id;
+            --my-border-query-list: 1px;
+            --my-border-left-query-list: 5px;
+            --my-height-orca-repr-main-after: .35rem;
         }
     }
 
@@ -54,57 +59,76 @@
         display: none;
     }
 
-    .orca-query-list-block-block{
+    .orca-query-list-block-block {
         isolation: isolate;
-    }
-    /* 【新增】块内容背景板 */
-    .orca-query-list-block-block:before {
-        content: "";
-        position: absolute;
-        /* top补偿 */
-        top: calc(-1 * var(--my-height-orca-repr-main-after));
-        bottom: 0;
-        /* 从容器padding区域的bottom开始 */
-        bottom: -1.5px;
-        /* 拉开开一个缩进+边框的距离 */
-        left: calc(-1 * var(--orca-spacing-indent) - var(--my-borderwidth-query-list));
-        right: 0;
-        /* background-color: transparent; */
-        background-color: #80808009;
-        z-index: -1;
-        border: 1px solid var(--my-bordercolor-query-list);
-        border-left-width: var(--my-borderwidth-query-list);
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
     }
 
     /* 【重定义】结果内的块内容不再需要那么大的左侧留白 */
     .orca-query-list-block-block {
         padding-left: 3px;
         /* 额外补一个left边框线的宽度 */
-        margin-left: calc(1px + var(--orca-spacing-indent) + var(--my-borderwidth-query-list));
+        margin-left: calc(var(--orca-spacing-indent) + var(--my-border-left-query-list));
+    }
+
+    /* 【新增】块内容背景板 */
+    .orca-query-list-block-block:before {
+        content: "";
+        position: absolute;
+        /* top补偿，after高度 + 边框 */
+        top: calc(-1 * var(--my-height-orca-repr-main-after) - var(--my-border-query-list));
+        /* bottom 补偿 边框 */
+        bottom: var(--my-border-query-list);
+        /* 拉开开一个缩进+边框的距离 */
+        left: calc(-1 * var(--orca-spacing-indent) - var(--my-border-left-query-list));
+        right: 0;
+        background-color: #80808006;
+        z-index: -1;
+        border: var(--my-border-query-list) solid var(--my-bordercolor-query-list);
+        border-left-width: var(--my-border-left-query-list);
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
     }
 
     .orca-query-list-block-breadcrumb {
-        font-size: .75rem;
-        color: var(--my-color-query-list-breadcrumb);
-        margin-bottom: .3rem;
+        /* 值margin-bottom == after + border-top */
+        margin-bottom: calc(var(--my-height-orca-repr-main-after) + var(--my-border-query-list));
+        /* 移动半个字 使得刚好错开块标 */
+        margin-left: -.5em;
     }
 
     /* 间距 */
     .orca-query-list-block {
-        /* 把条目边框的2px补进去 */
-        margin-top: calc(2 * var(--my-height-orca-repr-main-after) + 2px);
         padding-top: 0;
-        padding-bottom: 1.5px;
+        padding-bottom: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        /* orca-block的背景板对照main:after进行了top扩充 var(--my-height-orca-repr-main-after) + border1px */
+        /* 因此条目间距需要补上这个距离 */
+        /* 再为了使条目间距 == border到文字底部的距离，额外补偿一个main:after和半行距 */
+        margin-bottom: calc(var(--my-height-orca-repr-main-after) + var(--my-border-query-list) + 1 * (var(--my-height-orca-repr-main-after) + .3rem));
+
+        &:has(+.orca-query-list-block>.orca-query-list-block-breadcrumb) {
+            /* 后一个存在面包屑，有了明确实体，条目间距也就不需要替背景板补margin了*/
+            /* 削去字间距，补偿border宽度使其看起来像是等距 */
+            margin-bottom: calc(var(--my-height-orca-repr-main-after) + .3rem - var(--my-size-query-block-breadcrumb) * .3 + var(--my-border-query-list) * 2);
+        }
     }
 
-    /* 减小和list-block的距离 */
+    /* —————————————————————————————————————————— */
+    /* 使得工具条上俩间距一致 */
     .orca-query-result-list-toolbar {
-        margin-bottom: -5px !important;
+        margin-bottom: 0;
     }
 
+    .orca-query-list-block:first-child {
+        margin-top: calc(var(--orca-spacing-md) - var(--my-size-query-block-breadcrumb) * .3);
 
+        &:not(:has(>.orca-query-list-block-breadcrumb)) {
+            margin-top: calc(var(--orca-spacing-md) + var(--my-height-orca-repr-main-after) + var(--my-border-query-list))
+        }
+    }
+
+    /* —————————————————————————————————————————— */
     /* 计数器 */
     .orca-query-list-block-block>.orca-repr:after {
         content: counter(result-id);
@@ -157,6 +181,7 @@
     .orca-repr-main:not(:hover) .orca-block-folding-handle {
         opacity: 0;
     }
+
     .orca-query-list-block:hover>.orca-block>div>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-folding-handle {
         opacity: 1;
     }
@@ -164,7 +189,7 @@
 
 /* card视图 */
 #custom-theme-body {
-    
+
     /* 卡片视图里行卡片数文本移除左边距 和icon贴近点 */
     .orca-query-result-card-toolbar>div>.orca-button.plain.orca-select-button {
         padding-left: 0;
