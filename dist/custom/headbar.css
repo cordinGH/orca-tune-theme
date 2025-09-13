@@ -1,9 +1,12 @@
 /* 顶部栏右侧按钮收纳进设置圆点 */
 #headbar{
     .orca-headbar-global-tools {
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
-        /* padding-left:1rem; */
+        /* 拉开和user-tools的距离，减少误触 */
+        margin-left:1rem;
+        gap:0;
+        &>button:not(:last-child){
+            margin-right:var(--orca-spacing-sm);
+        }
     }
 
     .orca-headbar-global-tools:not(:hover)>button:not(:last-child) {
@@ -14,7 +17,6 @@
     }
 
     .orca-headbar-global-tools>button {
-        transition-delay: .2;
         transition:
             margin-right .2s ease-out,
             opacity .2s ease-out,
