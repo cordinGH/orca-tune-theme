@@ -106,10 +106,24 @@
         content: "\ec01";
     }
 
+
     /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
     /* 底部引用特定情况下去除：无计数器则none（虎鲸引用计数器是瞬时响应的） */
-    .orca-block-editor-blocks:not(:has(>.orca-block[data-indent="0"]>.orca-repr>.orca-repr-main .orca-block-ref-count-marker))+div:has(.orca-selected:first-child) .orca-hideable:not(.orca-hideable-hidden) {
-        display: none;
+    /* 2025-09-14 issue-1。fix->存在包含结构时不作处理 */
+    .orca-block-editor-blocks:not(:has(>.orca-block[data-indent="0"]>.orca-repr>.orca-repr-main :is(.orca-block-ref-count-marker, .orca-repr-tag-hierarchy)))+div:has(.orca-selected:first-child) {
+        & .orca-hideable {
+            display: none;
+        }
+
+        & .orca-block-editor-query-tabs-container {
+            transition: opacity .15s ease-out .15s;
+            opacity: .5;
+        }
+
+        & .orca-block-editor-query-tabs-container:hover {
+            opacity: 1;
+            transition: opacity .1s ease-out 0s;
+        }
     }
 
 
@@ -124,18 +138,13 @@
     /* 编辑器切换时增加过渡动画 */
     .orca-hideable:not(.orca-hideable-hidden)>.orca-block-editor>.orca-block-editor-main {
         transform-origin: top left;
-        animation: tovisible .1s linear forwards;
+        animation: tovisible .1s linear backwards;
     }
 
     @keyframes tovisible {
         from {
             opacity: 0;
             scale: .95;
-        }
-
-        to {
-            opacity: 1;
-            scale: 1;
         }
     }
 }
@@ -257,4 +266,26 @@
 /* 编辑器列表条目前缀块标 */
 .orca-menu-text-pre {
     margin-right: .5rem;
+}
+
+
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* TOC顶格缩进；块标调节 */
+.orca-toc>.orca-toc-item>.orca-toc-item-content {
+    &>.orca-toc-item-fold-arrow:before {
+        content: "\ea08";
+    }
+
+    margin-bottom:.375rem;
+
+    &:has(>.ti-chevron-right) {
+        border-radius: 4px;
+        padding-left: .375rem;
+        margin-left: -.375rem;
+        background-image: linear-gradient(to right, rgb(128 128 128 / 12%) 50%, transparent);
+    }
+}
+
+.orca-toc>.orca-toc-item>.orca-toc-item-child-items {
+    margin-left: 0em;
 }
