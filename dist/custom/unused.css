@@ -1,0 +1,25 @@
+/* 群友希望将底部引用放在最下面 */
+/* 未引入进主题，如果需要可自行复制一下，随便粘贴在哪一个css文件的末尾都行 */
+.orca-block-editor-main {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    anchor-scope: --orca-block-editor-blocks;
+    padding-bottom: 6rem;
+
+    &>.orca-block-editor-blocks {
+        anchor-name: --orca-block-editor-blocks;
+        margin-bottom: 100px;
+    }
+
+    &>.orca-block-editor-none-editable>.orca-block-editor-placeholder {
+        position: absolute;
+        position-anchor: --orca-block-editor-blocks;
+        top: anchor(bottom);
+        width: 100%;
+    }
+
+    &>.orca-block-editor-none-editable {
+        margin-top: auto;
+    }
+}
