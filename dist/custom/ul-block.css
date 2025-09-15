@@ -1,7 +1,8 @@
-.orca-repr-ul-content{
+.orca-repr-ul-content {
     /* 控制光标起始位置 */
     padding-left: 1.1em;
 }
+
 .orca-repr-ul-content:before {
     display: inline-block;
     content: var(--orca-ul-disc);
@@ -10,6 +11,7 @@
     margin-left: -1.25em;
     width: 1.35em;
 }
+
 .orca-repr-ul-content::before {
     font-family: tabler-icons;
     speak: none;
@@ -19,11 +21,13 @@
     -webkit-font-smoothing: antialiased;
     font-variant: normal;
 }
-.orca-repr-ul-content+.orca-repr-main-none-editable .orca-block-handle:not(.orca-block-handle-collapsed):before{
-    content:"\eb6b";
-    scale:1;
-    color: var(--orca-block-handle-passive-color)!important;
+
+.orca-repr-ul-content+.orca-repr-main-none-editable .orca-block-handle:not(.orca-block-handle-collapsed, :hover):before {
+    content: "\eb6b";
+    scale: 1;
+    color: var(--orca-block-handle-passive-color) !important;
 }
+
 /* —————————————————————————————————————————————————————————————————————— */
 /* 【重定义】ul圆点折叠后颜色不变 */
 /* 如果需要启用新块标就注释掉下面这条css，反之则注释掉上方的所有css */
