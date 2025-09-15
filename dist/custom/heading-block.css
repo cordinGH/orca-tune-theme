@@ -71,14 +71,13 @@ h2.orca-repr-heading-content>span {
 
 h3.orca-repr-heading-content {
     box-shadow:
-        inset 0 -2px 0 0 var(--orca-color-bg-1),
-        inset 0 -2.5px 0 0 var(--my-color-heading);
+        inset 0 -.5px 0 0 var(--my-color-heading);
 }
 
 h3.orca-repr-heading-content>:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
+    display:inline-block;
     box-shadow:
-        0 2px 0 0 var(--orca-color-bg-1),
-        0 4px 0 0 var(--my-color-heading);
+        inset 0 -2px 0 0 var(--my-color-heading);
 }
 
 
