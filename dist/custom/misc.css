@@ -41,7 +41,8 @@
     .orca-favorites-items,
     .orca-tags-list-list,
     .orca-aliased-list,
-    .orca-block-editor {
+    .orca-block-editor,
+    .orca-select-menu-options {
         /* 阻止因为滚动条导致的压缩 */
         scrollbar-gutter: stable;
 
