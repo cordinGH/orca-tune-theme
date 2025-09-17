@@ -63,28 +63,34 @@
     &>.orca-repr-main {
         float: left;
         margin-right: 1rem;
-        max-width: calc(100% - 19rem);
+        /* em是为了适配悬浮预览 */
+        /* 先消去为了translate而扩充的宽度 */
+        max-width: max(calc(100% - var(--orca-block-indent) * var(--orca-spacing-indent) - 15em), 12em);
     }
 
     &>.orca-repr-main .orca-image-wrapper {
-        min-width: 8rem;
+        /* em是为了适配悬浮预览 */
+        min-width: 8em;
     }
 
     &>.orca-repr-main .orca-image-image {
         min-width: 100%;
     }
 
+    /* ----------------------------------------------------- */
     /* 贴合子块内容起始位置 */
     &>.orca-repr-children {
         margin-left: calc(var(--orca-block-indent) * var(--orca-spacing-indent));
     }
 
+    /* 提供更大的渲染空间以便适配translate */
     width:calc(100% + calc(var(--orca-block-indent) * var(--orca-spacing-indent)));
 
     &>.orca-repr-children>* {
         display: flow-root;
         translate: calc(-1 * (var(--orca-block-indent) - 1) * var(--orca-spacing-indent));
     }
+    /* ----------------------------------------------------- */ 
 
     /* 让图片内容层叠级别上去，不被子块遮挡 */
     &>.orca-repr-main>.orca-repr-image-content>:is(.orca-no-editable-container, .orca-tags) {

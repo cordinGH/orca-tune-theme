@@ -176,5 +176,7 @@
         width: 600px;
         height: 375px;
         max-height: 45cqh;
+        /* 作用域orca窗口非常小时 */
+        max-width: 96cqw;
     }
 }
