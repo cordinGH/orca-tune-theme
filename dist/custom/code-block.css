@@ -129,6 +129,9 @@
         right: 1px;
         left: 1px;
 
+        /* header栏中的文字  不自动换行 */
+        white-space: nowrap;
+
         &>.orca-button.orca-select-button {
             color: var(--my-color-code-editor-header);
             font-size: 12px;

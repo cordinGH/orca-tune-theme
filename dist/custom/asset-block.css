@@ -1,19 +1,21 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+        --my-shadow-img: 0 0 5px #333;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --my-shadow-img: 0 0 5px #ccc;
+    }
+}
+
 /* 
     ————————————————————————————————————————————————————————————————————
     图片块提供轻微边界阴影。不会包含图片描述
     视频块同理。同时视频默认居中。
     ————————————————————————————————————————————————————————————————————
 */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --my-shadow-img: 0 0 5px #333;
-    }
-}
-@media (prefers-color-scheme: light) {
-    :root {
-        --my-shadow-img: 0 0 5px #ccc;
-    }
-}
 #custom-theme-body {
     .orca-image-wrapper {
         padding: 5px;
@@ -49,5 +51,35 @@
 
     .orca-video-toolbar>.orca-select-button {
         white-space: nowrap;
+    }
+}
+
+
+/* 图文环绕 */
+/* 使用说明：图文环绕是虎鲸中的一个标签名，当图片块打上该标签后，子块会以图文环绕的形式呈现。如果想用其他标签名，在下面改一下即可 */
+.orca-repr-image:has(>.orca-repr-main [data-name="图文环绕"]) {
+    display: flow-root;
+
+    &>.orca-repr-main {
+        float: left;
+        margin-right: 1rem;
+    }
+
+    /* 贴合子块内容起始位置 */
+    &>.orca-repr-children {
+        margin-left: calc(var(--orca-block-indent) * var(--orca-spacing-indent));
+    }
+
+    width:calc(100% + calc(var(--orca-block-indent) * var(--orca-spacing-indent)));
+
+    &>.orca-repr-children>* {
+        display: flow-root;
+        translate: calc(-1 * (var(--orca-block-indent) - 1) * var(--orca-spacing-indent));
+    }
+
+    /* 让图片内容层叠级别上去，不被子块遮挡 */
+    &>.orca-repr-main>.orca-repr-image-content>:is(.orca-no-editable-container, .orca-tags) {
+        z-index: 1;
+        position: relative;
     }
 }
