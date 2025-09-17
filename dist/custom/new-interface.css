@@ -74,7 +74,9 @@
 
             }
 
-            .day:not(.value):hover, .month:not(.value):hover, .year:not(.value):hover {
+            .day:not(.value):hover,
+            .month:not(.value):hover,
+            .year:not(.value):hover {
                 background-color: #1E40AF;
                 background-color: #bfdbfe;
                 /* color:#FAFAFA; */
@@ -82,9 +84,9 @@
         }
 
 
-        .orca-fav-item-item:hover .orca-fav-item-icon,
-        .orca-tags-tag-item:hover .orca-tags-tag-icon,
-        .orca-aliased-block-item:hover .orca-aliased-block-icon {
+        .orca-fav-item-item:hover :is(.orca-fav-item-icon, .orca-fav-item-icon-emoji),
+        .orca-tags-tag-item:hover :is(.orca-tags-tag-icon, .orca-tags-tag-icon-emoji),
+        .orca-aliased-block-item:hover :is(.orca-aliased-block-icon, .orca-aliased-block-icon-emoji) {
             background-color: var(--my-bgcolor-app);
             /* background-color:rgb(223 223 229); */
         }
