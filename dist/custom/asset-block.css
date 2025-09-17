@@ -56,13 +56,22 @@
 
 
 /* 图文环绕 */
-/* 使用说明：图文环绕是虎鲸中的一个标签名，当图片块打上该标签后，子块会以图文环绕的形式呈现。如果想用其他标签名，在下面改一下即可 */
+/* 使用说明：图文环绕是虎鲸中的标签名，当图片块打上该标签后，子块会以图文环绕的形式呈现 */
 .orca-repr-image:has(>.orca-repr-main [data-name="图文环绕"]) {
     display: flow-root;
 
     &>.orca-repr-main {
         float: left;
         margin-right: 1rem;
+        max-width: calc(100% - 19rem);
+    }
+
+    &>.orca-repr-main .orca-image-wrapper {
+        min-width: 8rem;
+    }
+
+    &>.orca-repr-main .orca-image-image {
+        min-width: 100%;
     }
 
     /* 贴合子块内容起始位置 */
