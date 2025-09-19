@@ -78,3 +78,13 @@
 #main .orca-popup .orca-inline-reference-preview>.orca-block-editor>.orca-block-editor-main {
     padding-bottom: 0;
 }
+
+
+/* 提高图片尺寸调节按钮的层叠级别，以避免扁长图不方便调节尺寸的问题（被工具栏遮挡） */
+.orca-image-resizer{
+    z-index: var(--orca-zindex-decorator);
+}
+.orca-image-wrapper:hover .orca-image-resizer:before{
+    top: 25%;
+    bottom: 25%;
+}

@@ -116,11 +116,23 @@
     }
 
     .orca-headbar-sidebar-tools .orca-button {
-        color: var(--orca-color-text-1);
+        color: var(--orca-color-text-1)!important;
+    }
+    .orca-headbar-sidebar-tools .orca-button:disabled{
+        opacity:.2;
     }
 
     .orca-headbar-sidebar-tools .orca-button:not(:disabled):active {
         background-color: var(--orca-color-gray-1);
+    }
+}
+/* dark下左侧栏按钮颜色 */
+@media (prefers-color-scheme: dark) {
+    .orca-headbar-sidebar-tools .orca-button {
+        color: var(--orca-color-gray-3)!important;
+    }
+    .orca-headbar-sidebar-tools .orca-button:disabled {
+        opacity:.2;
     }
 }
 
