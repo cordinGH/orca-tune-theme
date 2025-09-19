@@ -23,9 +23,9 @@ orca/
 ---
 
 > [!TIP]  
-> **Q：`orca\` 目录在哪？**  
-> A：从下图进入即可看到  
-> <img width="321" height="134" alt="image" src="https://github.com/user-attachments/assets/50cf1e64-f628-42cb-8e77-82ae4083999b" />
+> - **Q：`orca\` 目录在哪？**  
+> - A：从下图进入即可看到  
+>   <img width="321" height="134" alt="image" src="https://github.com/user-attachments/assets/50cf1e64-f628-42cb-8e77-82ae4083999b" />
 
 ---
 
@@ -33,12 +33,15 @@ orca/
 
 <img width="3200" height="1901" alt="image" src="https://github.com/user-attachments/assets/199f874e-2246-4172-a019-e9e8b2f4e093" />
 
+( 上图为 **v1.0.0** )
 
-> 1、纯 CSS 驱动  
-> 2、自带 PingFangSC 字体，字重支持范围 200-600  
-> 3、支持设置命令快捷键，快速启用和关闭主题（命令/快捷键搜索 Tune）
+> [!note]
+> - 纯 CSS 驱动  
+> - 自带 PingFangSC 字体，字重支持范围 200-600  
+> - 支持设置命令快捷键，快速启用和关闭主题（命令/快捷键搜索 Tune）
 
 ## 主题更新历史
+- **v1.5.0** [左侧栏更为平滑的收起/展开](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.5.0)  
 - **v1.4.0** [支持图文环绕](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.4.0)  
 - **v1.3.0** [新风格：顶部栏和左侧栏形成一个视觉整体，包裹住主编辑区域](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.3.0)  
 - **v1.2.0** [右侧栏toc从顶格开始显示](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.2.0)

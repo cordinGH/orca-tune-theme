@@ -54,14 +54,22 @@
     border-bottom-left-radius: 999px;
     border-left: .5px solid var(--orca-color-text-1);
     border-left-color: var(--orca-color-text-1);
-    opacity: .2;
+    opacity: .5;
+}
+
+@media (prefers-color-scheme: dark) {
+    .orca-aliased-block-item:has(>.ti-chevron-down):before,
+    .orca-tags-tag-item:has(>.ti-chevron-down):before,
+    .orca-fav-item-item:has(>.ti-chevron-down):before {
+        opacity: .3;
+    }
 }
 
 /* hover变色 */
 .orca-aliased-block-item:hover:before,
 .orca-tags-tag-item:hover:before,
 .orca-fav-item-item:hover:before {
-    opacity: .5;
+    opacity: 1;
 }
 
 /* 折叠变成圆角小竖条 */
@@ -74,7 +82,7 @@
 
 
     background-color: var(--orca-color-text-1);
-    opacity: .5;
+    opacity: .6;
     border-radius: 1px;
 }
 
