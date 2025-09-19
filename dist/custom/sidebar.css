@@ -184,3 +184,16 @@ body:has(.orca-tags-tag-item:hover) .orca-popup:has(.orca-tooltip),
 body:has(.orca-fav-item-item:hover) .orca-popup:has(.orca-tooltip) {
     translate: 2rem 0;
 }
+
+
+/* 2025-09-19，优化侧边栏收起/展开的过渡，使得main区域平滑变化 */
+#sidebar{
+    position: relative !important;
+    /* devtools预设的曲线 */
+    transition:margin-left 0.1s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+    
+}
+.sidebar-closed #sidebar{
+    width:var(--orca-sidebar-width);
+    margin-left:calc(-1 * var(--orca-sidebar-width));
+}
