@@ -60,41 +60,53 @@
 .orca-repr-image:has(>.orca-repr-main [data-name="图文环绕"]) {
     display: flow-root;
 
+    /* em是为了适配悬浮预览 */
     &>.orca-repr-main {
         float: left;
-        margin-right: 1rem;
-        /* em是为了适配悬浮预览 */
-        /* 先消去为了translate而扩充的宽度 */
-        max-width: max(calc(100% - var(--orca-block-indent) * var(--orca-spacing-indent) - 15em), 12em);
-    }
-
-    &>.orca-repr-main .orca-image-wrapper {
-        /* em是为了适配悬浮预览 */
-        min-width: 8em;
-    }
-
-    &>.orca-repr-main .orca-image-image {
-        min-width: 100%;
+        margin-right: 1em;
     }
 
     /* ----------------------------------------------------- */
-    /* 贴合子块内容起始位置 */
+    /* 约束子块集合的起始位置，再令子块左移一次父块缩进，即可使得子块的main的起始缩进变为1 */
     &>.orca-repr-children {
         margin-left: calc(var(--orca-block-indent) * var(--orca-spacing-indent));
     }
-
-    /* 提供更大的渲染空间以便适配translate */
-    width:calc(100% + calc(var(--orca-block-indent) * var(--orca-spacing-indent)));
 
     &>.orca-repr-children>* {
         display: flow-root;
         translate: calc(-1 * (var(--orca-block-indent) - 1) * var(--orca-spacing-indent));
     }
-    /* ----------------------------------------------------- */ 
 
+    /* 追加一次translate所需的内容空间 */
+    width:calc(100% + calc(var(--orca-block-indent) * var(--orca-spacing-indent)));
+    
+    /* ----------------------------------------------------- */ 
     /* 让图片内容层叠级别上去，不被子块遮挡 */
     &>.orca-repr-main>.orca-repr-image-content>:is(.orca-no-editable-container, .orca-tags) {
         z-index: 1;
         position: relative;
+    }
+
+    /* ----------------------------------------------------- */ 
+    /* 约束尺寸调节体验 */
+    
+    /* 最小图片尺寸，和图文环绕标签差不多长 */
+    --min-width-img: 6.5em;
+
+    &>.orca-repr-main{
+        /* 先消去为了translate而扩充的宽度 */
+        max-width: max(calc(100% - var(--orca-block-indent) * var(--orca-spacing-indent) - 15em), var(--min-width-img));
+
+        & .orca-tag{
+            white-space:nowrap;
+        }
+    }
+    &>.orca-repr-main .orca-image-wrapper {
+        /* 和图文环绕标签差不多长 */
+        min-width: var(--min-width-img);
+    }
+
+    &>.orca-repr-main .orca-image-image {
+        min-width: 100%;
     }
 }

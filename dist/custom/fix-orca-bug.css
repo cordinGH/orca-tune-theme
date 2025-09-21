@@ -105,3 +105,17 @@
         border-right: 0;
     }
 }
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 优化不可编辑块的按钮位置，单位em可以在预览窗口也有不错的体验 */
+.orca-no-editable-btn.orca-button.orca-insert-top {
+    left: 2.25em;
+}
+
+.orca-no-editable-btn.orca-button.orca-fold {
+    left: 4.25em;
+}
+
+.orca-no-editable-btn.orca-button.orca-insert-bottom {
+    right: 2.25em;
+}
