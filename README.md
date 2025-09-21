@@ -41,6 +41,7 @@ orca/
 > - 支持设置命令快捷键，快速启用和关闭主题（命令/快捷键搜索 Tune）
 
 ## 主题更新历史
+- **v1.6.0** [优化表格视图&左侧栏](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.6.0)  
 - **v1.5.0** [左侧栏更为平滑的收起/展开](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.5.0)  
 - **v1.4.0** [支持图文环绕](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.4.0)  
 - **v1.3.0** [新风格：顶部栏和左侧栏形成一个视觉整体，包裹住主编辑区域](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.3.0)  
