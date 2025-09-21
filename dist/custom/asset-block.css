@@ -70,6 +70,7 @@
     /* 约束子块集合的起始位置，再令子块左移一次父块缩进，即可使得子块的main的起始缩进变为1 */
     &>.orca-repr-children {
         margin-left: calc(var(--orca-block-indent) * var(--orca-spacing-indent));
+        padding-top: var(--orca-spacing-md);
     }
 
     &>.orca-repr-children>* {
