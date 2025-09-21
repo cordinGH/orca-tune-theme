@@ -55,6 +55,7 @@
 }
 
 
+/* ———————————————————————————————————————————————————————————————————— */
 /* 图文环绕 */
 /* 使用说明：图文环绕是虎鲸中的标签名，当图片块打上该标签后，子块会以图文环绕的形式呈现 */
 .orca-repr-image:has(>.orca-repr-main [data-name="图文环绕"]) {
@@ -109,5 +110,16 @@
 
     &>.orca-repr-main .orca-image-image {
         min-width: 100%;
+    }
+}
+
+
+/* ———————————————————————————————————————————————————————————————————— */
+/* 图片块底部插入按钮，跟随图片尺寸 */
+.orca-repr-image-content .orca-no-editable-container{
+    max-width: max-content;
+    & .orca-no-editable-btn.orca-button.orca-insert-bottom {
+        right: unset;
+        left:max(calc(100% - 3.5em), 2.25em);
     }
 }
