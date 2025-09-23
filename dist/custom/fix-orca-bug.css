@@ -119,3 +119,14 @@
 .orca-no-editable-btn.orca-button.orca-insert-bottom {
     right: 2.25em;
 }
+
+/* ———————————————————————————————————————————————————————————————————————————— */
+/* 列表视图，优化无面包屑时的单元格上边距（补齐main:after） */
+.orca-query-table-row:not(.orca-query-table-row-add,.orca-query-table-row-stats) .orca-query-table-cell:not(:has(>.orca-query-card-breadcrumb)){
+    padding-top:calc(var(--orca-spacing-sm) + .35em);
+}
+
+/* 列表视图垂直滚动条不应该存在 */
+.orca-query-table-table {
+    overflow-y: hidden;
+}

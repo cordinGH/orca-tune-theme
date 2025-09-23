@@ -1,187 +1,236 @@
-// dist/index.js
+// 导入升级模块
+import { handleVersionUpgrade } from './tune-upgrade.js';
 
-// 模块作用域变量
-let currentPluginName = '';
-const THEME_CSS_ID_PREFIX = 'css-injector-';
-const BODY_ID = 'custom-theme-body'; // 新增常量，便于维护
-let isThemeCurrentlyActive = false; // 用于跟踪主题的当前状态
-let themeToggleCommandId = '';    // 用于存储命令的ID
-let absoluteCssPath = ''; // 新增：缓存 CSS 路径，避免重复创建 URL
+// 常量定义
+const BASE_LINK_ID = 'tune-theme-inject-baseStyles'; // 基础CSS文件的link ID
+const BODY_ID = 'custom-theme-body'; // body元素的ID
+const BASE_CSS_NAME = 'custom.css'; // 基础CSS文件的名称
+// 全局变量
+let currentPluginName = ''; // 当前插件名称
+let cssPathPrefix = ''; // CSS路径前缀
+let isThemeCurrentlyActive = false; // 主题是否激活
+let themeActivateCommandId = ''; // 主题激活命令ID
 
-// --- Helper 函数：获取 DOM 元素，减少重复查询 ---
+// 日志工具
+const log = {
+    info: (message) => console.log(`[${currentPluginName}] ${message}`),
+    error: (message) => console.error(`[${currentPluginName}] ${message}`)
+};
+
+// 工具函数：获取 DOM 元素
 function getDomElements() {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  const body = document.body || document.getElementsByTagName('body')[0];
-  return { head, body };
+    return {
+        head: document.head || document.getElementsByTagName('head')[0],
+        body: document.body || document.getElementsByTagName('body')[0]
+    };
 }
 
-// --- 内部 CSS 加载逻辑 ---
-function applyThemeStylesInternal() {
-  if (!currentPluginName) {
-    console.warn('applyThemeStylesInternal called but currentPluginName is not set.');
-    return;
-  }
-  try {
-    const { head, body } = getDomElements();
-
-    if (head) {
-      const linkId = THEME_CSS_ID_PREFIX + currentPluginName;
-      if (document.getElementById(linkId)) {
-        console.log(`Plugin '${currentPluginName}': Theme CSS link already exists (ID: ${linkId}).`);
-        isThemeCurrentlyActive = true; // 确保状态同步
-        return;
-      }
-
-      // 先添加 ID 到 body 元素，确保在 CSS 加载前 body 已带有 ID
-      if (body && !body.id) { // 检查是否已有 ID，避免覆盖
-        body.id = BODY_ID;
-        console.log(`Plugin '${currentPluginName}': Added ID '${BODY_ID}' to body element.`);
-      } else if (body && body.id) {
-        console.warn(`Plugin '${currentPluginName}': Body already has an ID '${body.id}'. Not adding new ID to avoid conflicts.`);
-      } else {
-        console.error(`Plugin '${currentPluginName}': Could not find document body to add ID.`);
-      }
-
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = absoluteCssPath;
-      link.id = linkId;
-
-      // 添加 onload 和 onerror 以确认加载成功
-      link.onload = () => {
-        console.log(`Plugin '${currentPluginName}': CSS loaded successfully.`);
-        isThemeCurrentlyActive = true;
-      };
-      link.onerror = () => {
-        console.error(`Plugin '${currentPluginName}': Failed to load CSS from ${absoluteCssPath}.`);
-        isThemeCurrentlyActive = false;
-      };
-
-      head.appendChild(link);
-      console.log(`Plugin '${currentPluginName}': Custom CSS link created with ID '${link.id}'. Path: ${absoluteCssPath}`);
-    } else {
-      console.error(`Plugin '${currentPluginName}': Could not find document head to inject CSS.`);
-      isThemeCurrentlyActive = false; // 加载失败，状态设为false
+// 初始化函数：初始化插件的全局变量
+function initTuneThemeGlobals(pluginName) {
+    if (!pluginName) {
+        log.error('插件名称不能为空');
+        return false;
     }
-  } catch (e) {
-    console.error(`Plugin '${currentPluginName}': Error applying theme styles.`, e);
-    isThemeCurrentlyActive = false; // 加载失败，状态设为false
-  }
+    
+    currentPluginName = pluginName;
+    themeActivateCommandId = `${pluginName}.toggleActive`;
+
+    // 设置CSS路径前缀（当前JS文件所在的绝对路径）
+    cssPathPrefix = new URL('.', import.meta.url).href;
+    
+    log.info('插件初始化完成');
+    return true;
 }
 
-// --- 内部 CSS 卸载逻辑 ---
-function removeThemeStylesInternal() {
-  if (!currentPluginName) {
-    console.warn('removeThemeStylesInternal called but currentPluginName is not set.');
-    return;
-  }
-  try {
-    const { body } = getDomElements(); // 只需 body，这里不需要 head 但为了统一使用 helper
-    const linkId = THEME_CSS_ID_PREFIX + currentPluginName;
-    const themeLinkElement = document.getElementById(linkId);
-    if (themeLinkElement) {
-      themeLinkElement.remove();
-      isThemeCurrentlyActive = false;
-      console.log(`Plugin '${currentPluginName}': Custom CSS unloaded by removing element with ID '${linkId}'.`);
-    } else {
-      // 即使没找到元素，也应该将状态视为false，因为我们期望它被移除
-      isThemeCurrentlyActive = false;
-      console.warn(`Plugin '${currentPluginName}': No custom CSS link found to unload (expected ID: '${linkId}'). Current state set to inactive.`);
-    }
 
-    // 移除 body 的 ID（仅当它是我们添加的）
-    if (body && body.id === BODY_ID) {
-      body.removeAttribute('id');
-      console.log(`Plugin '${currentPluginName}': Removed ID '${BODY_ID}' from body element.`);
-    }
-  } catch (e) {
-    console.error(`Plugin '${currentPluginName}': Error removing theme styles.`, e);
-    isThemeCurrentlyActive = false; // 出错时，也认为主题未激活
-  }
-}
-
-// --- 切换主题的命令执行函数 ---
-function toggleThemeCommandExecute() {
-  if (!currentPluginName) {
-    console.warn('toggleThemeCommandExecute called but currentPluginName is not set.');
-    return;
-  }
-  console.log(`Command '${themeToggleCommandId}' executed. Current theme active state BEFORE toggle: ${isThemeCurrentlyActive}`);
-  if (isThemeCurrentlyActive) {
-    removeThemeStylesInternal();
-  } else {
-    applyThemeStylesInternal();
-  }
-  console.log(`Theme active state AFTER toggle: ${isThemeCurrentlyActive}`);
-  // 如果有持久化设置，可以在这里保存 isThemeCurrentlyActive 的状态
-  // await orca.settings.set(currentPluginName, 'themeActive', isThemeCurrentlyActive);
-}
-
-// --- load 函数 (修改版：加载时默认应用主题) ---
+// 插件生命周期函数：load函数
 export async function load(pluginName) {
-  currentPluginName = pluginName;
-  themeToggleCommandId = `${pluginName}.toggleMyTheme`; // 定义命令ID
+    try {
+        // 初始化全局变量
+        if (!initTuneThemeGlobals(pluginName)) {
+            throw new Error('插件初始化失败');
+        }
 
-  // 计算并缓存 CSS 路径
-  const cssUrl = new URL('./custom.css', import.meta.url);
-  absoluteCssPath = cssUrl.href;
+        // 应用主题样式
+        const applyOK = await applyStyles();
+        log.info(applyOK ? '主题基础样式应用成功' : '主题基础样式应用失败');
 
-  console.log(`Plugin '${currentPluginName}' LOADED. Attempting to apply theme by default. Command '${themeToggleCommandId}' will be registered.`);
+        // 注册主题激活命令
+        const registerOK = await registerThemeActivateCommand();
+        log.info(registerOK ? '主题激活命令注册成功' : '主题激活命令注册失败');
 
-  // ***** 主要改动在这里 *****
-  // 直接应用主题样式
-  applyThemeStylesInternal();
-  // isThemeCurrentlyActive 会在 applyThemeStylesInternal 内部被设为 true (如果成功)
-  // ***********************
+        // 版本升级处理（放在最后，不阻塞主流程）
+        handleVersionUpgrade(pluginName);
 
-  // 注册命令 (使用 optional chaining)
-  try {
-    const registerCommand = window.orca?.commands?.registerCommand;
-    if (registerCommand) {
-      registerCommand(themeToggleCommandId, toggleThemeCommandExecute, '启用/关闭Tune主题');
-      console.log(`Plugin '${pluginName}': Command '${themeToggleCommandId}' successfully registered.`);
-    } else {
-      console.warn(`Plugin '${pluginName}': orca.commands.registerCommand API not found. Command cannot be registered.`);
+    } catch (error) {
+        log.error(`插件加载失败: ${error.message}`);
     }
-  } catch (e) {
-    console.error(`Plugin '${pluginName}': Error registering command '${themeToggleCommandId}'.`, e);
-  }
-
-  // 确保在函数末尾打印正确的状态（如果 applyThemeStylesInternal 成功了）
-  console.log(`Theme active state after initial load: ${isThemeCurrentlyActive}`);
-  return Promise.resolve();
 }
 
-// --- unload 函数 ---
-export async function unload() {
-  if (!currentPluginName) {
-    console.warn('Unload called but currentPluginName is not set (was load successful?).');
-    return Promise.resolve();
-  }
-  console.log(`Plugin '${currentPluginName}' UNLOADING...`);
 
-  // 1. 注销命令 (使用 optional chaining)
-  try {
-    const unregisterCommand = window.orca?.commands?.unregisterCommand;
-    if (unregisterCommand && themeToggleCommandId) {
-      unregisterCommand(themeToggleCommandId);
-      console.log(`Plugin '${currentPluginName}': Command '${themeToggleCommandId}' unregistered.`);
-    } else {
-      console.warn(`Plugin '${currentPluginName}': Command unregistration API not available or command ID unknown.`);
+// 样式管理函数：应用主题基础样式
+async function applyStyles() {
+    try {
+        // 获取 DOM 元素
+        const { head, body } = getDomElements();
+
+        if (!head) {
+            log.error('无法找到document.head，无法注入CSS');
+            return false;
+        }
+
+        // 设置body ID（主题样式需要）
+        if (body) {
+            if (body.id && body.id !== BODY_ID) {
+                log.info(`Body已存在ID '${body.id}'，将覆盖为 '${BODY_ID}'`);
+            }
+            body.id = BODY_ID;
+        }
+
+        // 注入基础CSS
+        const cssPath = cssPathPrefix + BASE_CSS_NAME; // 基础CSS文件的绝对路径
+        const linkId = BASE_LINK_ID; // 基础CSS文件的link ID
+        const success = await injectCSS(cssPath, linkId, head);
+
+        if (success) {
+            isThemeCurrentlyActive = true;
+        }
+        return success;
+    } catch (error) {
+        log.error(`样式应用失败: ${error.message}`);
+        isThemeCurrentlyActive = false;
+        return false;
     }
-  } catch (e) {
-    console.error(`Plugin '${currentPluginName}': Error unregistering command.`, e);
-  }
+}
 
-  // 2. 移除CSS样式 (如果当前是激活状态，或者干脆都移除)
-  removeThemeStylesInternal(); // 插件卸载时，确保移除样式
+// 工具函数：注入CSS
+function injectCSS(cssPath, linkId, head) {
+    return new Promise((resolve, reject) => {
+        // 检查是否已经存在相同的CSS
+        if (document.getElementById(linkId)) {
+            log.info(`CSS已存在（link-ID: ${linkId}），跳过注入`);
+            resolve(true);
+            return;
+        }
 
-  console.log(`Plugin '${currentPluginName}' UNLOADED. Theme state was: ${isThemeCurrentlyActive}`);
-  // 清理状态变量
-  currentPluginName = '';
-  isThemeCurrentlyActive = false;
-  themeToggleCommandId = '';
-  absoluteCssPath = ''; // 清理缓存
-  return Promise.resolve();
+        try {
+            // 创建link元素
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = cssPath;
+            link.id = linkId;
+
+            // 事件监听 - 在监听回调完成后，调用 resolve 完成 Promise
+            link.onload = () => {
+                log.info(`CSS注入成功，link-ID: ${link.id}`);
+                resolve(true);
+            };
+
+            link.onerror = () => {
+                const error = `CSS注入失败，路径: ${link.href}`;
+                log.error(error);
+                log.error('注入失败的可能原因: 文件不存在、权限问题或CSS语法错误');
+                reject(new Error(error));
+            };
+
+            head.appendChild(link);
+
+        } catch (error) {
+            log.error(`CSS注入失败: ${error.message}`);
+            reject(error);
+        }
+    });
+}
+
+
+// 移除主题基础样式
+function removeStyles() {
+    // 移除本插件的基础CSS的link元素
+    document.getElementById(BASE_LINK_ID)?.remove();
+
+    // 移除本插件添加的body的ID
+    const { body } = getDomElements();
+    if (body && body.id === BODY_ID) {
+        body.removeAttribute('id');
+    }
+
+    // 更新状态
+    isThemeCurrentlyActive = false;
+    return true;
+}
+
+// 注册主题激活命令：激活/停用Tune主题样式
+async function registerThemeActivateCommand() {
+    try {
+        // 检查命令是否已存在
+        if (orca.state.commands[themeActivateCommandId] == null) {
+            // 注册命令
+            orca.commands.registerCommand(
+                // 命令注册参数1：命令ID
+                themeActivateCommandId,
+                // 命令注册参数2：绑定主题激活命令的执行函数
+                async () => {
+                    try {
+                        log.info(`执行命令 '${themeActivateCommandId}'，当前主题状态: ${isThemeCurrentlyActive}`);
+
+                        if (isThemeCurrentlyActive) {
+                            // 当前已激活，执行removeStyles
+                            log.info(removeStyles() ? '主题已停用' : '主题停用失败');
+                        } else {
+                            // 当前未激活，执行applyStyles
+                            log.info(await applyStyles() ? '主题已激活' : '主题激活失败');
+                        }
+
+                        log.info(`命令执行完毕，主题状态切换为: ${isThemeCurrentlyActive}`);
+                    } catch (error) {
+                        log.error(`命令执行失败: ${error.message}`);
+                    }
+                },
+                // 命令注册参数3： 命令的显示名称
+                '激活/停用Tune主题样式'
+            );
+            return true; // 命令注册成功
+        }
+        return true; // 命令已存在，也视为成功
+    } catch (error) {
+        return false; // 命令注册失败
+    }
+}
+
+
+// 插件卸载函数：卸载插件，移除主题激活命令，移除主题样式 和 清理本插件的全局变量
+export async function unload() {
+    try {
+        log.info('开始卸载插件');
+
+        // 注销主题激活命令和快捷键
+        orca.commands.unregisterCommand(themeActivateCommandId);
+        orca.shortcuts.reset(themeActivateCommandId);
+        log.info('主题激活命令和快捷键注销成功');
+
+        // 移除本插件的样式
+        removeStyles();
+        log.info('主题样式移除成功');
+
+        // 清理插件数据
+        try {
+            await orca.plugins.removeData(currentPluginName, 'version');
+            await orca.plugins.removeData(currentPluginName, 'settings');
+            log.info('插件数据清理完成');
+        } catch (error) {
+            log.error(`插件数据清理失败: ${error.message}`);
+        }
+
+        // 清理本插件的全局变量
+        currentPluginName = '';
+        isThemeCurrentlyActive = false;
+        cssPathPrefix = '';
+        themeActivateCommandId = '';
+
+        log.info('插件卸载完成');
+
+    } catch (error) {
+        log.error(`插件卸载失败: ${error.message}`);
+    }
 }

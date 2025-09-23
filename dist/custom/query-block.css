@@ -200,3 +200,74 @@
         white-space: nowrap;
     }
 }
+
+/* 表格视图 */
+/* 提供结果计数 */
+#custom-theme-body {
+    .orca-query-table-table {
+        counter-reset: result-id 0;
+    }
+
+    .orca-query-table-row:not(.orca-query-table-row-add, .orca-query-table-row-stats) .orca-query-table-cell:first-child:before {
+        --my-color-gray-1: hsl(0 0% 85% / 1);
+        counter-increment: result-id;
+        content: counter(result-id);
+        width: 1.5em;
+        height: 1em;
+        line-height: 1;
+        font-size: .6125rem;
+        font-family: var(--orca-fontfamily-code);
+        white-space: nowrap;
+
+        position: absolute;
+        z-index: 3;
+        left: 0;
+        top: 0;
+
+        background-color: var(--orca-color-border);
+        border-bottom-right-radius: 1em;
+        border: 1px solid var(--orca-color-border);
+        border-right-width: .5em;
+        box-sizing: content-box;
+        text-align: center;
+        opacity: .3;
+    }
+
+    /* 对齐header第一栏的icon */
+    .orca-table-header-cell:first-child {
+        padding-left: 1.125em;
+
+        &>.orca-table-header-cell-icon {
+            padding-right: .25em;
+        }
+    }
+
+    /* 表头第一个单元格模糊背景 */
+    .orca-table-header-cell {
+        background-color: rgb(from var(--orca-color-bg-2) r g b / .4);
+
+        /* 模糊背景 */
+        &:first-child {
+            backdrop-filter: blur(1em);
+        }
+
+        /* header第一个cell缺少了圆角设置，且因为是定位元素，因此会影响边框线，得提供一个圆角 */
+        &:first-child {
+            border-top-left-radius: var(--orca-radius-sm);
+        }
+
+        &:first-child:last-child {
+            border-top-right-radius: var(--orca-radius-sm);
+        }
+    }
+
+    .orca-query-table-table {
+        box-shadow: none;
+        border-left-width: .5px;
+        border-right-width: .5px;
+    }
+
+    .orca-table-resizer {
+        background: center top / .5px 100% linear-gradient(var(--orca-color-separator), var(--orca-color-separator)) no-repeat;
+    }
+}
