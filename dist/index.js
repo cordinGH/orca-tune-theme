@@ -1,5 +1,6 @@
 // 导入升级模块
 import { handleVersionUpgrade } from './tune-upgrade.js';
+import { setupL10N, t } from './i18n.js';
 
 // 常量定义
 const BASE_LINK_ID = 'tune-theme-inject-baseStyles'; // 基础CSS文件的link ID
@@ -27,18 +28,13 @@ function getDomElements() {
 
 // 初始化函数：初始化插件的全局变量
 function initTuneThemeGlobals(pluginName) {
-    if (!pluginName) {
-        log.error('插件名称不能为空');
-        return false;
-    }
-    
     currentPluginName = pluginName;
     themeActivateCommandId = `${pluginName}.toggleActive`;
 
     // 设置CSS路径前缀（当前JS文件所在的绝对路径）
     cssPathPrefix = new URL('.', import.meta.url).href;
-    
-    log.info('插件初始化完成');
+
+    log.info(t('插件初始化完成'));
     return true;
 }
 
@@ -46,24 +42,27 @@ function initTuneThemeGlobals(pluginName) {
 // 插件生命周期函数：load函数
 export async function load(pluginName) {
     try {
+        // 初始化多语言
+        setupL10N(orca.state.locale);
+
         // 初始化全局变量
         if (!initTuneThemeGlobals(pluginName)) {
-            throw new Error('插件初始化失败');
+            throw new Error(t('插件初始化失败'));
         }
 
         // 应用主题样式
         const applyOK = await applyStyles();
-        log.info(applyOK ? '主题基础样式应用成功' : '主题基础样式应用失败');
+        log.info(applyOK ? t('主题基础样式应用成功') : t('主题基础样式应用失败'));
 
         // 注册主题激活命令
         const registerOK = await registerThemeActivateCommand();
-        log.info(registerOK ? '主题激活命令注册成功' : '主题激活命令注册失败');
+        log.info(registerOK ? t('主题激活命令注册成功') : t('主题激活命令注册失败'));
 
         // 版本升级处理（放在最后，不阻塞主流程）
         handleVersionUpgrade(pluginName);
 
     } catch (error) {
-        log.error(`插件加载失败: ${error.message}`);
+        log.error(`${t('插件加载失败 ==> ')}${error.message}`);
     }
 }
 
@@ -75,14 +74,14 @@ async function applyStyles() {
         const { head, body } = getDomElements();
 
         if (!head) {
-            log.error('无法找到document.head，无法注入CSS');
+            log.error(t('无法找到document.head，无法注入CSS'));
             return false;
         }
 
         // 设置body ID（主题样式需要）
         if (body) {
             if (body.id && body.id !== BODY_ID) {
-                log.info(`Body已存在ID '${body.id}'，将覆盖为 '${BODY_ID}'`);
+                log.info(`${t('Body已存在ID ==> #')}${body.id} ${t('将覆盖为 #')}${BODY_ID}`);
             }
             body.id = BODY_ID;
         }
@@ -97,7 +96,7 @@ async function applyStyles() {
         }
         return success;
     } catch (error) {
-        log.error(`样式应用失败: ${error.message}`);
+        log.error(`${t('样式应用失败 ==> ')}${error.message}`);
         isThemeCurrentlyActive = false;
         return false;
     }
@@ -108,7 +107,7 @@ function injectCSS(cssPath, linkId, head) {
     return new Promise((resolve, reject) => {
         // 检查是否已经存在相同的CSS
         if (document.getElementById(linkId)) {
-            log.info(`CSS已存在（link-ID: ${linkId}），跳过注入`);
+            log.info(`${t('跳过注入，因为该CSS已存在 ==> link-ID: #')}${linkId}`);
             resolve(true);
             return;
         }
@@ -123,21 +122,21 @@ function injectCSS(cssPath, linkId, head) {
 
             // 事件监听 - 在监听回调完成后，调用 resolve 完成 Promise
             link.onload = () => {
-                log.info(`CSS注入成功，link-ID: ${link.id}`);
+                log.info(`${t('CSS注入成功 ==> link-ID: #')}${link.id}`);
                 resolve(true);
             };
 
             link.onerror = () => {
-                const error = `CSS注入失败，路径: ${link.href}`;
+                const error = `${t(`CSS注入失败，路径：`)} ${link.href}`;
                 log.error(error);
-                log.error('注入失败的可能原因: 文件不存在、权限问题或CSS语法错误');
+                log.error(t('注入失败的可能原因: 文件不存在、权限问题或CSS语法错误'));
                 reject(new Error(error));
             };
 
             head.appendChild(link);
 
         } catch (error) {
-            log.error(`CSS注入失败: ${error.message}`);
+            log.error(`${t('CSS注入失败：')}${error.message}`);
             reject(error);
         }
     });
@@ -172,23 +171,23 @@ async function registerThemeActivateCommand() {
                 // 命令注册参数2：绑定主题激活命令的执行函数
                 async () => {
                     try {
-                        log.info(`执行命令 '${themeActivateCommandId}'，当前主题状态: ${isThemeCurrentlyActive}`);
+                        log.info(`${t('即将执行命令：')}${themeActivateCommandId}${t('。当前主题状态：')} ${isThemeCurrentlyActive}`);
 
                         if (isThemeCurrentlyActive) {
                             // 当前已激活，执行removeStyles
-                            log.info(removeStyles() ? '主题已停用' : '主题停用失败');
+                            log.info(removeStyles() ? t('主题已停用') : t('主题停用失败'));
                         } else {
                             // 当前未激活，执行applyStyles
-                            log.info(await applyStyles() ? '主题已激活' : '主题激活失败');
+                            log.info(await applyStyles() ? t('主题已激活') : t('主题激活失败'));
                         }
 
-                        log.info(`命令执行完毕，主题状态切换为: ${isThemeCurrentlyActive}`);
+                        log.info(`${t('命令执行完毕，主题状态已切换为：')}${isThemeCurrentlyActive}`);
                     } catch (error) {
-                        log.error(`命令执行失败: ${error.message}`);
+                        log.error(`${t('命令执行失败')}: ${error.message}`);
                     }
                 },
                 // 命令注册参数3： 命令的显示名称
-                '激活/停用Tune主题样式'
+                t('激活/停用Tune主题样式')
             );
             return true; // 命令注册成功
         }
@@ -202,24 +201,24 @@ async function registerThemeActivateCommand() {
 // 插件卸载函数：卸载插件，移除主题激活命令，移除主题样式 和 清理本插件的全局变量
 export async function unload() {
     try {
-        log.info('开始卸载插件');
+        log.info(t('开始卸载插件'));
 
         // 注销主题激活命令和快捷键
         orca.commands.unregisterCommand(themeActivateCommandId);
         orca.shortcuts.reset(themeActivateCommandId);
-        log.info('主题激活命令和快捷键注销成功');
+        log.info(t('主题激活命令和快捷键注销成功'));
 
         // 移除本插件的样式
         removeStyles();
-        log.info('主题样式移除成功');
+        log.info(t('主题样式移除成功'));
 
         // 清理插件数据
         try {
             await orca.plugins.removeData(currentPluginName, 'version');
             await orca.plugins.removeData(currentPluginName, 'settings');
-            log.info('插件数据清理完成');
+            log.info(t('插件数据清理完成'));
         } catch (error) {
-            log.error(`插件数据清理失败: ${error.message}`);
+            log.error(`${t('插件数据清理失败：')}${error.message}`);
         }
 
         // 清理本插件的全局变量
@@ -228,9 +227,9 @@ export async function unload() {
         cssPathPrefix = '';
         themeActivateCommandId = '';
 
-        log.info('插件卸载完成');
+        log.info(t('插件卸载完成'));
 
     } catch (error) {
-        log.error(`插件卸载失败: ${error.message}`);
+        log.error(`${t('插件卸载失败：')} ${error.message}`);
     }
 }
