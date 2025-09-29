@@ -161,12 +161,14 @@
     :root {
         /* 顶层块缩进线 */
         --my-color-scope-line: var(--orca-color-gray-8);
+        --my-color-scope-line: var(--orca-color-gray-5);
     }
 }
 
 @media (prefers-color-scheme: light) {
     :root {
         --my-color-scope-line: hsl(0 0% 90%);
+        --my-color-scope-line: var(--orca-color-gray-5);
     }
 }
 
@@ -206,6 +208,7 @@
             border-left-style: dotted;
             border-left-width: .5px;
             border-top-left-radius: 10px;
+            opacity: .1;
         }
 
         /* 更改缩进线的hover变色逻辑，改用边框 */
