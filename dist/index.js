@@ -4,7 +4,6 @@ import { setupL10N, t } from './i18n.js';
 
 // 常量定义
 const BASE_LINK_ID = 'tune-theme-inject-baseStyles'; // 基础CSS文件的link ID
-const BODY_ID = 'custom-theme-body'; // body元素的ID
 const BASE_CSS_NAME = 'custom.css'; // 基础CSS文件的名称
 // 全局变量
 let currentPluginName = ''; // 当前插件名称
@@ -18,13 +17,6 @@ const log = {
     error: (message) => console.error(`[${currentPluginName}] ${message}`)
 };
 
-// 工具函数：获取 DOM 元素
-function getDomElements() {
-    return {
-        head: document.head || document.getElementsByTagName('head')[0],
-        body: document.body || document.getElementsByTagName('body')[0]
-    };
-}
 
 // 初始化函数：初始化插件的全局变量
 function initTuneThemeGlobals(pluginName) {
@@ -71,20 +63,13 @@ export async function load(pluginName) {
 async function applyStyles() {
     try {
         // 获取 DOM 元素
-        const { head, body } = getDomElements();
+        const head = document.head || document.getElementsByTagName('head')[0];
 
         if (!head) {
             log.error(t('无法找到document.head，无法注入CSS'));
             return false;
         }
 
-        // 设置body ID（主题样式需要）
-        if (body) {
-            if (body.id && body.id !== BODY_ID) {
-                log.info(`${t('Body已存在ID ==> #')}${body.id} ${t('将覆盖为 #')}${BODY_ID}`);
-            }
-            body.id = BODY_ID;
-        }
 
         // 注入基础CSS
         const cssPath = cssPathPrefix + BASE_CSS_NAME; // 基础CSS文件的绝对路径
@@ -148,11 +133,6 @@ function removeStyles() {
     // 移除本插件的基础CSS的link元素
     document.getElementById(BASE_LINK_ID)?.remove();
 
-    // 移除本插件添加的body的ID
-    const { body } = getDomElements();
-    if (body && body.id === BODY_ID) {
-        body.removeAttribute('id');
-    }
 
     // 更新状态
     isThemeCurrentlyActive = false;

@@ -177,13 +177,13 @@
 .orca-favorites-items,
 .orca-tags-list-list,
 .orca-aliased-list {
-    padding-right: .25rem;
+    padding-right: .375rem;
 }
 
 .orca-favorites-list,
 .orca-tags-list,
 .orca-aliased {
-    border: 2px solid transparent;
+    /* border: 2px solid transparent; */
 }
 
 

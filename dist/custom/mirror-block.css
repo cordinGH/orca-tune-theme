@@ -12,7 +12,7 @@
 }
 
 /* Tana风格镜像块（无背景+虚线） */
-#custom-theme-body {
+
     /* 【移除】镜像块不再需要背景底板 */
     .orca-mirror-bg:not(.orca-repr-quote2):before {
         display: none;
@@ -82,4 +82,4 @@
         border-style: dashed;
         border-width: 1px;
     }
-}
+

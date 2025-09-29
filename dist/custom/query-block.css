@@ -27,7 +27,7 @@
 }
 
 /* 通用 */
-#custom-theme-body {
+
 
     /* 查询块面包屑尺寸缩小一点 */
     :is(.orca-query-card-breadcrumb, .orca-query-list-block-breadcrumb) {
@@ -38,10 +38,10 @@
             font-size: var(--my-size-query-block-breadcrumb);
         }
     }
-}
+
 
 /* list视图 */
-#custom-theme-body {
+
     .orca-query-list {
         counter-reset: result-id 0;
 
@@ -59,6 +59,7 @@
         display: none;
     }
 
+    /* 确保背景板的层叠正常 */
     .orca-query-list-block-block {
         isolation: isolate;
     }
@@ -145,7 +146,7 @@
     }
 
     .orca-query-list-block-block[data-editable=false]>.orca-repr:after {
-        /* 不可编辑块存在--orca-spacing-md的padding用来放置按钮，因此要额外补一点 */
+        /* 条目编号位置：不可编辑块存在--orca-spacing-md的padding用来放置按钮，因此要额外补一点 */
         top: calc((var(--orca-block-line-height) * .5 - 5px + var(--orca-spacing-md)));
     }
 
@@ -185,25 +186,25 @@
     .orca-query-list-block:hover>.orca-block>div>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-folding-handle {
         opacity: 1;
     }
-}
+
 
 /* card视图 */
-#custom-theme-body {
 
-    /* 卡片视图里行卡片数文本移除左边距 和icon贴近点 */
-    .orca-query-result-card-toolbar>div>.orca-button.plain.orca-select-button {
-        padding-left: 0;
+
+    /* 行卡片数icon不需要右边距会好点 */
+    .ti-number.orca-query-result-card-toolbar-btn-icon{
+        margin-right:0;
     }
 
     /* 行卡片数不需要自动换行 */
     .orca-query-result-card-toolbar>div:has(>.orca-select-button) {
         white-space: nowrap;
     }
-}
+
 
 /* 表格视图 */
 /* 提供结果计数 */
-#custom-theme-body {
+
     .orca-query-table-table {
         counter-reset: result-id 0;
     }
@@ -248,7 +249,7 @@
 
         /* 模糊背景 */
         &:first-child {
-            backdrop-filter: blur(1em);
+            backdrop-filter: blur(1px);
         }
 
         /* header第一个cell缺少了圆角设置，且因为是定位元素，因此会影响边框线，得提供一个圆角 */
@@ -270,4 +271,3 @@
     .orca-table-resizer {
         background: center top / .5px 100% linear-gradient(var(--orca-color-separator), var(--orca-color-separator)) no-repeat;
     }
-}

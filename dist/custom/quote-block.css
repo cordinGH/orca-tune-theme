@@ -56,13 +56,16 @@
 }
 
 /* 卡片风格引述块，并优化了嵌套引述的显示效果 */
-#custom-theme-body {
+
 
     /* 【移除】引述块原生边线 */
     .orca-repr-quote2::after {
         display: none;
     }
-
+    /* 独立出层叠，使得背景卡片可以显示正常 */
+    .orca-repr-quote2{
+        isolation: isolate;
+    }
     /* 【新增】背景卡片绘制 */
     .orca-repr-quote2::before {
         pointer-events: none;
@@ -98,19 +101,19 @@
 
     /* 【重定义】【微调】还原块缩进并右侧留白 */
     .orca-repr-quote2>.orca-repr-children :is(.orca-repr-main-content, .orca-repr-main-none-editable) {
-        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + .5)) * var(--orca-spacing-indent));
+        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + .5)) * var(--orca-spacing-indent))!important;
         margin-right: 10px;
     }
 
     /* 【同上】【适配】1层嵌套引述 */
     .orca-repr-quote2 .orca-repr-quote2>.orca-repr-children :is(.orca-repr-main-content, .orca-repr-main-none-editable) {
-        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + 1)) * var(--orca-spacing-indent));
+        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + 1)) * var(--orca-spacing-indent))!important;
         margin-right: 20px;
     }
 
     /* 【同上】2层 */
     .orca-repr-quote2 .orca-repr-quote2 .orca-repr-quote2>.orca-repr-children :is(.orca-repr-main-content, .orca-repr-main-none-editable) {
-        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + 1.5)) * var(--orca-spacing-indent));
+        margin-left: calc(max(0, calc(var(--orca-block-indent, 0) + 1.5)) * var(--orca-spacing-indent))!important;
         margin-right: 30px;
     }
 
@@ -204,7 +207,7 @@
     /* 【新增】所有类型的quote背景卡片定义配色和边框 */
     .orca-repr-quote2 {
         &.orca-repr-quote2-quote::before {
-            background-color: rgb(from var(--my-color-text-1) R G B / 0.1);
+            background-color: rgb(from var(--my-color-text-1) R G B / 0.05);
             border: .5px solid var(--my-color-gray-1);
         }
 
@@ -271,4 +274,4 @@
         }
     }
 
-}
+

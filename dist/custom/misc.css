@@ -1,4 +1,4 @@
-#custom-theme-body {
+
 
     /* —————————————————————————————————————————————————————————————————————— */
     /* 非长文下显示块标 */
@@ -6,8 +6,13 @@
         opacity: 1;
     }
 
+    /* 重写orca官方的引述块第一个子块的块标透明度，官方优先级080，下面那条也是080，再下面0 11 0，均不影响覆盖 */
+    .orca-repr-quote2>.orca-repr-children>.orca-block>.orca-repr>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle:not(:hover) {
+        opacity: 1;
+    }
+
     /* 淡化圆点块标，但不淡化折叠和ul，也不淡化hover */
-    /* 避开镜像块 */
+    /* 只作用text */
     [data-type="text"]>.orca-repr>.orca-repr-main>.orca-repr-text-content+.orca-repr-main-none-editable>.orca-block-handle.ti-point-filled:not(.orca-block-handle-collapsed, :hover) {
         opacity: .5;
     }
@@ -23,16 +28,7 @@
 
     /* —————————————————————————————————————————————————————————————————————— */
     /* 非悬浮时，隐藏大块的折叠等按钮 */
-    .orca-button.orca-no-editable-btn {
-
-        &.orca-fold:hover,
-        &.orca-insert-top:hover,
-        &.orca-insert-bottom:hover {
-            opacity: 1 !important;
-        }
-    }
-
-    .orca-repr-main-content:hover>.orca-no-editable-container>.orca-no-editable-btn {
+    .orca-repr-main-content:hover>.orca-no-editable-container>.orca-no-editable-btn:not(:hover) {
         opacity: .2;
     }
 
@@ -51,7 +47,8 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            border-radius: 4px;
+            /* 必须！important才能覆写，暂时没必要覆写 */
+            /* border-radius: 4px; */
             /* box-shadow: 0px 10px var(--orca-color-bg-1) inset; */
         }
     }
@@ -60,7 +57,6 @@
     /* —————————————————————————————————————————————————————————————————————— */
     /* 折叠按钮平滑旋转、瞬间出现延迟消失 */
     .orca-repr-main .orca-block-folding-handle {
-        opacity: 0;
         transition: opacity 100ms ease-in 0ms;
 
         &:before {
@@ -72,7 +68,6 @@
     }
 
     .orca-repr-main:hover .orca-block-folding-handle {
-        opacity: 1;
         transition: opacity 50ms ease-out 0ms;
     }
 
@@ -102,6 +97,7 @@
     }
 
     /* 适配ul */
+    /* 被ul-list.css覆盖 */
     .orca-block.orca-active-parent>.orca-repr-ul>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle:before {
         color: var(--orca-color-text-1);
     }
@@ -133,7 +129,7 @@
     .orca-block.orca-active>.orca-repr>.orca-repr-main>.orca-repr-text-content:empty:after {
         display: inline-block;
         content: "Type something, or try # @ /";
-        opacity: .5;
+        opacity: .39;
     }
 
 
@@ -165,7 +161,7 @@
     /* task块的勾选框尺寸同步内容字体大小 */
     .orca-repr-task-content:before {
         font-size: 1.25em;
-        /* 消除基线对齐产生的偏离 */
+        /* 消除基线对齐产生的偏离，.25em的一半 */
         translate: 0 .125em;
     }
 
@@ -179,4 +175,3 @@
         /* 作用域orca窗口非常小时 */
         max-width: 96cqw;
     }
-}
