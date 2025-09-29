@@ -40,7 +40,8 @@ orca/
 > - 自带 PingFangSC 字体，字重支持范围 200-600  
 > - 支持设置命令快捷键，快速启用和关闭主题（命令/快捷键搜索 Tune）
 
-## 主题更新历史
+## 各版本主要变化
+- **v2.2.0** [兼容了官方插件official-themes，可以叠加运行/优化加载](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.2.0)  
 - **v2.1.0** [支持本地语言翻译](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.1.0)  
 - **v2.0.0** [重构注入代码/表格视图计数/优化图片块按钮位置](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.0.0)  
 - **v1.6.0** [优化表格视图&左侧栏](https://github.com/cordinGH/orca-tune-theme/releases/tag/v1.6.0)  

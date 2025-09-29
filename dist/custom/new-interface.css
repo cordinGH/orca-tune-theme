@@ -17,6 +17,10 @@
 .orca-fav-item-item{
     transition: background-color 0s;
 }
+/* 插件自身的top边距太大了1.5rem，.25观感好一些 */
+.orca-block-editor-main {
+    padding-top: .25rem;
+}
 /* —————————————————————————————————————————————————— */
 
 
