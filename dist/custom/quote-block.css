@@ -75,12 +75,15 @@
         left: calc(var(--orca-spacing-indent) * var(--orca-block-indent));
         right: 0;
         top: 3px;
-        bottom: 11px;
+        bottom: 0.5em;
         border: .5px solid;
         border-radius: 6px;
         transition: background-color .15s ease-out;
     }
-
+    .orca-repr-quote2:has(>.orca-repr-main-collapsed):before{
+        bottom: 0.75em;
+    }
+    
     /* 【同上】【适配】嵌套1层引述 */
     .orca-repr.orca-repr-quote2 .orca-repr-quote2::before {
         left: calc(var(--orca-spacing-indent) * calc(var(--orca-block-indent) + .5));
