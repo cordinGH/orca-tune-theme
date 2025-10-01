@@ -3,12 +3,8 @@ import { handleVersionUpgrade } from './tune-upgrade.js';
 import { setupL10N, t } from './i18n.js';
 import { start as startThemeSwitcher, cleanup as cleanupThemeSwitcher } from './theme-switcher.js';
 
-// 常量定义
-const BASE_LINK_ID = 'tune-theme-inject-baseStyles'; // 基础CSS文件的link ID
-const BASE_CSS_NAME = 'custom.css'; // 基础CSS文件的名称
 // 全局变量
 let currentPluginName = ''; // 当前插件名称
-let cssPathPrefix = ''; // CSS路径前缀
 let isThemeCurrentlyActive = false; // 主题是否激活
 let themeActivateCommandId = ''; // 主题激活命令ID
 let isClassInjectionActive = false; // class注入是否激活
@@ -24,9 +20,6 @@ const log = {
 function initTuneThemeGlobals(pluginName) {
     currentPluginName = pluginName;
     themeActivateCommandId = `${pluginName}.toggleActive`;
-
-    // 设置CSS路径前缀（当前JS文件所在的绝对路径）
-    cssPathPrefix = new URL('.', import.meta.url).href;
 
     log.info(t('插件初始化完成'));
     return true;
@@ -45,8 +38,7 @@ export async function load(pluginName) {
         }
 
         // 应用主题样式
-        const applyOK = await applyStyles();
-        log.info(applyOK ? t('主题基础样式应用成功') : t('主题基础样式应用失败'));
+        const applyOK = applyStyles();
 
         // 注册主题激活命令
         const registerOK = await registerThemeActivateCommand();
@@ -68,26 +60,13 @@ export async function load(pluginName) {
 
 
 // 样式管理函数：应用主题基础样式
-async function applyStyles() {
+function applyStyles() {
     try {
-        // 获取 DOM 元素
-        const head = document.head || document.getElementsByTagName('head')[0];
-
-        if (!head) {
-            log.error(t('无法找到document.head，无法注入CSS'));
-            return false;
-        }
-
-
-        // 注入基础CSS
-        const cssPath = cssPathPrefix + BASE_CSS_NAME; // 基础CSS文件的绝对路径
-        const linkId = BASE_LINK_ID; // 基础CSS文件的link ID
-        const success = await injectCSS(cssPath, linkId, head);
-
-        if (success) {
-            isThemeCurrentlyActive = true;
-        }
-        return success;
+        // 使用官方API注入CSS
+        orca.themes.injectCSSResource(`${currentPluginName}/dist/custom.css`, currentPluginName);
+        isThemeCurrentlyActive = true;
+        log.info(t('主题基础样式应用成功'));
+        return true;
     } catch (error) {
         log.error(`${t('样式应用失败 ==> ')}${error.message}`);
         isThemeCurrentlyActive = false;
@@ -95,56 +74,20 @@ async function applyStyles() {
     }
 }
 
-// 工具函数：注入CSS
-function injectCSS(cssPath, linkId, head) {
-    return new Promise((resolve, reject) => {
-        // 检查是否已经存在相同的CSS
-        if (document.getElementById(linkId)) {
-            log.info(`${t('跳过注入，因为该CSS已存在 ==> link-ID: #')}${linkId}`);
-            resolve(true);
-            return;
-        }
-
-        try {
-            // 创建link元素
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = cssPath;
-            link.id = linkId;
-
-            // 事件监听 - 在监听回调完成后，调用 resolve 完成 Promise
-            link.onload = () => {
-                log.info(`${t('CSS注入成功 ==> link-ID: #')}${link.id}`);
-                resolve(true);
-            };
-
-            link.onerror = () => {
-                const error = `${t(`CSS注入失败，路径：`)} ${link.href}`;
-                log.error(error);
-                log.error(t('注入失败的可能原因: 文件不存在、权限问题或CSS语法错误'));
-                reject(new Error(error));
-            };
-
-            head.appendChild(link);
-
-        } catch (error) {
-            log.error(`${t('CSS注入失败：')}${error.message}`);
-            reject(error);
-        }
-    });
-}
 
 
 // 移除主题基础样式
 function removeStyles() {
-    // 移除本插件的基础CSS的link元素
-    document.getElementById(BASE_LINK_ID)?.remove();
-
-
-    // 更新状态
-    isThemeCurrentlyActive = false;
-    return true;
+    try {
+        // 使用官方API移除CSS资源
+        orca.themes.removeCSSResources(currentPluginName);
+        isThemeCurrentlyActive = false;
+        log.info(t('主题样式移除成功'));
+        return true;
+    } catch (error) {
+        log.error(`${t('样式移除失败 ==> ')}${error.message}`);
+        return false;
+    }
 }
 
 // 设置插件设置模式
@@ -248,7 +191,7 @@ async function registerThemeActivateCommand() {
                             log.info(removeStyles() ? t('主题已停用') : t('主题停用失败'));
                         } else {
                             // 当前未激活，执行applyStyles
-                            log.info(await applyStyles() ? t('主题已激活') : t('主题激活失败'));
+                            log.info(applyStyles() ? t('主题已激活') : t('主题激活失败'));
                         }
 
                         log.info(`${t('命令执行完毕，主题状态已切换为：')}${isThemeCurrentlyActive}`);
@@ -301,7 +244,6 @@ export async function unload() {
         currentPluginName = '';
         isThemeCurrentlyActive = false;
         isClassInjectionActive = false;
-        cssPathPrefix = '';
         themeActivateCommandId = '';
 
         log.info(t('插件卸载完成'));

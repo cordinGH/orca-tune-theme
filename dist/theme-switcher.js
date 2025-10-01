@@ -63,44 +63,46 @@ export async function cleanup() {
  * 设置主题状态订阅
  */
 function setupThemeStateSubscription() {
-  // 检查是否已经有完整的主题数据
   if (orca.state && orca.state.themes) {
     const themes = Object.keys(orca.state.themes)
-    if (themes.length >= 6) {
-      officialThemes = themes // 填充官方主题数组
+    if (themes.length === 6) {
+      officialThemes = themes
       log.info(`发现 ${themes.length} 个主题: ${themes.join(', ')}`)
+      
+      // 检查并启用圆角设置
+      checkAndEnableRoundShell()
+      // 初始化主题切换器
       initializeThemeSwitcher()
       return
-    } else if (themes.length > 0) {
-      log.info(`主题数据不完整，当前 ${themes.length} 个，期望至少 6 个`)
     }
   }
-  
-  // 如果没有主题数据，使用状态订阅等待
   log.info("等待主题数据加载...")
-  
-  const unsubscribe = window.Valtio.subscribe(orca.state, () => {
-    if (orca.state.themes && Object.keys(orca.state.themes).length >= 6) {
-      const themes = Object.keys(orca.state.themes)
-      officialThemes = themes // 填充官方主题数组
-      log.info(`主题数据已完整加载，发现 ${themes.length} 个主题: ${themes.join(', ')}`)
+  const unsubscribe = window.Valtio.subscribe(orca.state.themes, (themes) => {
+    if (themes && Object.keys(themes).length === 6) {
+      officialThemes = Object.keys(themes)
+      log.info(`主题数据已完整加载，发现 ${officialThemes.length} 个主题: ${officialThemes.join(', ')}`)
       
       // 取消订阅
       unsubscribe()
-      
-      // 初始化主题切换器
+      checkAndEnableRoundShell()
       initializeThemeSwitcher()
-    } else if (orca.state.themes && Object.keys(orca.state.themes).length > 0) {
-      const themes = Object.keys(orca.state.themes)
-      log.info(`主题数据加载中，当前 ${themes.length} 个，期望至少 6 个`)
     }
   })
-  
-  // 设置超时保护（3秒后取消订阅）
+  // 设置超时保护（5秒后取消订阅）
   setTimeout(() => {
     unsubscribe()
-    log.info("主题数据加载超时，主题切换器跳过启动")
-  }, 3000)
+    log.info("官方主题插件加载超时，主题切换器跳过启动")
+  }, 5000)
+}
+
+
+/**
+ * 检查并启用官方主题插件的圆角设置
+ */
+function checkAndEnableRoundShell() {
+  if (!orca.state.plugins["official-themes"].settings?.enableRoundShell) {
+    orca.notify("info", "💡请先开启 official-themes 的圆角外壳")
+  }
 }
 
 /**
@@ -128,7 +130,7 @@ async function initializeThemeSwitcher() {
         themeLink.disabled = true
         log.info(`禁用了现有的主题CSS元素: ${themeLink.href}`)
       } else {
-        // 如果没有，说明是真正的默认主题，需要创建元素
+        // 如果没有，说明是默认主题，预备一个
         log.info("真正的默认主题，没有主题CSS元素")
         
         // 延迟创建，避免被系统删除
