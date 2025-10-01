@@ -1,5 +1,5 @@
 /* 顶部栏右侧按钮收纳进设置圆点 */
-#headbar{
+#headbar.enable-hidden-btn{
     .orca-headbar-global-tools {
         gap:0;
         &>button:not(:last-child){

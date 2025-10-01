@@ -1,6 +1,7 @@
 // 导入升级模块
 import { handleVersionUpgrade } from './tune-upgrade.js';
 import { setupL10N, t } from './i18n.js';
+import { start as startThemeSwitcher, cleanup as cleanupThemeSwitcher } from './theme-switcher.js';
 
 // 常量定义
 const BASE_LINK_ID = 'tune-theme-inject-baseStyles'; // 基础CSS文件的link ID
@@ -10,6 +11,7 @@ let currentPluginName = ''; // 当前插件名称
 let cssPathPrefix = ''; // CSS路径前缀
 let isThemeCurrentlyActive = false; // 主题是否激活
 let themeActivateCommandId = ''; // 主题激活命令ID
+let isClassInjectionActive = false; // class注入是否激活
 
 // 日志工具
 const log = {
@@ -50,8 +52,14 @@ export async function load(pluginName) {
         const registerOK = await registerThemeActivateCommand();
         log.info(registerOK ? t('主题激活命令注册成功') : t('主题激活命令注册失败'));
 
+        // 设置插件设置模式
+        setupPluginSettings(pluginName);
+
+        await startThemeSwitcher(pluginName);
+        
         // 版本升级处理（放在最后，不阻塞主流程）
         handleVersionUpgrade(pluginName);
+
 
     } catch (error) {
         log.error(`${t('插件加载失败 ==> ')}${error.message}`);
@@ -139,6 +147,88 @@ function removeStyles() {
     return true;
 }
 
+// 设置插件设置模式
+function setupPluginSettings(pluginName) {
+    try {
+        // 定义设置模式
+        orca.plugins.setSettingsSchema(pluginName, {
+            enableClassInjection: {
+                type: "boolean",
+                label: "启用顶部栏按钮简化",
+                description: "顶部栏原生按钮隐藏",
+                defaultValue: false
+            }
+        });
+
+        // 监听设置变化
+        const { subscribe } = window.Valtio;
+        subscribe(orca.state.plugins[pluginName], () => {
+            const settings = orca.state.plugins[pluginName]?.settings;
+            if (settings) {
+                const shouldInject = settings.enableClassInjection;
+                if (shouldInject !== isClassInjectionActive) {
+                    if (shouldInject) {
+                        injectCustomClass();
+                    } else {
+                        removeCustomClass();
+                    }
+                    isClassInjectionActive = shouldInject;
+                }
+            }
+        });
+
+        // 应用初始设置
+        const settings = orca.state.plugins[pluginName]?.settings;
+        if (settings?.enableClassInjection) {
+            injectCustomClass();
+            isClassInjectionActive = true;
+        }
+
+        log.info('插件设置模式设置完成');
+        return true;
+    } catch (error) {
+        log.error(`设置模式设置失败: ${error.message}`);
+        return false;
+    }
+}
+
+// 注入class => enable-hidden-btn成功
+function injectCustomClass() {
+    try {
+        const headbarElement = document.getElementById('headbar');
+        if (headbarElement) {
+            headbarElement.classList.add('enable-hidden-btn');
+            log.info('注入class => enable-hidden-btn成功');
+            return true;
+        } else {
+            log.error('未找到#headbar元素');
+            return false;
+        }
+    } catch (error) {
+        log.error(`自定义class注入失败: ${error.message}`);
+        return false;
+    }
+}
+
+// 移除class => enable-hidden-btn成功
+function removeCustomClass() {
+    try {
+        const headbarElement = document.getElementById('headbar');
+        if (headbarElement) {
+            headbarElement.classList.remove('enable-hidden-btn');
+            log.info('移除class => enable-hidden-btn成功');
+            return true;
+        } else {
+            log.error('未找到#headbar元素');
+            return false;
+        }
+    } catch (error) {
+        log.error(`自定义class移除失败: ${error.message}`);
+        return false;
+    }
+}
+
+
 // 注册主题激活命令：激活/停用Tune主题样式
 async function registerThemeActivateCommand() {
     try {
@@ -192,6 +282,12 @@ export async function unload() {
         removeStyles();
         log.info(t('主题样式移除成功'));
 
+        // 移除自定义class
+        removeCustomClass();
+        log.info('自定义class清理完成');
+
+        await cleanupThemeSwitcher();
+
         // 清理插件数据
         try {
             await orca.plugins.removeData(currentPluginName, 'version');
@@ -204,6 +300,7 @@ export async function unload() {
         // 清理本插件的全局变量
         currentPluginName = '';
         isThemeCurrentlyActive = false;
+        isClassInjectionActive = false;
         cssPathPrefix = '';
         themeActivateCommandId = '';
 

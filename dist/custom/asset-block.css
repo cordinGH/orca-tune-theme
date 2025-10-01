@@ -110,12 +110,18 @@
     &>.orca-repr-main .orca-image-image {
         min-width: 100%;
     }
+
+    /* ———————————————————————————————————————————————————————————————————— */
+    /* 如果第一个子块不是不可编辑块，就给一个top以维持水平对齐 */
+    &>.orca-repr-children:has(>.orca-block:not([data-editable="false"]):first-child){
+        padding-top: var(--orca-spacing-md);
+    }
 }
 
 
 /* ———————————————————————————————————————————————————————————————————— */
 /* 图片块底部插入按钮，跟随图片尺寸 */
-.orca-repr-image-content .orca-no-editable-container{
+.orca-repr-image-content .orca-no-editable-container:not(:has(.orca-repr-self-fold-container)){
     max-width: max-content;
     & .orca-no-editable-btn.orca-button.orca-insert-bottom {
         right: unset;
