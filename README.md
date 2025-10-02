@@ -41,6 +41,7 @@ orca/
 > - 支持设置命令快捷键，快速启用和关闭主题（命令/快捷键搜索 Tune）
 
 ## 各版本主要变化
+- [v2.4.0](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.4.0)：适配了 [official-themes](https://github.com/sethyuan/orca-plugin-official-themes) 各配色下的查询块列表视图
 - [v2.3.0](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.3.0)
   - 新增设置项：是否启用顶部栏简化（原生按钮）
   - 新增顶部栏切换按钮，可以在[official-themes](https://github.com/sethyuan/orca-plugin-official-themes)主题和tune主题之间循环切换（official-themes请开启圆角选项）
