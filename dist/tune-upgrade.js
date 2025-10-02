@@ -27,8 +27,8 @@ export async function handleVersionUpgrade(pluginName) {
             return;
         }
 
-        // 初始化设置界面
-        await orca.plugins.setSettingsSchema(pluginName, {});
+        // 初始化设置界面（废弃，在反复启动时会存在冲突）
+        // await orca.plugins.setSettingsSchema(pluginName, {});
         log.info(t('检测到版本变更或首次安装。已初始化设置界面'));
 
         // 延迟执行快捷键清理，等待快捷键完全加载

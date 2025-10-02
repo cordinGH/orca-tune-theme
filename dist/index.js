@@ -8,6 +8,7 @@ let currentPluginName = ''; // 当前插件名称
 let isThemeCurrentlyActive = false; // 主题是否激活
 let themeActivateCommandId = ''; // 主题激活命令ID
 let isClassInjectionActive = false; // class注入是否激活
+let settingsUnsubscribe = null; // 设置订阅取消函数
 
 // 日志工具
 const log = {
@@ -44,10 +45,13 @@ export async function load(pluginName) {
         const registerOK = await registerThemeActivateCommand();
         log.info(registerOK ? t('主题激活命令注册成功') : t('主题激活命令注册失败'));
 
-        // 设置插件设置模式
-        setupPluginSettings(pluginName);
+        // 注册设置模式
+        await registerSettings(pluginName);
 
         await startThemeSwitcher(pluginName);
+        
+        // 最后启动设置监听器，确保所有初始化都完成
+        setupSettingsWatcher(pluginName);
         
         // 版本升级处理（放在最后，不阻塞主流程）
         handleVersionUpgrade(pluginName);
@@ -90,22 +94,37 @@ function removeStyles() {
     }
 }
 
-// 设置插件设置模式
-function setupPluginSettings(pluginName) {
+/**
+ * 注册设置模式
+ */
+async function registerSettings(pluginName) {
+    const settingsSchema = {
+        enableClassInjection: {
+            type: "boolean",
+            label: "启用顶部栏按钮简化",
+            description: "顶部栏原生按钮隐藏",
+            defaultValue: false
+        }
+    };
+
+    await orca.plugins.setSettingsSchema(pluginName, settingsSchema);
+    log.info('✅ 插件设置模式已注册');
+}
+
+/**
+ * 设置监听器（分离设置注册和监听逻辑）
+ */
+function setupSettingsWatcher(pluginName) {
     try {
-        // 定义设置模式
-        orca.plugins.setSettingsSchema(pluginName, {
-            enableClassInjection: {
-                type: "boolean",
-                label: "启用顶部栏按钮简化",
-                description: "顶部栏原生按钮隐藏",
-                defaultValue: false
-            }
-        });
+        // 清理旧的订阅（如果存在）
+        if (settingsUnsubscribe) {
+            settingsUnsubscribe();
+            settingsUnsubscribe = null;
+        }
 
         // 监听设置变化
         const { subscribe } = window.Valtio;
-        subscribe(orca.state.plugins[pluginName], () => {
+        settingsUnsubscribe = subscribe(orca.state.plugins[pluginName], () => {
             const settings = orca.state.plugins[pluginName]?.settings;
             if (settings) {
                 const shouldInject = settings.enableClassInjection;
@@ -127,11 +146,9 @@ function setupPluginSettings(pluginName) {
             isClassInjectionActive = true;
         }
 
-        log.info('插件设置模式设置完成');
-        return true;
+        log.info('✅ 设置监听器已启动');
     } catch (error) {
-        log.error(`设置模式设置失败: ${error.message}`);
-        return false;
+        log.error(`❌ 设置监听器启动失败: ${error.message}`);
     }
 }
 
@@ -229,12 +246,26 @@ export async function unload() {
         removeCustomClass();
         log.info('自定义class清理完成');
 
+        // 清理设置订阅
+        if (settingsUnsubscribe) {
+            settingsUnsubscribe();
+            settingsUnsubscribe = null;
+            log.info('设置订阅已清理');
+        }
+
+        // 清理设置模式
+        try {
+            await orca.plugins.setSettingsSchema(currentPluginName, {});
+            log.info('设置模式已清理');
+        } catch (error) {
+            log.error(`设置模式清理失败: ${error.message}`);
+        }
+
         await cleanupThemeSwitcher();
 
-        // 清理插件数据
+        // 清理插件数据（只清理版本信息，升级模块使用了 setData 存储）
         try {
             await orca.plugins.removeData(currentPluginName, 'version');
-            await orca.plugins.removeData(currentPluginName, 'settings');
             log.info(t('插件数据清理完成'));
         } catch (error) {
             log.error(`${t('插件数据清理失败：')}${error.message}`);
@@ -245,6 +276,7 @@ export async function unload() {
         isThemeCurrentlyActive = false;
         isClassInjectionActive = false;
         themeActivateCommandId = '';
+        settingsUnsubscribe = null;
 
         log.info(t('插件卸载完成'));
 
