@@ -12,17 +12,28 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --my-bordercolor-query-list: var(--orca-color-gray-8);
-        --my-color-query-list-breadcrumb: var(--orca-color-gray-6a);
-        --my-color-query-list-id: var(--orca-color-gray-7a);
+        /* --my-bordercolor-query-list: var(--orca-color-gray-8); */
+        /* --my-bordercolor-query-list: rgb(from var(--orca-color-gray-6) r g b / .24); */
+        --my-bordercolor-query-list: rgb(from var(--orca-color-gray-5) r g b / .12);
+        /* --my-color-query-list-breadcrumb: var(--orca-color-gray-6a); */
+        --my-color-query-list-breadcrumb: rgb(from var(--orca-color-gray-5) r g b / .71);
+        /* --my-color-query-list-id: var(--orca-color-gray-7a); */
+        --my-color-query-list-id: rgb(from var(--orca-color-gray-6) r g b / .5);
+        /* --my-bg-color-query-list: #80808006; */
+        --my-bg-color-query-list: rgb(from var(--orca-color-gray-5) r g b / .02);
     }
 }
 
 @media (prefers-color-scheme: light) {
     :root {
-        --my-bordercolor-query-list: var(--orca-color-gray-2a);
-        --my-color-query-list-breadcrumb: var(--orca-color-gray-4a);
-        --my-color-query-list-id: var(--orca-color-gray-3a);
+        /* --my-bordercolor-query-list: var(--orca-color-gray-2a); */
+        /* --my-color-query-list-breadcrumb: var(--orca-color-gray-4a); */
+        /* --my-color-query-list-id: var(--orca-color-gray-3a); */
+        --my-bordercolor-query-list: rgb(from var(--orca-color-gray-2) r g b / .6);
+        --my-color-query-list-breadcrumb: rgb(from var(--orca-color-gray-4) r g b / .84);
+        --my-color-query-list-id: rgb(from var(--orca-color-gray-3) r g b / .79);
+        /* --my-bg-color-query-list: #80808006; */
+        --my-bg-color-query-list: rgb(from var(--orca-color-gray-6) r g b / .02);
     }
 }
 
@@ -82,7 +93,7 @@
         /* 拉开开一个缩进+边框的距离 */
         left: calc(-1 * var(--orca-spacing-indent) - var(--my-border-left-query-list));
         right: 0;
-        background-color: #80808006;
+        background-color: var(--my-bg-color-query-list);
         z-index: -1;
         border: var(--my-border-query-list) solid var(--my-bordercolor-query-list);
         border-left-width: var(--my-border-left-query-list);
