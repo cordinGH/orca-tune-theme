@@ -46,6 +46,14 @@ body.windows #app{
     background-color: var(--orca-color-bg-1);
     /* 不应该出现滚动条，因为只是容器 */
     overflow:hidden;
+
+    /* 覆盖官方主题的圆角位置变化 */
+    .orca-panel-drag-handle {
+        top: var(--orca-spacing-md);
+    }
+    .orca-block-editor-sidetools {
+        top: calc(50px + var(--orca-spacing-md));
+    }
 }
 
 /* 适配滚动条和侧边栏内边距 */
