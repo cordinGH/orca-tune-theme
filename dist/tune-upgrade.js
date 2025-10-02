@@ -1,6 +1,6 @@
 // 升级管理模块
 import { setupL10N, t } from './i18n.js';
-const PLUGIN_VERSION = '2.4.0'; // 插件版本号
+const PLUGIN_VERSION = '2.3.1'; // 插件版本号
 let previousVersion = ''; // 之前的版本号
 
 // 日志工具
