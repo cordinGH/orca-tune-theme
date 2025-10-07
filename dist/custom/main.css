@@ -31,56 +31,7 @@
 
 
     /* ***********************  面板左侧的折叠按钮非active非hover时变为小圆点   *********************** */
-    /* 虎鲸的非active透明逻辑是直接给按钮压低透明  这样的方式不适合背景色和color过渡切换，正确方式是背景色和color透明 */
-    .orca-panel:not(.active) .orca-block-editor-sidetools-btn.orca-button {
-        opacity: unset;
-    }
-
-    .orca-panel:not(.active) .orca-block-editor-sidetools-btn>i {
-        color: hsl(from var(--orca-color-text-1) h s l / .2);
-    }
-
-    .orca-panel:not(.active) .orca-block-editor-sidetools:not(:hover)>.orca-button>i {
-        color: hsl(from var(--orca-color-text-1) h s l / 0);
-        background-color: hsl(from var(--orca-color-text-1) h s l / .2);
-    }
-
-    .orca-block-editor-sidetools-btn>i {
-        border-radius: 999px;
-        transition:
-            background-color .15s ease-out,
-            color .15s ease-out;
-    }
-
-    .orca-panel .orca-block-editor-sidetools {
-        transition: scale .15s ease-out;
-        transform-origin: top;
-        scale: 1;
-    }
-
-    .orca-panel:not(.active) .orca-block-editor-sidetools:not(:hover) {
-        scale: .3;
-    }
-
-
-    /* 给一个hover背景色给侧边工具栏 */
-    .orca-block-editor-sidetools:hover {
-        background-color: hsl(from var(--orca-color-gray-5) h s l / .1);
-    }
-
-    /* 给面板抓手补个透明过渡 */
-    .orca-panel-drag-handle {
-        transition: opacity .15s ease-out;
-    }
-
-    /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
-    /* 优化工具条按钮，使得拖拽抓手和侧边按钮一致 */
-    .orca-panel-drag-handle,
-    .orca-block-editor-sidetools {
-        background-color: rgba(from var(--orca-color-bg-1) R G B/.1);
-        backdrop-filter: blur(10px);
-    }
-
+    /* 2025-10-07 简化圆点的实现方案以及样式 */
     /* 让工具条按钮padding和抓手padding一致，并稍微缩小一点 */
     .orca-block-editor-sidetools-btn.orca-button {
         padding: var(--orca-spacing-sm) var(--orca-spacing-2xs);
@@ -91,21 +42,39 @@
             transform: scale(.9);
         }
     }
-
     /* 定位对齐也和抓手按钮一致 */
     .orca-block-editor-sidetools {
         right: calc(var(--orca-spacing-lg) + var(--orca-spacing-sm));
     }
 
+    .orca-block-editor-sidetools-btn.orca-button{
+        transition:all .15s ease-out;
+    }
+
+    /* 当悬停在非官方按钮上时生效，当没有悬停在侧边工具栏时也生效 */
+    .orca-panel:not(.active)  .orca-block-editor-sidetools:is(:not(:hover), :has(.orca-block-editor-sidetools-btn:nth-child(n + 5):hover)) .orca-block-editor-sidetools-btn.orca-button:nth-child(-n + 4){
+        scale: .3;
+        transform-origin:top;
+        margin-bottom: -75%;
+        &>i{
+            background-color:var(--orca-color-text-1);
+            color:transparent;
+            border-radius:999px;
+            transition:all .15s ease-out;
+        }
+    }
+
+    /* 给面板抓手补个透明过渡 */
+    .orca-panel-drag-handle {
+        transition: opacity .15s ease-out;
+    }
 
     .orca-panel-drag-handle.ti-dots-vertical {
         cursor: pointer;
+        &::before{
+            content: "\ec01";
+        }
     }
-
-    .orca-panel-drag-handle.ti-dots-vertical:before {
-        content: "\ec01";
-    }
-
 
     /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
     /* 底部引用特定情况下去除：无计数器则none（虎鲸引用计数器是瞬时响应的） */

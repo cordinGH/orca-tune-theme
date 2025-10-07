@@ -7,7 +7,7 @@
 // 当启用官方主题后，orca.state.settings[11] 不会是null，默认是'default'
 // 但是Object.keys(orca.state.themes) 是可能为空数组（主题加载失败）
 // ['Aurora Borealis', 'Catppuccin', 'Mono Mint', 'Moonlit Sakura', 'Pastel Garden', 'Sandstone Dusk']
-// 默认主题时，disable官方主题得了link，移除class即可自由切换tune和官方主题
+// 默认主题时，disable官方主题的link标签，再移除圆角class，即可自由切换tune和官方主题
 
 
 // 模块状态
