@@ -18,7 +18,7 @@ const CLASS_CONFIGS = {
     'enable-block-ref-brackets': {
         target: 'body',
         label: '启用块引用方括号装饰',
-        description: '关闭后块引用不会再显示方括号'
+        description: '关闭后块引用不会再显示方括号，并恢复下划线'
     }
 };
 
