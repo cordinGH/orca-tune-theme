@@ -35,7 +35,7 @@ h4.orca-repr-heading-content {
 }
 
 
-.enable-heading-decoration {
+body.tune-heading-decoration {
 
     h1.orca-repr-heading-content>span {
         &:is(.orca-inline, .orca-repr-title:not(.orca-input)) {

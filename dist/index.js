@@ -5,18 +5,15 @@ import { start as startThemeSwitcher, cleanup as cleanupThemeSwitcher } from './
 
 // class配置定义
 const CLASS_CONFIGS = {
-    'enable-headbar-hidden-btn': {
-        target: '#headbar',
+    'tune-headbar-hidden-btn': {
         label: '启用顶部栏按钮简化',
         description: '关闭后不会再隐藏顶部栏原生按钮'
     },
-    'enable-heading-decoration': {
-        target: 'body',
+    'tune-heading-decoration': {
         label: '启用标题装饰',
         description: '关闭后标题块不会再有线条装饰'
     },
-    'enable-block-ref-brackets': {
-        target: 'body',
+    'tune-block-ref-brackets': {
         label: '启用块引用方括号装饰',
         description: '关闭后块引用不会再显示方括号，并恢复下划线'
     }
@@ -26,7 +23,6 @@ const CLASS_CONFIGS = {
 let currentPluginName = ''; // 当前插件名称
 let isThemeCurrentlyActive = false; // 主题是否激活
 let themeActivateCommandId = ''; // 主题激活命令ID
-let activeClasses = new Set(); // 当前激活的class集合
 let settingsUnsubscribe = null; // 设置订阅取消函数
 
 // 日志工具
@@ -149,17 +145,12 @@ function setupSettingsWatcher(pluginName) {
         settingsUnsubscribe = subscribe(orca.state.plugins[pluginName], () => {
             const settings = orca.state.plugins[pluginName]?.settings;
             if (settings) {
-                // 遍历所有class配置，检查每个设置项
-                for (const [className, config] of Object.entries(CLASS_CONFIGS)) {
-                    const shouldInject = settings[className];
-                    const isCurrentlyActive = activeClasses.has(className);
-                    
-                    if (shouldInject !== isCurrentlyActive) {
-                        if (shouldInject) {
-                            injectClass(className, config.target);
-                        } else {
-                            removeClass(className, config.target);
-                        }
+                // 遍历所有class配置以注入/移除class（key）
+                for (const className of Object.keys(CLASS_CONFIGS)) {
+                    if (settings[className]) {
+                        injectClass(className);
+                    } else {
+                        removeClass(className);
                     }
                 }
             }
@@ -168,9 +159,9 @@ function setupSettingsWatcher(pluginName) {
         // 应用初始设置
         const settings = orca.state.plugins[pluginName]?.settings;
         if (settings) {
-            for (const [className, config] of Object.entries(CLASS_CONFIGS)) {
+            for (const className of Object.keys(CLASS_CONFIGS)) {
                 if (settings[className]) {
-                    injectClass(className, config.target);
+                    injectClass(className);
                 }
             }
         }
@@ -182,18 +173,11 @@ function setupSettingsWatcher(pluginName) {
 }
 
 // 通用class注入函数
-function injectClass(className, targetSelector) {
+function injectClass(className) {
     try {
-        const targetElement = document.querySelector(targetSelector);
-        if (targetElement) {
-            targetElement.classList.add(className);
-            activeClasses.add(className);
-            log.info(`注入class => ${className}成功`);
-            return true;
-        } else {
-            log.error(`未找到元素: ${targetSelector}`);
-            return false;
-        }
+        document.body.classList.add(className);
+        log.info(`注入class => ${className}成功`);
+        return true;
     } catch (error) {
         log.error(`class注入失败: ${error.message}`);
         return false;
@@ -201,18 +185,11 @@ function injectClass(className, targetSelector) {
 }
 
 // 通用class移除函数
-function removeClass(className, targetSelector) {
+function removeClass(className) {
     try {
-        const targetElement = document.querySelector(targetSelector);
-        if (targetElement) {
-            targetElement.classList.remove(className);
-            activeClasses.delete(className);
-            log.info(`移除class => ${className}成功`);
-            return true;
-        } else {
-            log.error(`未找到元素: ${targetSelector}`);
-            return false;
-        }
+        document.body.classList.remove(className);
+        log.info(`移除class => ${className}成功`);
+        return true;
     } catch (error) {
         log.error(`class移除失败: ${error.message}`);
         return false;
@@ -274,13 +251,9 @@ export async function unload() {
         log.info(t('主题样式移除成功'));
 
         // 移除所有自定义class
-        for (const className of activeClasses) {
-            const config = CLASS_CONFIGS[className];
-            if (config) {
-                removeClass(className, config.target);
-            }
+        for (const className of Object.keys(CLASS_CONFIGS)) {
+            removeClass(className);
         }
-        activeClasses.clear();
         log.info('所有自定义class清理完成');
 
         // 清理设置订阅
@@ -311,7 +284,6 @@ export async function unload() {
         // 清理本插件的全局变量
         currentPluginName = '';
         isThemeCurrentlyActive = false;
-        activeClasses.clear();
         themeActivateCommandId = '';
         settingsUnsubscribe = null;
 

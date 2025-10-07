@@ -2,10 +2,6 @@
     /* —————————————————————————————————————————————————————————————————————— */
     /* 定义行内引用的双括号 */
     [data-type="r"] {
-        &.enable-block-ref-brackets>.orca-inline-r-content {
-            border-bottom: none;
-        }
-
         &>.orca-inline-r-alias-icon:before {
             opacity: .5;
         }
@@ -43,11 +39,13 @@
         display: none
     }
 
-    body:not(.enable-block-ref-brackets){
+    body:not(.tune-block-ref-brackets){
         [data-type="r"]:before,
         [data-type="r"]:after{
             display:none;
-        }
-        
+        }   
+    }
+    body.tune-block-ref-brackets [data-type="r"]>.orca-inline-r-content {
+        border-bottom: none;
     }
     /* —————————————————————————————————————————————————————————————————————— */
