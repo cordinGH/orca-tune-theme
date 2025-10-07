@@ -3,11 +3,26 @@ import { handleVersionUpgrade } from './tune-upgrade.js';
 import { setupL10N, t } from './i18n.js';
 import { start as startThemeSwitcher, cleanup as cleanupThemeSwitcher } from './theme-switcher.js';
 
+// class配置定义
+const CLASS_CONFIGS = {
+    'enable-headbar-hidden-btn': {
+        target: '#headbar',
+        label: '启用顶部栏按钮简化',
+        description: '顶部栏原生按钮隐藏'
+    },
+    'enable-heading-decoration': {
+        target: 'body',
+        label: '启用标题装饰',
+        description: '启用标题装饰'
+    }
+    
+};
+
 // 全局变量
 let currentPluginName = ''; // 当前插件名称
 let isThemeCurrentlyActive = false; // 主题是否激活
 let themeActivateCommandId = ''; // 主题激活命令ID
-let isClassInjectionActive = false; // class注入是否激活
+let activeClasses = new Set(); // 当前激活的class集合
 let settingsUnsubscribe = null; // 设置订阅取消函数
 
 // 日志工具
@@ -98,14 +113,17 @@ function removeStyles() {
  * 注册设置模式
  */
 async function registerSettings(pluginName) {
-    const settingsSchema = {
-        enableClassInjection: {
+    const settingsSchema = {};
+    
+    // 根据CLASS_CONFIGS动态生成设置项
+    for (const [className, config] of Object.entries(CLASS_CONFIGS)) {
+        settingsSchema[className] = {
             type: "boolean",
-            label: "启用顶部栏按钮简化",
-            description: "顶部栏原生按钮隐藏",
-            defaultValue: false
-        }
-    };
+            label: config.label,
+            description: config.description,
+            defaultValue: true
+        };
+    }
 
     await orca.plugins.setSettingsSchema(pluginName, settingsSchema);
     log.info('✅ 插件设置模式已注册');
@@ -127,23 +145,30 @@ function setupSettingsWatcher(pluginName) {
         settingsUnsubscribe = subscribe(orca.state.plugins[pluginName], () => {
             const settings = orca.state.plugins[pluginName]?.settings;
             if (settings) {
-                const shouldInject = settings.enableClassInjection;
-                if (shouldInject !== isClassInjectionActive) {
-                    if (shouldInject) {
-                        injectCustomClass();
-                    } else {
-                        removeCustomClass();
+                // 遍历所有class配置，检查每个设置项
+                for (const [className, config] of Object.entries(CLASS_CONFIGS)) {
+                    const shouldInject = settings[className];
+                    const isCurrentlyActive = activeClasses.has(className);
+                    
+                    if (shouldInject !== isCurrentlyActive) {
+                        if (shouldInject) {
+                            injectClass(className, config.target);
+                        } else {
+                            removeClass(className, config.target);
+                        }
                     }
-                    isClassInjectionActive = shouldInject;
                 }
             }
         });
 
         // 应用初始设置
         const settings = orca.state.plugins[pluginName]?.settings;
-        if (settings?.enableClassInjection) {
-            injectCustomClass();
-            isClassInjectionActive = true;
+        if (settings) {
+            for (const [className, config] of Object.entries(CLASS_CONFIGS)) {
+                if (settings[className]) {
+                    injectClass(className, config.target);
+                }
+            }
         }
 
         log.info('✅ 设置监听器已启动');
@@ -152,38 +177,40 @@ function setupSettingsWatcher(pluginName) {
     }
 }
 
-// 注入class => enable-hidden-btn成功
-function injectCustomClass() {
+// 通用class注入函数
+function injectClass(className, targetSelector) {
     try {
-        const headbarElement = document.getElementById('headbar');
-        if (headbarElement) {
-            headbarElement.classList.add('enable-hidden-btn');
-            log.info('注入class => enable-hidden-btn成功');
+        const targetElement = document.querySelector(targetSelector);
+        if (targetElement) {
+            targetElement.classList.add(className);
+            activeClasses.add(className);
+            log.info(`注入class => ${className}成功`);
             return true;
         } else {
-            log.error('未找到#headbar元素');
+            log.error(`未找到元素: ${targetSelector}`);
             return false;
         }
     } catch (error) {
-        log.error(`自定义class注入失败: ${error.message}`);
+        log.error(`class注入失败: ${error.message}`);
         return false;
     }
 }
 
-// 移除class => enable-hidden-btn成功
-function removeCustomClass() {
+// 通用class移除函数
+function removeClass(className, targetSelector) {
     try {
-        const headbarElement = document.getElementById('headbar');
-        if (headbarElement) {
-            headbarElement.classList.remove('enable-hidden-btn');
-            log.info('移除class => enable-hidden-btn成功');
+        const targetElement = document.querySelector(targetSelector);
+        if (targetElement) {
+            targetElement.classList.remove(className);
+            activeClasses.delete(className);
+            log.info(`移除class => ${className}成功`);
             return true;
         } else {
-            log.error('未找到#headbar元素');
+            log.error(`未找到元素: ${targetSelector}`);
             return false;
         }
     } catch (error) {
-        log.error(`自定义class移除失败: ${error.message}`);
+        log.error(`class移除失败: ${error.message}`);
         return false;
     }
 }
@@ -242,9 +269,15 @@ export async function unload() {
         removeStyles();
         log.info(t('主题样式移除成功'));
 
-        // 移除自定义class
-        removeCustomClass();
-        log.info('自定义class清理完成');
+        // 移除所有自定义class
+        for (const className of activeClasses) {
+            const config = CLASS_CONFIGS[className];
+            if (config) {
+                removeClass(className, config.target);
+            }
+        }
+        activeClasses.clear();
+        log.info('所有自定义class清理完成');
 
         // 清理设置订阅
         if (settingsUnsubscribe) {
@@ -274,7 +307,7 @@ export async function unload() {
         // 清理本插件的全局变量
         currentPluginName = '';
         isThemeCurrentlyActive = false;
-        isClassInjectionActive = false;
+        activeClasses.clear();
         themeActivateCommandId = '';
         settingsUnsubscribe = null;
 
