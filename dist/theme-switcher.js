@@ -148,7 +148,12 @@ async function initializeThemeSwitcher() {
           }
         }, 500)
       }
-      
+
+      // disable圆角css
+      const officialRoundShellLink = document.querySelector('link[data-role="official-themes"]')
+      if (officialRoundShellLink) {
+        officialRoundShellLink.disabled = true
+      }
       // 移除body圆角class
       document.body.classList.remove('kef-round-shell')
     }
