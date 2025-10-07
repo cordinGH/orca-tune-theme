@@ -214,7 +214,7 @@ async function createThemeSwitcherButton() {
           
           switchToTheme(nextTheme)
         }
-      }, React.createElement("i", { className: "ti ti-palette" }))
+      }, React.createElement("i", { className: "ti ti-mood-smile orca-headbar-icon" }))
     })
     
     log.info("主题切换按钮已注册到头部栏")
