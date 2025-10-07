@@ -55,7 +55,10 @@
     .orca-panel:not(.active)  .orca-block-editor-sidetools:is(:not(:hover), :has(.orca-block-editor-sidetools-btn:nth-child(n + 5):hover)) .orca-block-editor-sidetools-btn.orca-button:nth-child(-n + 4){
         scale: .3;
         transform-origin:top;
-        margin-bottom: -75%;
+        margin-bottom: -85%;
+        &:nth-child(4){
+            margin-bottom: -75%;
+        }
         &>i{
             background-color:var(--orca-color-text-1);
             color:transparent;
