@@ -2,7 +2,7 @@
     /* —————————————————————————————————————————————————————————————————————— */
     /* 定义行内引用的双括号 */
     [data-type="r"] {
-        &>.orca-inline-r-content {
+        &.enable-block-ref-brackets>.orca-inline-r-content {
             border-bottom: none;
         }
 
@@ -43,8 +43,11 @@
         display: none
     }
 
-    body:not(.enable-block-ref-brackets) [data-type="r"]:before,
-    body:not(.enable-block-ref-brackets) [data-type="r"]:after{
-        display:none;
+    body:not(.enable-block-ref-brackets){
+        [data-type="r"]:before,
+        [data-type="r"]:after{
+            display:none;
+        }
+        
     }
     /* —————————————————————————————————————————————————————————————————————— */
