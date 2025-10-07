@@ -8,17 +8,17 @@ const CLASS_CONFIGS = {
     'enable-headbar-hidden-btn': {
         target: '#headbar',
         label: '启用顶部栏按钮简化',
-        description: '顶部栏原生按钮隐藏'
+        description: '关闭后不会再隐藏顶部栏原生按钮'
     },
     'enable-heading-decoration': {
         target: 'body',
         label: '启用标题装饰',
-        description: '启用标题装饰'
+        description: '关闭后标题块不会再有线条装饰'
     },
     'enable-block-ref-brackets': {
         target: 'body',
-        label: '启用块引用的方括号装饰',
-        description: '启用块引用的方括号装饰'
+        label: '启用块引用方括号装饰',
+        description: '关闭后块引用不会再显示方括号'
     }
 };
 
