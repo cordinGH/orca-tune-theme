@@ -14,8 +14,12 @@ const CLASS_CONFIGS = {
         target: 'body',
         label: '启用标题装饰',
         description: '启用标题装饰'
+    },
+    'enable-block-ref-brackets': {
+        target: 'body',
+        label: '启用块引用的方括号装饰',
+        description: '启用块引用的方括号装饰'
     }
-    
 };
 
 // 全局变量
