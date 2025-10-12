@@ -214,7 +214,10 @@ body:has(.orca-fav-item-item:hover) .orca-popup:has(.orca-tooltip) {
     transition:margin-left 0.1s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
     
 }
+
+/* 2025-10-13 orca-sidebar-width包括了padding和边框 */
 .sidebar-closed #sidebar{
     width:var(--orca-sidebar-width);
-    margin-left:calc(-1 * var(--orca-sidebar-width));
+    /* 补上main的6px外边距 */
+    margin-left:calc(-1 * var(--orca-sidebar-width) + 6px);
 }
