@@ -1,6 +1,7 @@
 @media (prefers-color-scheme: light) {
     :root {
         --my-bgcolor-app: #E6E6EB;
+        /* --my-bgcolor-app: var(--orca-color-scope-line); */
         /* --my-color-shadow-main: gray; */
     }
 }
