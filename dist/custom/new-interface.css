@@ -46,8 +46,8 @@ body.windows #app{
     /* 过分贴边滚动时不太好看，2px刚好，还能拉开滚动条和边框距离 */
     padding: 2px!important;
     background-color: var(--orca-color-bg-1);
-    /* 不应该出现滚动条，因为只是容器 */
-    overflow:hidden;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
 
     /* 覆盖官方主题的圆角位置变化 */
     .orca-panel-drag-handle {
