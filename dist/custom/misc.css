@@ -19,7 +19,7 @@
 
     /* 没激活  也不是最后一个，就不用彻底淡化 */
     [data-type="text"]:not(.orca-active):not(:last-child)>.orca-repr>.orca-repr-main>.orca-repr-text-content:empty+.orca-repr-main-none-editable>.orca-block-handle.ti-point-filled:not(.orca-block-handle-collapsed, :hover) {
-        opacity: .1;
+        opacity: .03;
     }
 
     .orca-repr-text-content+.orca-repr-main-none-editable>.orca-block-handle:not(.orca-block-handle-collapsed) {

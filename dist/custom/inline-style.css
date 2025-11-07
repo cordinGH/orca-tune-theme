@@ -49,3 +49,12 @@
         border-bottom: none;
     }
     /* —————————————————————————————————————————————————————————————————————— */
+
+    /* 行内代码 */
+    .orca-inline.c{
+        padding-top: .1em;
+        padding-bottom: .1em;
+        padding-left: .35em;
+        padding-right: .35em;
+        border-bottom: none;
+    }
