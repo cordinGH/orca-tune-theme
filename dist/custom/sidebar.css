@@ -200,13 +200,6 @@
 }
 
 
-body:has(.orca-aliased-block-item:hover) .orca-popup:has(.orca-tooltip),
-body:has(.orca-tags-tag-item:hover) .orca-popup:has(.orca-tooltip),
-body:has(.orca-fav-item-item:hover) .orca-popup:has(.orca-tooltip) {
-    translate: 2rem 0;
-}
-
-
 /* 2025-09-19，优化侧边栏收起/展开的过渡，使得main区域平滑变化 */
 #sidebar{
     position: relative !important;
