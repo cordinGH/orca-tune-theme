@@ -2,15 +2,15 @@
 body.tune-headbar-hidden-btn #headbar{
     .orca-headbar-global-tools {
         gap:0;
+        /* 默认状态保持原先的gap间距 */
         &>button:not(:last-child){
             margin-right:var(--orca-spacing-sm);
         }
     }
-    
-    .orca-headbar-sidebar-tools:not(:has(+.orca-headbar-global-tools)) ~ .orca-headbar-global-tools{
-        /* 拉开和user-tools的距离，减少误触 */
-        /* 或者是其他用户组件，总之只要非直接兄弟，均拉开 */
-        margin-left:1rem;
+
+    /* 只要不是sidebar-tools就拉开距离，减少误触 */
+    :not(.orca-headbar-sidebar-tools) ~ .orca-headbar-global-tools{
+        margin-left: .5rem;
     }
 
     .orca-headbar-global-tools:not(:hover)>button:not(:last-child) {

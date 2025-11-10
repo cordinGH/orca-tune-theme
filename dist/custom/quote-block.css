@@ -80,9 +80,6 @@
         border-radius: 6px;
         transition: background-color .15s ease-out;
     }
-    .orca-repr-quote2:has(>.orca-repr-main-collapsed):before{
-        bottom: 0.75em;
-    }
     
     /* 【同上】【适配】嵌套1层引述 */
     .orca-repr.orca-repr-quote2 .orca-repr-quote2::before {
@@ -167,7 +164,7 @@
 
         &>.orca-repr-quote2-icon {
             scale: 1.1;
-            transform-origin: bottom;
+            transform-origin: top;
         }
 
         /* 统一行高，使得切换为quote不会改变布局 */
