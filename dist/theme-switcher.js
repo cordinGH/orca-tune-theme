@@ -35,7 +35,6 @@ export async function start(name) {
   try {
     // 使用状态订阅监听主题数据
     setupThemeStateSubscription()
-    log.info("主题切换器启动成功")
   } catch (error) {
     log.error(`启动失败: ${error.message}`)
   }
@@ -76,7 +75,6 @@ function setupThemeStateSubscription() {
       return
     }
   }
-  log.info("等待主题数据加载...")
   const unsubscribe = window.Valtio.subscribe(orca.state.themes, (themes) => {
     if (themes && Object.keys(themes).length === 6) {
       officialThemes = Object.keys(themes)

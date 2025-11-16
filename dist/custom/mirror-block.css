@@ -19,7 +19,7 @@
     }
 
     /* 统一各种情况下的镜像块icon */
-    /* 【新增】覆盖自定义icon，强制激活ti */
+    /* 【新增】激活ti */
     [data-type="mirror"]>.orca-repr>.orca-repr-main .orca-block-handle:not(:hover) {
         font-family: tabler-icons !important;
         speak: none;
@@ -49,20 +49,23 @@
         &:before {
             content: "\ff8d";
             /* 覆盖掉ul的特殊颜色，采用默认颜色 */
-            color: var(--orca-block-handle-passive-color);
+            /* color: var(--orca-block-handle-passive-color); */
         }
         &.orca-block-handle-collapsed:before {
-            color: var(--my-color-mirror-block-handle);
+            /* color: var(--my-color-mirror-block-handle); */
+            width:unset;
+            height:unset;
+            background-color:unset;
         }
         /* 包裹色和原生折叠包裹色一致 */
         &.orca-block-handle-collapsed {
-            background-color: var(--my-bgcolor-mirror-block-handle);
+            /* background-color: var(--my-bgcolor-mirror-block-handle); */
         }
 
 
     }
 
-    /* 【重定义】镜像块的折叠线 */
+    /* 【重定义】镜像块的缩进线 */
     [data-type="mirror"]>.orca-repr>.orca-repr-main .orca-repr-scope-line {
         &:before {
             border-left: 2px dashed var(--orca-color-scope-line);
@@ -77,9 +80,15 @@
         }
     }
 
-    /* 【适配】引述块的镜像块，提供背景卡片虚线边框 */
+    /* 【适配tune主题】引述块的镜像块，提供背景卡片虚线边框 */
     [data-type="mirror"]>.orca-repr-quote2:before {
         border-style: dashed;
         border-width: 1px;
+    }
+
+    /* 移除虎鲸1.49版本镜像块的样式变更 */
+    .orca-repr.orca-mirror-bg .orca-repr-main{
+        padding-left: 0!important;
+        padding-right: 0!important;
     }
 

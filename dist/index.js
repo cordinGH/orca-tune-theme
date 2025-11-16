@@ -36,8 +36,6 @@ const log = {
 function initTuneThemeGlobals(pluginName) {
     currentPluginName = pluginName;
     themeActivateCommandId = `${pluginName}.toggleActive`;
-
-    log.info(t('插件初始化完成'));
     return true;
 }
 
@@ -84,7 +82,6 @@ function applyStyles() {
         // 使用官方API注入CSS
         orca.themes.injectCSSResource(`${currentPluginName}/dist/custom.css`, currentPluginName);
         isThemeCurrentlyActive = true;
-        log.info(t('主题基础样式应用成功'));
         return true;
     } catch (error) {
         log.error(`${t('样式应用失败 ==> ')}${error.message}`);
@@ -124,9 +121,7 @@ async function registerSettings(pluginName) {
             defaultValue: true
         };
     }
-
     await orca.plugins.setSettingsSchema(pluginName, settingsSchema);
-    log.info('✅ 插件设置模式已注册');
 }
 
 /**
@@ -166,7 +161,7 @@ function setupSettingsWatcher(pluginName) {
             }
         }
 
-        log.info('✅ 设置监听器已启动');
+        log.info('✅ 开始监听tune设置变更');
     } catch (error) {
         log.error(`❌ 设置监听器启动失败: ${error.message}`);
     }
@@ -176,10 +171,10 @@ function setupSettingsWatcher(pluginName) {
 function injectClass(className) {
     try {
         document.body.classList.add(className);
-        log.info(`注入class => ${className}成功`);
+        log.info(`注入设置选项成功，class = ${className}`);
         return true;
     } catch (error) {
-        log.error(`class注入失败: ${error.message}`);
+        log.error(`注入设置选项失败: ${error.message}`);
         return false;
     }
 }

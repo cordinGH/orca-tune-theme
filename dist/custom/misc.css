@@ -175,3 +175,13 @@
         /* 作用域orca窗口非常小时 */
         max-width: 96cqw;
     }
+
+    /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+    /* 别名编辑菜单中，有别名才显示「显示别名」和「放置在标签中」 */
+    .orca-ara:has(.orca-ara-list:empty)~.orca-alias-format-grid{
+        margin-bottom:.5em;
+    }
+    .orca-ara:has(.orca-ara-list:empty)~.orca-alias-format-grid ~ * {
+        display:none
+    }
+    
