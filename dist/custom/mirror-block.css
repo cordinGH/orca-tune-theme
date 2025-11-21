@@ -48,6 +48,7 @@
         /* 统一icon、color、bg */
         &:before {
             content: "\ff8d";
+            font-size: unset;
             /* 覆盖掉ul的特殊颜色，采用默认颜色 */
             /* color: var(--orca-block-handle-passive-color); */
         }
