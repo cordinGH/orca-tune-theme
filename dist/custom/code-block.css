@@ -56,11 +56,17 @@
 
 
     /* cm编辑器颜色和圆角 */
-    /* 【重定义】边框和边距 */
-    .orca-code-editor {
-        padding: unset;
-        border: .5px solid var(--my-bdcolor-code-editor);
+
+
+    /* 适配虎鲸1.50样式变化 */
+    .orca-code-editor-container{
+         padding:unset;
     }
+    .orca-code-editor {
+        /* padding: unset; */
+        /* border: .5px solid var(--my-bdcolor-code-editor); */
+    }
+
 
     /* 【新增】新风格的cm-editor */
     .orca-code-editor .cm-editor {
@@ -93,9 +99,11 @@
         }
 
         /* 滚动区域位置和滚动条样式 */
-        &>.cm-scroller {
-            padding-top: 26px;
-            padding-bottom: 3px;
+        & .cm-scroller {
+            /* 适配虎鲸1.50样式变化 */
+            padding-top: unset;
+            padding-bottom: var(--orca-spacing-xs);
+            margin-top: calc(-2 * var(--orca-spacing-xs)); 
 
 
             &::-webkit-scrollbar:vertical {
@@ -122,12 +130,14 @@
 
     /* header栏配色和尺寸处理 */
     .orca-code-editor-header {
-        background-color: rgba(from var(--my-bgcolor-cm-editor) r g b / .3);
-        backdrop-filter: blur(5px);
+        /* 适配虎鲸1.50样式变化 */
+        /* background-color: rgba(from var(--my-bgcolor-cm-editor) r g b / .3); */
+        /* backdrop-filter: blur(5px); */
         /* 为边框线预留空间 */
-        top: .5px;
-        right: 1px;
-        left: 1px;
+        /* top: .5px; */
+        /* right: 1px; */
+        /* left: 1px; */
+
 
         /* header栏中的文字  不自动换行 */
         white-space: nowrap;

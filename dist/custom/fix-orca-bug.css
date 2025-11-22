@@ -130,3 +130,10 @@
 .orca-query-table-table {
     overflow-y: hidden;
 }
+
+.orca-inline-reference{
+    max-height: unset;
+    & .orca-inline-reference-results{
+        max-height: 50cqh;
+    }
+}
