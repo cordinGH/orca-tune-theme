@@ -49,6 +49,11 @@ body.windows #app{
     overflow-x:auto !important;
     overflow-y:hidden !important;
 
+    /* 1.50虎鲸默认hidden，主题因为卡了最小宽度，因此必须要 */
+    &>.orca-panels-row{
+        overflow-x:auto !important;        
+    }
+
     /* 覆盖官方主题的圆角位置变化 */
     .orca-panel-drag-handle {
         top: var(--orca-spacing-md);

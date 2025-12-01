@@ -75,9 +75,9 @@ export function setupL10N(currentLocale) {
     
     // 检查目标语言是否存在翻译集合
     if (currentLocale !== "zh-CN" && !translations[currentLocale]) {
-        orca.notify("warn", `语言 "${currentLocale}" 的翻译集合不存在，将显示中文原文`, {
-            title: "Tune Theme 多语言警告"
-        });
+        // orca.notify("warn", `语言 "${currentLocale}" 的翻译集合不存在，将显示中文原文`, {
+        //     title: "Tune Theme 多语言警告"
+        // });
     }
 }
 
