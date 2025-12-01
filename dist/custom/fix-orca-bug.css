@@ -5,25 +5,15 @@
     height: var(--hr-height);
     margin: calc(.5 * (var(--orca-block-line-height) - var(--hr-height) - 2 * var(--orca-spacing-md))) 0;
 }
-
-/* ———————————————————————————————————————————————————————————————————————————— */
-/* 修复大块折叠按钮hover时的抖动 */
-.orca-no-editable-container>.orca-no-editable-btn.orca-button {
-    border: 0 !important;
+.orca-block[data-type=hr]>.orca-repr>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle:not(:hover){
+    opacity:1;
 }
+
 
 /* ———————————————————————————————————————————————————————————————————————————— */
 /* 修复折叠按钮不对齐的问题(orca忽视了padding */
 .orca-block-folding-handle {
     top: calc((var(--orca-block-line-height) - var(--orca-spacing-sm) * 2 - var(--orca-fontsize-sm)) * .5)
-}
-
-/* ———————————————————————————————————————————————————————————————————————————— */
-/* 修复Windows自定义图标错位的问题 */
-.orca-block-handle[data-icon]:not(:hover) {
-    width: 1rem;
-    display: inline-flex;
-    justify-content: center;
 }
 
 /* ———————————————————————————————————————————————————————————————————————————— */
@@ -56,13 +46,6 @@
 /* 卡片视图左侧额外 .25rem 使得icon左右留白一致 */
 .orca-query-card>.orca-block {
     margin-left: calc(var(--orca-spacing-xl) + .25rem);
-}
-
-
-/* ———————————————————————————————————————————————————————————————————————————— */
-/* 链接编辑窗口的输入框需要100% */
-.orca-inline-link-edit-input>input {
-    width: 100%;
 }
 
 
