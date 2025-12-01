@@ -51,14 +51,13 @@
         transition:all .15s ease-out;
     }
 
-    /* 当悬停在非官方按钮上时生效，当没有悬停在侧边工具栏时也生效 */
-    .orca-panel:not(.active)  .orca-block-editor-sidetools:is(:not(:hover), :has(.orca-block-editor-sidetools-btn:nth-child(n + 5):hover)) .orca-block-editor-sidetools-btn.orca-button:nth-child(-n + 4){
+    /* 仅悬停在工具栏时生效，不对自定义按钮做特殊处理（has hover会在全局搜索时影响性能） */
+    /* .orca-panel:not(.active)  .orca-block-editor-sidetools:is(:not(:hover), :has(.orca-block-editor-sidetools-btn:nth-child(n + 5):hover)) .orca-block-editor-sidetools-btn.orca-button:nth-child(-n + 4){ */
+    .orca-panel:not(.active)  .orca-block-editor-sidetools:not(:hover) .orca-block-editor-sidetools-btn.orca-button:nth-child(-n + 4){
         scale: .3;
         transform-origin:top;
         margin-bottom: -85%;
-        &:nth-child(4){
-            margin-bottom: -75%;
-        }
+
         &>i{
             background-color:var(--orca-color-text-1);
             color:transparent;
