@@ -81,7 +81,7 @@
         transition: background-color .15s ease-out;
     }
 
-    /* 适配虎鲸单行引述块的样式简化 */
+    /* 适配虎鲸单行引述块的样式简化（1.54虎鲸） */
     div.orca-long-form .orca-repr-quote2.orca-repr-quote2-single {
         &:before {
             top: -5px;
@@ -93,6 +93,12 @@
     div:not(.orca-long-form) .orca-repr-quote2.orca-repr-quote2-single > .orca-repr-children .orca-block-handle{
         display:none;
     }
+    /* 削减单行文本中左边距 */
+    .orca-repr-quote2-single>.orca-repr-children>.orca-block>.orca-repr>.orca-repr-main>.orca-repr-main-content{
+        padding-left: 1em;
+    }
+
+
 
     /* 【同上】【适配】嵌套1层引述 */
     .orca-repr.orca-repr-quote2 .orca-repr-quote2::before {

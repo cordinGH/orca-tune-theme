@@ -170,8 +170,8 @@
     .orca-block-preview{
         /* 16/10 */
         width: 600px;
-        height: 375px;
-        max-height: 45cqh;
+        /* height: 375px; */
+        /* max-height: 45cqh; */
         /* 作用域orca窗口非常小时 */
         max-width: 96cqw;
     }
@@ -184,4 +184,22 @@
     .orca-ara:has(.orca-ara-list:empty)~.orca-alias-format-grid ~ * {
         display:none
     }
-    
+
+
+    /* ———————————————————————————————————————————————————————————————————————————— */
+    /* 2025年12月8日，1.54虎鲸滚动条缺失 */
+    .orca-block-preview{
+        overflow: auto;
+        scrollbar-gutter: stable;
+        border-radius: 5px;
+        &::-webkit-scrollbar-thumb{
+            background-clip: padding-box;
+            border: 2px solid transparent;
+        }
+
+        /* 底部留白削减 */
+        & [data-panel-id="_reference"]>.orca-hideable>.orca-block-editor>.orca-block-editor-main>.orca-block-editor-none-editable>.orca-block-editor-placeholder{
+            height: 0px;
+        }
+    }
+        
