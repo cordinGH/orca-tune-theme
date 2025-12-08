@@ -80,7 +80,20 @@
         border-radius: 6px;
         transition: background-color .15s ease-out;
     }
-    
+
+    /* 适配虎鲸单行引述块的样式简化 */
+    div.orca-long-form .orca-repr-quote2.orca-repr-quote2-single {
+        &:before {
+            top: -5px;
+        }
+        &>.orca-repr-main .orca-repr-quote2-type-selector{
+            top: 4px
+        }
+    }
+    div:not(.orca-long-form) .orca-repr-quote2.orca-repr-quote2-single > .orca-repr-children .orca-block-handle{
+        display:none;
+    }
+
     /* 【同上】【适配】嵌套1层引述 */
     .orca-repr.orca-repr-quote2 .orca-repr-quote2::before {
         left: calc(var(--orca-spacing-indent) * calc(var(--orca-block-indent) + .5));
