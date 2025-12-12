@@ -16,6 +16,10 @@ const CLASS_CONFIGS = {
     'tune-block-ref-brackets': {
         label: '启用块引用方括号装饰',
         description: '关闭后块引用不会再显示方括号，并恢复下划线'
+    },
+    'tune-inline-i-font-family': {
+        label: '斜体英文采用更为流畅的字体',
+        description: '关闭后显示默认的斜体字体'
     }
 };
 
@@ -256,14 +260,6 @@ export async function unload() {
             settingsUnsubscribe();
             settingsUnsubscribe = null;
             log.info('设置订阅已清理');
-        }
-
-        // 清理设置模式
-        try {
-            await orca.plugins.setSettingsSchema(currentPluginName, {});
-            log.info('设置模式已清理');
-        } catch (error) {
-            log.error(`设置模式清理失败: ${error.message}`);
         }
 
         await cleanupThemeSwitcher();

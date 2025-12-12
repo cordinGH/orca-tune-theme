@@ -33,6 +33,27 @@
     src: url('./fonts-woff2/PingFangSC-Semibold-600.woff2') format('woff2');
 }
 
+
+/* 斜体字体 */
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: italic;
+    font-weight: 600;
+    src: url('./fonts-woff2/IBM_Plex_Serif/IBMPlexSerif-BoldItalic.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: italic;
+    font-weight: 400;
+    src: url('./fonts-woff2/IBM_Plex_Serif/IBMPlexSerif-SemiBoldItalic.woff2') format('woff2');
+}
+
 :root {
     --orca-fontfamily-ui: "PingFang SC", var(--orca-fontfamily-fallback);
+}
+
+ /* 斜体字体 */
+ .tune-inline-i-font-family .orca-repr-main-content:not(.orca-repr-heading-content) .orca-inline.i {
+    font-family: "IBM Plex Serif", var(--orca-fontfamily-editor);
 }

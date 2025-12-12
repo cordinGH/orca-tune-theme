@@ -3,10 +3,13 @@
 .orca-repr-hr-content hr {
     --hr-height: 2px;
     height: var(--hr-height);
-    margin: calc(.5 * (var(--orca-block-line-height) - var(--hr-height) - 2 * var(--orca-spacing-md))) 0;
+    /* 1.55分割线样式调整，这里不再需要margin */
+    /* margin: calc(.5 * (var(--orca-block-line-height) - var(--hr-height) - 2 * var(--orca-spacing-md))) 0; */
 }
-.orca-block[data-type=hr]>.orca-repr>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle:not(:hover){
-    opacity:1;
+.orca-block[data-type=hr]>.orca-repr>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle{
+    /* 适配1.55虎鲸的分割线块标位置变化 */
+    opacity:1 !important;
+    top: var(--orca-spacing-md);
 }
 
 

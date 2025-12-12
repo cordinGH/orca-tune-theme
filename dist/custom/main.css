@@ -44,7 +44,7 @@
     }
     /* 定位对齐也和抓手按钮一致 */
     .orca-block-editor-sidetools {
-        right: calc(var(--orca-spacing-lg) + var(--orca-spacing-sm));
+        right: calc(var(--orca-spacing-md) + var(--orca-spacing-sm))
     }
 
     .orca-block-editor-sidetools-btn.orca-button{
