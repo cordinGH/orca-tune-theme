@@ -49,7 +49,6 @@
         border-bottom: none;
     }
     /* —————————————————————————————————————————————————————————————————————— */
-
     /* 行内代码 */
     .orca-inline.c{
         padding-top: .1em;
@@ -57,4 +56,20 @@
         padding-left: .35em;
         padding-right: .35em;
         border-bottom: none;
+    }
+
+    /* 链接下划线延续到图标 */
+    .orca-inline[data-type=l]{
+        border-bottom: .5px solid var(--orca-color-gray-3);
+        border-radius: 0;
+        padding-bottom:0;
+    }
+    .orca-inline-l-text{
+        border-bottom: none;
+    }
+
+    /* —————————————————————————————————————————————————————————————————————— */
+    /* 下划线文本中，下划线往下偏移不遮挡qypgj */
+    .orca-inline.u{
+        text-underline-offset: .15625em;  /* 16px下 == 2.5px */
     }
