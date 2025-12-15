@@ -63,7 +63,8 @@
 
 /* ———————————————————————————————————————————————————————————————————— */
 /* 图片块底部插入按钮，跟随图片尺寸 */
-.orca-repr-image-content .orca-no-editable-container:not(:has(.orca-repr-self-fold-container)){
+/* 修复图片块无法居中居右的问题 */
+.orca-repr-image-content .orca-no-editable-container:not(:has(.orca-repr-self-fold-container)):not(:has(>.orca-image-wrapper[style*="margin"])){
     max-width: max-content;
     & .orca-no-editable-btn.orca-button.orca-insert-bottom {
         right: unset;
