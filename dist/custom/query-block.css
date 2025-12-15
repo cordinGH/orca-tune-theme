@@ -41,11 +41,24 @@
 
 
     /* 查询块面包屑尺寸缩小一点 */
-    :is(.orca-query-card-breadcrumb, .orca-query-list-block-breadcrumb) {
+    .orca-query-card-breadcrumb {
         color: var(--my-color-query-list-breadcrumb);
+        font-size: var(--my-size-query-block-breadcrumb);
+        margin-top: 2px;
 
         &>:is(.orca-breadcrumb-sep, .orca-block-breadcrumb-segment) {
-            line-height: var(--orca-lineheight-md);
+            font-size: var(--my-size-query-block-breadcrumb);
+        }
+    }
+    .orca-query-table-cell>.orca-query-card-breadcrumb{
+        margin-top: 0;
+        margin-bottom: calc(var(--my-height-orca-repr-main-after) - (var(--orca-lineheight-sm) - 1) * .5 * var(--my-size-query-block-breadcrumb));
+    }
+
+    .orca-query-list-block-breadcrumb{
+        font-size: var(--my-size-query-block-breadcrumb);
+        color: var(--my-color-query-list-breadcrumb);
+        & :is(.orca-breadcrumb-sep, .orca-block-breadcrumb-segment){
             font-size: var(--my-size-query-block-breadcrumb);
         }
     }
@@ -89,7 +102,7 @@
         /* top补偿，after高度 + 边框 */
         top: calc(-1 * var(--my-height-orca-repr-main-after) - var(--my-border-query-list));
         /* bottom 补偿 边框 */
-        bottom: var(--my-border-query-list);
+        bottom: calc( -1 * var(--my-border-query-list));
         /* 拉开开一个缩进+边框的距离 */
         left: calc(-1 * var(--orca-spacing-indent) - var(--my-border-left-query-list));
         right: 0;
@@ -114,15 +127,22 @@
         padding-bottom: 0;
         margin-top: 0;
         margin-bottom: 0;
-        /* orca-block的背景板对照main:after进行了top扩充 var(--my-height-orca-repr-main-after) + border1px */
-        /* 因此条目间距需要补上这个距离 */
-        /* 再为了使条目间距 == border到文字底部的距离，额外补偿一个main:after和半行距 */
-        margin-bottom: calc(var(--my-height-orca-repr-main-after) + var(--my-border-query-list) + 1 * (var(--my-height-orca-repr-main-after) + .3rem));
+        /* orca-block的背景板对照main:after进行了top扩充 var(--my-height-orca-repr-main-after) + border1px。因此需要补上这个top */
+        /* 字间距 + after 作为卡片间距，再额外替top补一个after，再补上条border。最终间距关系，a块的字底部到卡片border === 卡片border1到卡片border2 === 卡片border2 到 b块的字底部 */
+        margin-bottom: calc(
+            (var(--orca-lineheight-md) - 1) * .5 * var(--orca-fontsize-md) + var(--my-height-orca-repr-main-after)
+            + var(--my-height-orca-repr-main-after)
+            + var(--my-border-query-list) * 2
+            );
 
         &:has(+.orca-query-list-block>.orca-query-list-block-breadcrumb) {
             /* 后一个存在面包屑，有了明确实体，条目间距也就不需要替背景板补margin了*/
-            /* 削去字间距，补偿border宽度使其看起来像是等距 */
-            margin-bottom: calc(var(--my-height-orca-repr-main-after) + .3rem - var(--my-size-query-block-breadcrumb) * .3 + var(--my-border-query-list) * 2);
+            /* 字间距 + after 作为卡片间距，减去面包屑的字间距，再补上border。最终间距关系，a块的字底部到卡片boder1 === 卡片border1到b块面包屑的字顶部 */
+            margin-bottom: calc(
+                (var(--orca-lineheight-md) - 1) * .5 * var(--orca-fontsize-md) + var(--my-height-orca-repr-main-after)
+                - (var(--orca-lineheight-sm) - 1) * .5 * var(--my-size-query-block-breadcrumb)
+                + var(--my-border-query-list)
+            );
         }
     }
 
