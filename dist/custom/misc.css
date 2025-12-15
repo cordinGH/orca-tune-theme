@@ -181,15 +181,10 @@
 
 
     /* ———————————————————————————————————————————————————————————————————————————— */
-    /* 2025年12月8日，1.54虎鲸滚动条缺失 */
+    /* 2025年12月8日，1.54虎鲸滚动条缺失（1.55已修复） */
     .orca-block-preview{
-        overflow: auto;
         scrollbar-gutter: stable;
-        border-radius: 5px;
-        &::-webkit-scrollbar-thumb{
-            background-clip: padding-box;
-            border: 2px solid transparent;
-        }
+        border-radius: 6px;
 
         /* 底部留白削减 */
         & [data-panel-id="_reference"]>.orca-hideable>.orca-block-editor>.orca-block-editor-main>.orca-block-editor-none-editable>.orca-block-editor-placeholder{
