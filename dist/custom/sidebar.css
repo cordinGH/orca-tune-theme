@@ -41,7 +41,7 @@
     translate: -5px;
 
     /* 宽度背景色不需要过渡，不然很奇怪，有一个很大的折叠区块*/
-    transition-property: height, top, opacity, border-radius;
+    transition-property: height, top, opacity, border-radius, box-shadow;
     transition-duration: .2s;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -56,8 +56,8 @@
     width: 6.5px;
     border-top-left-radius: 999px;
     border-bottom-left-radius: 999px;
-    border-left: .5px solid var(--orca-color-text-1);
-    border-left-color: var(--orca-color-text-1);
+    /* 用box-shadow模拟border，从而以规避border的幽灵线 */
+    box-shadow: -.5px 0 0 0 var(--orca-color-text-1);
     opacity: .5;
 }
 
@@ -70,7 +70,7 @@
     }
 }
 
-/* hover变色 */
+/* hover提升透明度 */
 /* ⭐️⭐️⭐️已适配tabsman插件 */
 .orca-aliased-block-item:hover:before,
 .orca-tags-tag-item:hover:before,
@@ -86,7 +86,6 @@
     top: 8px;
     height: 15px;
     width: 2px;
-
 
     background-color: var(--orca-color-text-1);
     opacity: .6;
