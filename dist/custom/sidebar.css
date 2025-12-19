@@ -140,11 +140,10 @@
 
 /* 折叠按钮和块标重叠化 */
 /* 处理第一个按钮同步块标按钮22px尺寸，从而精准对齐块标icon，使得hover时显示出来以偷取fav-icon背景色 */
-/* ⭐️⭐️⭐️已适配tabsman插件 */
 .orca-aliased-block-item :is(.ti-chevron-right, .ti-chevron-down),
 .orca-tags-tag-item :is(.ti-chevron-right, .ti-chevron-down),
 .orca-fav-item-item:not(.plugin-tabsman-item-item) :is(.ti-chevron-right, .ti-chevron-down) {
-    /* 变为定位元素  叠在块标上面 */
+    /* 叠到块标上面 */
     position: relative;
     opacity: 0;
     width: 22px;
@@ -165,17 +164,16 @@
     }
 }
 
-/* hover时 等一会儿出现透明度 */
-/* ⭐️⭐️⭐️已适配tabsman插件 */
-.orca-aliased-block-item:hover :is(.ti-chevron-right, .ti-chevron-down),
-.orca-tags-tag-item:hover :is(.ti-chevron-right, .ti-chevron-down),
-.orca-fav-item-item:not(.plugin-tabsman-item-item):hover :is(.ti-chevron-right, .ti-chevron-down) {
+/* 进入hover时 等块标消失了再显示折叠图标 */
+.orca-aliased-block-item:hover>:is(.ti-chevron-right, .ti-chevron-down),
+.orca-tags-tag-item:hover>:is(.ti-chevron-right, .ti-chevron-down),
+.orca-fav-item-item:not(.plugin-tabsman-item-item):hover>:is(.ti-chevron-right, .ti-chevron-down) {
     opacity: 1;
     transition: opacity 0.1s cubic-bezier(0, 0, 0.2, 1) 0.1s;
 }
 
-/* ⭐️⭐️⭐️已适配tabsman插件 */
-.orca-aliased-block-item:has( :is(.ti-chevron-right, .ti-chevron-down)):hover :is(.orca-aliased-block-icon, .orca-aliased-block-icon-emoji),
+/* 退出hover时，等待折叠图标消失了再显现块标 */
+.orca-aliased-block-item:has( :is(.ti-chevron-right, .ti-chevron-down)) :is(.orca-aliased-block-icon, .orca-aliased-block-icon-emoji),
 .orca-tags-tag-item:has( :is(.ti-chevron-right, .ti-chevron-down)) .orca-tags-tag-icon,
 .orca-fav-item-item:not(.plugin-tabsman-item-item):has( :is(.ti-chevron-right, .ti-chevron-down)) .orca-fav-item-icon {
     /* 可折叠的条目不需要旋转放大的动画 */
@@ -185,7 +183,7 @@
     transition: color 0.1s cubic-bezier(0, 0, 0.2, 1) 0.1s;
 }
 
-/* ⭐️⭐️⭐️已适配tabsman插件 */
+/* hover时，块标立马透明，让折叠图标显现出来 */
 .orca-aliased-block-item:has( :is(.ti-chevron-right, .ti-chevron-down)):hover :is(.orca-aliased-block-icon, .orca-aliased-block-icon-emoji),
 .orca-tags-tag-item:has( :is(.ti-chevron-right, .ti-chevron-down)):hover .orca-tags-tag-icon,
 .orca-fav-item-item:not(.plugin-tabsman-item-item):has( :is(.ti-chevron-right, .ti-chevron-down)):hover .orca-fav-item-icon {
