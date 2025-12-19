@@ -7,21 +7,6 @@
 
     ————————————————————————————————————————————————————————————————————————————————
 */
-/* 为左侧栏条目配备缩进线 */
-/* ⭐️⭐️⭐️已适配tabsman插件 */
-.orca-fav-item-item:not(.plugin-tabsman-item-item) {
-    /* 合并折叠按钮和块图标 */
-    grid-template-columns: 0px auto 1fr auto;
-    /* 延续虎鲸的设计，通过border拉开一点边距 */
-    border-left-width: 9px;
-}
-
-/* tag和别名要多一个计数器栏 */
-.orca-tags-tag-item,
-.orca-aliased-block-item {
-    grid-template-columns: 0 auto auto minmax(max-content, 1fr) auto;
-    border-left-width: 9px;
-}
 
 /* ==================== 创建层级指示条  并优化悬停时的背景色=================== */
 /* ======================  2025-12-19 优化版本 ======================== */
@@ -135,6 +120,24 @@
 
 
 
+/* =================================== 融合折叠按钮和块标 ===================================== */
+
+/* 为左侧栏条目配备缩进线 */
+/* ⭐️⭐️⭐️已适配tabsman插件 */
+.orca-fav-item-item:not(.plugin-tabsman-item-item) {
+    /* 合并折叠按钮和块图标 */
+    grid-template-columns: 0px auto 1fr auto;
+    /* 延续虎鲸的设计，通过border拉开一点边距 */
+    border-left-width: 11px;
+}
+
+/* tag和别名要多一个计数器栏 */
+.orca-tags-tag-item,
+.orca-aliased-block-item {
+    grid-template-columns: 0 auto auto minmax(max-content, 1fr) auto;
+    border-left-width: 11px;
+}
+
 /* 折叠按钮和块标重叠化 */
 /* 处理第一个按钮同步块标按钮22px尺寸，从而精准对齐块标icon，使得hover时显示出来以偷取fav-icon背景色 */
 /* ⭐️⭐️⭐️已适配tabsman插件 */
@@ -191,6 +194,8 @@
     pointer-events: none;
     transition: color 0.1s cubic-bezier(0.5, 0, 1, 1) 0s;
 }
+
+/* ======================================================================================== */
 
 
 .orca-favorites-items,
