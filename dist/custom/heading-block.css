@@ -75,14 +75,30 @@ body.tune-heading-decoration {
             inset 0 -.5px 0 0 var(--my-color-heading);
     }
 
-    h3.orca-repr-heading-content>:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
+    h3.orca-repr-heading-content>:is(span.orca-inline:not([data-type="mt"]), .orca-repr-title:not(.orca-input)) {
+        font-family: inherit!important;
         display: inline-block;
+        box-shadow:
+            inset 0 -2px 0 0 var(--my-color-heading);
+    }
+    
+    /* 2.8.0 */
+    .orca-repr-heading-content .orca-inline-mt-icon{
+        margin-left:.125em;
+    }
+    /* 2.8.0 */
+    /* 适配h3中的时间戳，padding+margin延长box-shadow */
+    h3.orca-repr-heading-content .orca-inline-mt-text {
+        font-family: inherit!important;
+        display: inline-block;
+        padding-left: 1.25em;
+        margin-left: -1.25em;
         box-shadow:
             inset 0 -2px 0 0 var(--my-color-heading);
     }
 
 
-    h4.orca-repr-heading-content>:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
+    h4.orca-repr-heading-content>:is(span.orca-inline, .orca-repr-title:not(.orca-input)) {
         padding-bottom: 2px;
         padding-bottom: 4.5px;
         background-image: linear-gradient(to right, var(--my-color-heading) 60%, transparent 60%);
@@ -91,6 +107,15 @@ body.tune-heading-decoration {
         background-repeat: repeat-x;
     }
 
+    /* 2.8.0 */
+    /* 统一标题块中的时间戳样式 */
+    .orca-repr-heading-content>.orca-inline[data-type="mt"]{
+        font-family: inherit!important;
+        border-radius:unset;
+    }
+    .orca-repr-heading-content>.orca-inline[data-type="mt"]>i.orca-inline-mt-icon{
+        font-size:inherit!important;
+    }
 }
 
 /* ———————————————————————————————————————————————————————————— */

@@ -63,12 +63,12 @@
 .orca-aliased-block:has(>.orca-aliased-block-item>.ti-chevron-down):before,
 .orca-tags-tag:has(>.orca-tags-tag-item>.ti-chevron-down):before,
 .orca-fav-item:not(.plugin-tabsman-panel-group):has(>.orca-fav-item-item>.ti-chevron-down):before {
-    opacity: .375;
+    opacity: .4;
 }
 .orca-aliased-block:has(>.orca-aliased-block-item>.ti-chevron-down):hover:before,
 .orca-tags-tag:has(>.orca-tags-tag-item>.ti-chevron-down):hover:before,
 .orca-fav-item:not(.plugin-tabsman-panel-group):has(>.orca-fav-item-item>.ti-chevron-down):hover:before {
-    opacity: .75;
+    opacity: .8;
 }
 @media (prefers-color-scheme: dark) {
     .orca-aliased-block:has(>.orca-aliased-block-item>.ti-chevron-down):before,
