@@ -40,7 +40,7 @@
         display: block;
     }
 
-    .orca-repr-video-content div:has(>.orca-video) {
+    .orca-video-container {
         box-shadow: var(--my-shadow-img);
         border-radius: 3px;
     }

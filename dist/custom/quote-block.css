@@ -293,4 +293,14 @@
         }
     }
 
+    /* 虎鲸1.56 - 1.57 多行引述块的main多处了padding */
+    .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-main {
+        padding: 0;
+    }
+
+    /* 1.57微调单行引述块背景板尺寸 */
+    .orca-repr-quote2.orca-repr-quote2-single:before{
+        bottom: .625em;
+    }
+
 
