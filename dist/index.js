@@ -175,7 +175,6 @@ function setupSettingsWatcher(pluginName) {
 function injectClass(className) {
     try {
         document.body.classList.add(className);
-        log.info(`注入设置选项成功，class = ${className}`);
         return true;
     } catch (error) {
         log.error(`注入设置选项失败: ${error.message}`);

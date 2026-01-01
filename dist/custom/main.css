@@ -97,14 +97,6 @@
         }
     }
 
-
-    /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
-    /* 分屏分割线淡化 */
-    .orca-panels-row>:is(.orca-panels-column, .orca-panel):not(:last-child),
-    .orca-panels-column>:is(.orca-panels-row, .orca-panel):not(:last-child) {
-        border-width: .5px;
-    }
-
     /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
     /* 编辑器切换时增加过渡动画 */
     .orca-hideable:not(.orca-hideable-hidden)>.orca-block-editor>.orca-block-editor-main {
@@ -145,7 +137,7 @@
 
 
 /* 和次级块同缩进，并回拽一个缩进 */
-@scope(#main) to (.orca-long-form, .orca-popup) {
+@scope(#main) to (:is(.orca-long-form, .orca-popup)) {
 
     /* 回拽一个缩进 */
     .orca-block-editor-blocks>[data-indent="0"]:has(>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)) {
@@ -246,11 +238,12 @@
 /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
 /* TOC顶格缩进；块标调节 */
 .orca-toc>.orca-toc-item>.orca-toc-item-content {
+    margin-bottom: .375rem;
+
     &>.orca-toc-item-fold-arrow:before {
         content: "\ea08";
     }
 
-    margin-bottom:.375rem;
 
     &:has(>.ti-chevron-right) {
         border-radius: 4px;
