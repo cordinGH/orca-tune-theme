@@ -1,7 +1,0 @@
-{
-  "name": "Tune-theme-plugin",
-  "version": "1.0.0",
-  "description": "A custom theme for Orca Note.",
-  "type": "module",
-  "main": "dist/index.js"
-}

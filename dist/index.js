@@ -1,5 +1,3 @@
-// 导入升级模块
-import { handleVersionUpgrade } from './tune-upgrade.js';
 import { setupL10N, t } from './i18n.js';
 import { start as startThemeSwitcher, cleanup as cleanupThemeSwitcher } from './theme-switcher.js';
 
@@ -69,10 +67,6 @@ export async function load(pluginName) {
         
         // 最后启动设置监听器，确保所有初始化都完成
         setupSettingsWatcher(pluginName);
-        
-        // 版本升级处理（放在最后，不阻塞主流程）
-        handleVersionUpgrade(pluginName);
-
 
     } catch (error) {
         log.error(`${t('插件加载失败 ==> ')}${error.message}`);

@@ -1,6 +1,6 @@
 // 升级管理模块
 import { setupL10N, t } from './i18n.js';
-const PLUGIN_VERSION = '2.8'; // 插件版本号
+const PLUGIN_VERSION = '2.8.2'; // 插件版本号
 let previousVersion = ''; // 之前的版本号
 
 // 日志工具
@@ -22,10 +22,7 @@ export async function handleVersionUpgrade(pluginName) {
         await orca.plugins.setData(pluginName, 'version', PLUGIN_VERSION);
 
         // 如果版本相同，无需处理
-        if (previousVersion === PLUGIN_VERSION) {
-            log.info(t('版本未变化，无需处理'));
-            return;
-        }
+        if (previousVersion === PLUGIN_VERSION) return
 
         // 初始化设置界面（废弃，在反复启动时会存在冲突）
         // await orca.plugins.setSettingsSchema(pluginName, {});
