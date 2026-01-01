@@ -63,7 +63,7 @@ export async function load(pluginName) {
         // 注册设置模式
         await registerSettings(pluginName);
 
-        await startThemeSwitcher(pluginName);
+        await startThemeSwitcher()
         
         // 最后启动设置监听器，确保所有初始化都完成
         setupSettingsWatcher(pluginName);
