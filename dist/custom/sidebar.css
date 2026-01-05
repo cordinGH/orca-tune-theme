@@ -31,7 +31,7 @@
     pointer-events: none;
     position: absolute;
     position-anchor: --item-row-area;
-    top: 8px;
+    top: 9px;
     height: 15px;
     left: calc(anchor(left) - 6px);
     width: 2px;
@@ -216,4 +216,10 @@
     width:var(--orca-sidebar-width);
     /* 补上main的6px外边距 */
     margin-left:calc(-1 * var(--orca-sidebar-width) + 6px);
+}
+
+
+/* 2026年1月5日虎鲸1.58，折叠按钮新增了一个padding，导致侧边栏的层级指示器和按钮等元素尺寸错位。现取消。 */
+.orca-aliased-block-fold, .orca-fav-item-fold, .orca-tags-tag-fold{
+    padding:0
 }
