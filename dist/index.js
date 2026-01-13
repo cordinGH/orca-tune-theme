@@ -159,7 +159,7 @@ function setupSettingsWatcher(pluginName) {
             }
         }
 
-        log.info('✅ 开始监听tune设置变更');
+        log.info('开始监听tune设置选项');
     } catch (error) {
         log.error(`❌ 设置监听器启动失败: ${error.message}`);
     }
@@ -252,7 +252,7 @@ export async function unload() {
         if (settingsUnsubscribe) {
             settingsUnsubscribe();
             settingsUnsubscribe = null;
-            log.info('设置订阅已清理');
+            log.info('已退订设置选项监听');
         }
 
         await cleanupThemeSwitcher();

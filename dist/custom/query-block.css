@@ -302,3 +302,11 @@
     .orca-table-resizer {
         background: center top / .5px 100% linear-gradient(var(--orca-color-separator), var(--orca-color-separator)) no-repeat;
     }
+
+    /* 2026年1月13日，查询列表中日志块移除margin，以使得卡片背景上下等距 */
+    .orca-query-list-block-block>.orca-repr-journal{
+        margin-top: 0;
+    }
+    .orca-query-list-block-block>.orca-repr-journal>.orca-repr-main>.orca-repr-main-content{
+        margin:0;
+    }
