@@ -165,7 +165,7 @@ export async function load(pluginName) {
         currentPluginName = pluginName;
         
         // 应用主题样式
-        applyStyles();
+        await applyStyles();
 
         // 注册主题激活命令
         registerCommands();
