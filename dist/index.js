@@ -1,31 +1,13 @@
 import { setupL10N, t } from './i18n.js';
 import { start as startThemeSwitcher, cleanup as cleanupThemeSwitcher } from './theme-switcher.js';
 
-// class配置定义
-const CLASS_CONFIGS = {
-    'tune-headbar-hidden-btn': {
-        label: '启用顶部栏按钮简化',
-        description: '关闭后不会再隐藏顶部栏原生按钮'
-    },
-    'tune-heading-decoration': {
-        label: '启用标题装饰',
-        description: '关闭后标题块不会再有线条装饰'
-    },
-    'tune-block-ref-brackets': {
-        label: '启用块引用方括号装饰',
-        description: '关闭后块引用不会再显示方括号，并恢复下划线'
-    },
-    'tune-inline-i-font-family': {
-        label: '斜体英文采用更为流畅的字体',
-        description: '关闭后显示默认的斜体字体'
-    }
-};
 
-// 全局变量
-let currentPluginName = ''; // 当前插件名称
+let currentPluginName = '';
 let isThemeCurrentlyActive = false; // 主题是否激活
-let themeActivateCommandId = ''; // 主题激活命令ID
-let settingsUnsubscribe = null; // 设置订阅取消函数
+let settingsSchema = null
+let commands = null
+
+let settingsUnsubscribe = null; // 设置变更的退订
 
 // 日志工具
 const log = {
@@ -33,34 +15,164 @@ const log = {
     error: (message) => console.error(`[${currentPluginName}] ${message}`)
 };
 
+// 样式管理函数：应用主题基础样式
+async function applyStyles() {
+    try {
+        const style = await orca.plugins.getData('tune-theme', "indent-style")
 
-// 初始化函数：初始化插件的全局变量
-function initTuneThemeGlobals(pluginName) {
-    currentPluginName = pluginName;
-    themeActivateCommandId = `${pluginName}.toggleActive`;
-    return true;
+        if (!style) await orca.plugins.setData('tune-theme', "indent-style", 1);
+
+        switch (style) {
+            case 2:
+                orca.themes.injectCSSResource(`${currentPluginName}/dist/custom2.css`, currentPluginName);
+                await orca.plugins.setData('tune-theme', "indent-style", 2);
+                break;
+            default:
+                orca.themes.injectCSSResource(`${currentPluginName}/dist/custom.css`, currentPluginName);
+                await orca.plugins.setData('tune-theme', "indent-style", 1);
+                break;
+            }
+
+        // 注入CSS
+        isThemeCurrentlyActive = true;
+        return true;
+    } catch (error) {
+        log.error(`${t('样式应用失败 ==> ')}${error.message}`);
+        isThemeCurrentlyActive = false;
+        return false;
+    }
+}
+
+// 移除主题基础样式
+function removeStyles() {
+    try {
+        // 使用官方API移除CSS资源
+        orca.themes.removeCSSResources(currentPluginName);
+        isThemeCurrentlyActive = false;
+        return true;
+    } catch (error) {
+        log.error(`${t('样式移除失败 ==> ')}${error.message}`);
+        return false;
+    }
+}
+
+/**
+ * 注册设置选项
+ */
+async function registerSettings(pluginName) {
+    // class配置定义
+    settingsSchema = {
+        'tune-headbar-hidden-btn': {
+            type: "boolean",
+            label: '启用顶部栏按钮简化',
+            description: '关闭后不会再隐藏顶部栏原生按钮',
+            defaultValue: true
+        },
+        'tune-heading-decoration': {
+            type: "boolean",
+            label: '启用标题装饰',
+            description: '关闭后标题块不会再有线条装饰',
+            defaultValue: true
+        },
+        'tune-block-ref-brackets': {
+            type: "boolean",
+            label: '启用块引用方括号装饰',
+            description: '关闭后块引用不会再显示方括号，并恢复下划线',
+            defaultValue: true
+        },
+        'tune-inline-i-font-family': {
+            type: "boolean",
+            label: '斜体英文采用更为流畅的字体',
+            description: '关闭后显示默认的斜体字体',
+            defaultValue: true
+        }
+    };
+
+    await orca.plugins.setSettingsSchema(pluginName, settingsSchema);
+
+    // 应用初始设置的样式
+    const settings = orca.state.plugins[pluginName]?.settings;
+    if (!settings) return
+    Object.keys(settingsSchema).forEach(className => {
+        if (settings[className]) document.body.classList.add(className)
+    })
+}
+
+/**
+ * 监听设置选项变更
+ */
+function setupSettingsWatcher(pluginName) {
+    try {
+        // 清理旧的订阅
+        if (settingsUnsubscribe) {
+            settingsUnsubscribe();
+            settingsUnsubscribe = null;
+        }
+
+        // 监听设置变化
+        const { subscribe } = window.Valtio;
+        settingsUnsubscribe = subscribe(orca.state.plugins[pluginName], () => {
+            const settings = orca.state.plugins[pluginName]?.settings;
+            if (!settings) return
+            // 更新变化
+            Object.keys(settingsSchema).forEach(className => {
+                settings[className] ? document.body.classList.add(className) : document.body.classList.remove(className)
+            })
+        });
+
+    } catch (error) {
+        log.error(`❌ 设置监听器启动失败: ${error.message}`);
+    }
 }
 
 
-// 插件生命周期函数：load函数
+// 注册tabsman命令
+function registerCommands() {
+    commands = [
+        {
+            name: "tune.toggleActive",
+            fn() {
+                if (isThemeCurrentlyActive) {
+                    log.info(removeStyles() ? t('主题已停用') : t('主题停用失败'));
+                } else {
+                    log.info(applyStyles() ? t('主题已激活') : t('主题激活失败'));
+                }
+            },
+            description: "[tune] " + t('激活/停用Tune主题样式')
+        },
+        {
+            name: "tune.toggleIndentOnFocus",
+            async fn() {
+                const style = await orca.plugins.getData('tune-theme', "indent-style")
+                await orca.plugins.setData('tune-theme', "indent-style", style === 1 ? 2 : 1)
+                removeStyles()
+                applyStyles()
+            },
+            description: "[tune] " + t('切换聚焦时的缩进风格')
+        }
+    ]
+
+    commands.forEach(({name,fn,description}) => orca.commands.registerCommand(name, fn, description))
+}
+
+
+// 插件生命周期函数，load函数
 export async function load(pluginName) {
     try {
         // 初始化多语言
         setupL10N(orca.state.locale);
 
-        // 初始化全局变量
-        if (!initTuneThemeGlobals(pluginName)) {
-            throw new Error(t('插件初始化失败'));
-        }
-
+        currentPluginName = pluginName;
+        
         // 应用主题样式
-        const applyOK = applyStyles();
+        applyStyles();
 
         // 注册主题激活命令
-        const registerOK = await registerThemeActivateCommand();
-        log.info(registerOK ? t('主题激活命令注册成功') : t('主题激活命令注册失败'));
+        registerCommands();
 
-        // 注册设置模式
+        console.log("[tune-theme] 样式已生效")
+
+        // 注册设置选项
         await registerSettings(pluginName);
 
         await startThemeSwitcher()
@@ -74,178 +186,21 @@ export async function load(pluginName) {
 }
 
 
-// 样式管理函数：应用主题基础样式
-function applyStyles() {
-    try {
-        // 使用官方API注入CSS
-        orca.themes.injectCSSResource(`${currentPluginName}/dist/custom.css`, currentPluginName);
-        isThemeCurrentlyActive = true;
-        return true;
-    } catch (error) {
-        log.error(`${t('样式应用失败 ==> ')}${error.message}`);
-        isThemeCurrentlyActive = false;
-        return false;
-    }
-}
-
-
-
-// 移除主题基础样式
-function removeStyles() {
-    try {
-        // 使用官方API移除CSS资源
-        orca.themes.removeCSSResources(currentPluginName);
-        isThemeCurrentlyActive = false;
-        log.info(t('主题样式移除成功'));
-        return true;
-    } catch (error) {
-        log.error(`${t('样式移除失败 ==> ')}${error.message}`);
-        return false;
-    }
-}
-
-/**
- * 注册设置模式
- */
-async function registerSettings(pluginName) {
-    const settingsSchema = {};
-    
-    // 根据CLASS_CONFIGS动态生成设置项
-    for (const [className, config] of Object.entries(CLASS_CONFIGS)) {
-        settingsSchema[className] = {
-            type: "boolean",
-            label: config.label,
-            description: config.description,
-            defaultValue: true
-        };
-    }
-    await orca.plugins.setSettingsSchema(pluginName, settingsSchema);
-}
-
-/**
- * 设置监听器（分离设置注册和监听逻辑）
- */
-function setupSettingsWatcher(pluginName) {
-    try {
-        // 清理旧的订阅（如果存在）
-        if (settingsUnsubscribe) {
-            settingsUnsubscribe();
-            settingsUnsubscribe = null;
-        }
-
-        // 监听设置变化
-        const { subscribe } = window.Valtio;
-        settingsUnsubscribe = subscribe(orca.state.plugins[pluginName], () => {
-            const settings = orca.state.plugins[pluginName]?.settings;
-            if (settings) {
-                // 遍历所有class配置以注入/移除class（key）
-                for (const className of Object.keys(CLASS_CONFIGS)) {
-                    if (settings[className]) {
-                        injectClass(className);
-                    } else {
-                        removeClass(className);
-                    }
-                }
-            }
-        });
-
-        // 应用初始设置
-        const settings = orca.state.plugins[pluginName]?.settings;
-        if (settings) {
-            for (const className of Object.keys(CLASS_CONFIGS)) {
-                if (settings[className]) {
-                    injectClass(className);
-                }
-            }
-        }
-
-        log.info('开始监听tune设置选项');
-    } catch (error) {
-        log.error(`❌ 设置监听器启动失败: ${error.message}`);
-    }
-}
-
-// 通用class注入函数
-function injectClass(className) {
-    try {
-        document.body.classList.add(className);
-        return true;
-    } catch (error) {
-        log.error(`注入设置选项失败: ${error.message}`);
-        return false;
-    }
-}
-
-// 通用class移除函数
-function removeClass(className) {
-    try {
-        document.body.classList.remove(className);
-        log.info(`移除class => ${className}成功`);
-        return true;
-    } catch (error) {
-        log.error(`class移除失败: ${error.message}`);
-        return false;
-    }
-}
-
-
-// 注册主题激活命令：激活/停用Tune主题样式
-async function registerThemeActivateCommand() {
-    try {
-        // 检查命令是否已存在
-        if (orca.state.commands[themeActivateCommandId] == null) {
-            // 注册命令
-            orca.commands.registerCommand(
-                // 命令注册参数1：命令ID
-                themeActivateCommandId,
-                // 命令注册参数2：绑定主题激活命令的执行函数
-                async () => {
-                    try {
-                        log.info(`${t('即将执行命令：')}${themeActivateCommandId}${t('。当前主题状态：')} ${isThemeCurrentlyActive}`);
-
-                        if (isThemeCurrentlyActive) {
-                            // 当前已激活，执行removeStyles
-                            log.info(removeStyles() ? t('主题已停用') : t('主题停用失败'));
-                        } else {
-                            // 当前未激活，执行applyStyles
-                            log.info(applyStyles() ? t('主题已激活') : t('主题激活失败'));
-                        }
-
-                        log.info(`${t('命令执行完毕，主题状态已切换为：')}${isThemeCurrentlyActive}`);
-                    } catch (error) {
-                        log.error(`${t('命令执行失败')}: ${error.message}`);
-                    }
-                },
-                // 命令注册参数3： 命令的显示名称
-                t('激活/停用Tune主题样式')
-            );
-            return true; // 命令注册成功
-        }
-        return true; // 命令已存在，也视为成功
-    } catch (error) {
-        return false; // 命令注册失败
-    }
-}
-
-
-// 插件卸载函数：卸载插件，移除主题激活命令，移除主题样式 和 清理本插件的全局变量
 export async function unload() {
     try {
-        log.info(t('开始卸载插件'));
-
         // 注销主题激活命令和快捷键
-        orca.commands.unregisterCommand(themeActivateCommandId);
-        orca.shortcuts.reset(themeActivateCommandId);
-        log.info(t('主题激活命令和快捷键注销成功'));
+        commands.forEach(({name}) => {
+            orca.commands.unregisterCommand(name)
+            orca.shortcuts.reset(name);
+        })
+        commands = null
+        log.info(t('主题激活命令和快捷键已注销'));
 
-        // 移除本插件的样式
         removeStyles();
-        log.info(t('主题样式移除成功'));
 
         // 移除所有自定义class
-        for (const className of Object.keys(CLASS_CONFIGS)) {
-            removeClass(className);
-        }
+        Object.keys(settingsSchema).forEach(className => document.body.classList.remove(className))
+        settingsSchema = null
         log.info('所有自定义class清理完成');
 
         // 清理设置订阅
@@ -257,20 +212,9 @@ export async function unload() {
 
         await cleanupThemeSwitcher();
 
-        // 清理插件数据（只清理版本信息，升级模块使用了 setData 存储）
-        try {
-            await orca.plugins.removeData(currentPluginName, 'version');
-            log.info(t('插件数据清理完成'));
-        } catch (error) {
-            log.error(`${t('插件数据清理失败：')}${error.message}`);
-        }
-
         // 清理本插件的全局变量
         currentPluginName = '';
         isThemeCurrentlyActive = false;
-        themeActivateCommandId = '';
-        settingsUnsubscribe = null;
-
         log.info(t('插件卸载完成'));
 
     } catch (error) {

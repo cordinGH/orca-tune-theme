@@ -137,15 +137,15 @@
 
 
 /* 和次级块同缩进，并回拽一个缩进 */
-@scope(#main) to (:is(.orca-long-form, .orca-popup)) {
+@scope(#main div:first-child) to (:is(.orca-long-form, .orca-popup)) {
 
     /* 回拽一个缩进 */
-    .orca-block-editor-blocks>[data-indent="0"]:has(>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)) {
+    &.orca-block-editor-blocks>[data-indent="0"]:has(>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)) {
         margin-left: calc(-1 * var(--orca-spacing-indent));
     }
 
     /* 顶层块处理 */
-    .orca-block-editor-blocks>[data-indent="0"]>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)>.orca-repr-main {
+    &.orca-block-editor-blocks>[data-indent="0"]>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)>.orca-repr-main {
 
         /* 顶层块减少一个缩进 */
         &>:is(.orca-repr-main-content, .orca-repr-main-none-editable) {
@@ -188,7 +188,7 @@
     }
 
     /* fixed|适配虎鲸1.31版本的css变更：orca-block增加新属性data-editable="false"，因为需要存放插入行按钮，所以额外加了margin */
-    .orca-block-editor-blocks>[data-indent="0"][data-editable="false"]:not([data-type="journal"])>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)>.orca-repr-main>.orca-repr-main-none-editable>.orca-repr-scope-line {
+    &.orca-block-editor-blocks>[data-indent="0"][data-editable="false"]:not([data-type="journal"])>.orca-repr:not(.orca-repr-table2, .orca-repr-quote2)>.orca-repr-main>.orca-repr-main-none-editable>.orca-repr-scope-line {
         top: calc(var(--orca-block-line-height) * .5 - 1px + var(--orca-spacing-md)) !important;
     }
 
