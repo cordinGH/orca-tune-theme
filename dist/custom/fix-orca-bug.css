@@ -103,6 +103,7 @@
 }
 
 .orca-no-editable-btn.orca-button.orca-insert-bottom {
+    left: unset;
     right: 2.25em;
 }
 

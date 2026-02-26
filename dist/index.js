@@ -59,7 +59,7 @@ function removeStyles() {
 /**
  * 注册设置选项
  */
-async function registerSettings(pluginName) {
+async function registerSettings() {
     // class配置定义
     settingsSchema = {
         'tune-headbar-hidden-btn': {
@@ -88,10 +88,10 @@ async function registerSettings(pluginName) {
         }
     };
 
-    await orca.plugins.setSettingsSchema(pluginName, settingsSchema);
+    await orca.plugins.setSettingsSchema(currentPluginName, settingsSchema);
 
     // 应用初始设置的样式
-    const settings = orca.state.plugins[pluginName]?.settings;
+    const settings = orca.state.plugins[currentPluginName]?.settings;
     if (!settings) return
     Object.keys(settingsSchema).forEach(className => {
         if (settings[className]) document.body.classList.add(className)
@@ -101,7 +101,7 @@ async function registerSettings(pluginName) {
 /**
  * 监听设置选项变更
  */
-function setupSettingsWatcher(pluginName) {
+function setupSettingsWatcher() {
     try {
         // 清理旧的订阅
         if (settingsUnsubscribe) {
@@ -110,11 +110,9 @@ function setupSettingsWatcher(pluginName) {
         }
 
         // 监听设置变化
-        const { subscribe } = window.Valtio;
-        settingsUnsubscribe = subscribe(orca.state.plugins[pluginName], () => {
-            const settings = orca.state.plugins[pluginName]?.settings;
-            if (!settings) return
-            // 更新变化
+        settingsUnsubscribe = window.Valtio.subscribe(orca.state.plugins[currentPluginName], () => {
+            const settings = orca.state.plugins[currentPluginName].settings;
+            // 加载新的settings
             Object.keys(settingsSchema).forEach(className => {
                 settings[className] ? document.body.classList.add(className) : document.body.classList.remove(className)
             })
@@ -159,10 +157,11 @@ function registerCommands() {
 // 插件生命周期函数，load函数
 export async function load(pluginName) {
     try {
-        // 初始化多语言
-        setupL10N(orca.state.locale);
 
         currentPluginName = pluginName;
+
+        // 初始化多语言
+        setupL10N(orca.state.locale);
         
         // 应用主题样式
         await applyStyles();
@@ -173,12 +172,12 @@ export async function load(pluginName) {
         console.log("[tune-theme] 样式已生效")
 
         // 注册设置选项
-        await registerSettings(pluginName);
+        await registerSettings();
 
         await startThemeSwitcher()
         
         // 最后启动设置监听器，确保所有初始化都完成
-        setupSettingsWatcher(pluginName);
+        setupSettingsWatcher();
 
     } catch (error) {
         log.error(`${t('插件加载失败 ==> ')}${error.message}`);
