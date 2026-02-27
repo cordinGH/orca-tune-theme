@@ -1,7 +1,7 @@
 **[Orca-Note](https://github.com/sethyuan/orca-note) 主题，自用主题**
 
 > [!TIP]
-> 因为是基于**非生动风格**，所以关闭生动风格可能表现更好
+> 因为是基于**非生动风格**编写，所以**关闭生动风格**可能表现更好
 > <img width="850" height="281" alt="image" src="https://github.com/user-attachments/assets/dc5b9b41-8a35-49b4-9860-52b8e5be50e8" />
 
 
