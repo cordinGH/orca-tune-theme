@@ -1,5 +1,10 @@
 **[Orca-Note](https://github.com/sethyuan/orca-note) 主题，自用主题**
 
+> [!TIP]
+> 因为是基于**非生动风格**编写，所以**关闭生动风格**可能表现更好
+> <img width="850" height="281" alt="image" src="https://github.com/user-attachments/assets/dc5b9b41-8a35-49b4-9860-52b8e5be50e8" />
+
+
 # （一）使用方法
 
 前往本仓库的 [Releases](https://github.com/cordinGH/orca-tune-theme/releases) 页面。
@@ -41,7 +46,7 @@ orca/
 > - 支持设置命令快捷键，快速启用和关闭主题（命令/快捷键搜索 Tune）
 
 ## 各版本主要变化
-- 2.9.0 更加稳定的主题切换器(搭配官方主题)
+- 2.9.0 [更加稳定的主题切换器(搭配官方主题)](https://github.com/cordinGH/orca-tune-theme/releases/tag/2.9.0)
 - [v2.4.0](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.4.0)：适配了 [official-themes](https://github.com/sethyuan/orca-plugin-official-themes) 各配色下的查询块列表视图
 - [v2.3.0](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.3.0)
   - 新增设置项：是否启用顶部栏简化（原生按钮）
