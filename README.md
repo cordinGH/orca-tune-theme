@@ -1,4 +1,4 @@
-**[Orca-Note](https://github.com/sethyuan/orca-note) 主题，自用主题**
+**[Orca-Note](https://github.com/sethyuan/orca-note) 主题**
 
 > [!TIP]
 > 因为是基于**非生动风格**编写，所以**关闭生动风格**可能表现更好
