@@ -1,7 +1,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --my-bdcolor-code-editor: #444;
-        --my-bgcolor-cm-editor: #333333;
+        --my-bgcolor-cm-editor: #333333; /* 3.1.2废弃 */
         --my-color-cm-gutters: var(--orca-color-gray-5);
         --my-color-cm-active-line-gutter: #fff;
 
@@ -15,7 +15,7 @@
 @media (prefers-color-scheme: light) {
     :root {
         --my-bdcolor-code-editor: #ddd;
-        --my-bgcolor-cm-editor: #f0f0f0;
+        --my-bgcolor-cm-editor: #f0f0f0; /* 3.1.2废弃 */
         --my-color-cm-gutters: var(--orca-color-gray-3);
         --my-color-cm-active-line-gutter: #000;
 
@@ -71,11 +71,11 @@
     /* 【新增】新风格的cm-editor */
     .orca-code-editor .cm-editor {
         border-radius: var(--orca-radius-sm);
-        background-color: var(--my-bgcolor-cm-editor);
+        background-color: var(--orca-color-bg-2);
 
         /* 行槽 追加模糊背景色 */
         & .cm-gutters {
-            background-color: rgba(from var(--my-bgcolor-cm-editor) r g b / .3);
+            background-color: var(--orca-color-bg-2);
             backdrop-filter: blur(5px);
             border-right: unset;
             color: var(--my-color-cm-gutters);
@@ -111,7 +111,7 @@
             }
 
             &::-webkit-scrollbar-thumb:vertical {
-                border: 1px solid var(--my-bgcolor-cm-editor);
+                border: 1px solid var(--orca-color-bg-2);
                 /* 1.51版本的虎鲸已自带该效果 */
                 /* box-shadow: 0px 30px 0px 0px var(--my-bgcolor-cm-editor) inset; */
             }
@@ -121,7 +121,7 @@
             }
 
             &::-webkit-scrollbar-thumb:horizontal {
-                border: 1px solid var(--my-bgcolor-cm-editor);
+                border: 1px solid var(--orca-color-bg-2);
             }
         }
     }
