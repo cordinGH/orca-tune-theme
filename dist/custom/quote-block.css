@@ -305,7 +305,7 @@
 
 /* ——————————————————————— 非quote-quote的quote块，也支持单块简化显示 ——————————————————————————— */
 /* selector脱离 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-main:has(+.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector {
+.orca-repr-quote2:not(.orca-repr-quote2-quote):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector {
     position: absolute;
     padding: 0;
     top: 10px;
@@ -313,23 +313,23 @@
     z-index:1;
 }
 /* 卡片背景尺寸缩短 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote):has(>.orca-repr-main+.orca-repr-children>.orca-block[data-type="text"]:only-child)::before{
+.orca-repr-quote2:not(.orca-repr-quote2-quote):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child)::before{
     bottom:.625em;
 }
 
 /* 隐藏selector文本 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-main:has(+.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector>.orca-repr-quote2-type-text {
+.orca-repr-quote2:not(.orca-repr-quote2-quote):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector>.orca-repr-quote2-type-text {
     display:none;
 }
 
 /* text块尺寸和single-quote一致 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-main+.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main>.orca-repr-main-content{
-    margin-top: 8px;
+.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main>.orca-repr-main-content{
+    padding-top: 8px;
     padding-left: 1em;
 }
 
 /* text块圆点隐藏 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-main+.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-handle{
+.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-handle{
     display:none;
     pointer-events:none
 }
