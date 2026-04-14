@@ -333,4 +333,15 @@
     display:none;
     pointer-events:none
 }
+
+/* 单行引述块折叠时，优化折叠按钮的尺寸、位置和颜色 */
+.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-folding-handle{
+    top: 9px;
+    margin-left:.75em;
+    color:unset;
+    &.ti-caret-right-filled{
+        opacity:1;
+        font-size:1rem;
+    }
+}
 /* —————————————————————————————————————————————————— */
