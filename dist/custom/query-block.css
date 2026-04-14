@@ -176,7 +176,7 @@
         text-align: right;
     }
 
-    .orca-query-list-block-block[data-editable=false]>.orca-repr:after {
+    .orca-query-list-block-block[data-editable=false]>.orca-repr:not(.orca-repr-journal):after {
         /* 条目编号位置：不可编辑块存在--orca-spacing-md的padding用来放置按钮，因此要额外补一点 */
         top: calc((var(--orca-block-line-height) * .5 - 5px + var(--orca-spacing-md)));
     }
