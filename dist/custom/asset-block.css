@@ -52,22 +52,3 @@
     .orca-video-toolbar>.orca-select-button {
         white-space: nowrap;
     }
-
-
-
-/* ———————————————————————————————————————————————————————————————————— */
-/* 图文环绕 */
-/* 使用说明：图文环绕是虎鲸中的标签名，当图片块打上该标签后，子块会以图文环绕的形式呈现 */
-/* 影响全局搜索性能 */
-
-
-/* ———————————————————————————————————————————————————————————————————— */
-/* 图片块底部插入按钮，跟随图片尺寸 */
-/* 修复图片块无法居中居右的问题 */
-.orca-repr-image-content .orca-no-editable-container:not(:has(.orca-repr-self-fold-container)):not(:has(>.orca-image-wrapper[style*="margin"])){
-    max-width: max-content;
-    & .orca-no-editable-btn.orca-button.orca-insert-bottom {
-        right: unset;
-        left:max(calc(100% - 3.5em), 2.25em);
-    }
-}
