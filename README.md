@@ -12,6 +12,7 @@
 ---
 
 ### 更新日志
+- 3.2.0 解决了大型页面的卡顿问题（2.8.0版本引入了一个异常选择器），现加载和响应速度和官方原生基本无疑。
 - 2.9.0 [更加稳定的主题切换器(搭配官方主题)](https://github.com/cordinGH/orca-tune-theme/releases/tag/2.9.0)
 - [v2.4.0](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.4.0)：适配了 [official-themes](https://github.com/sethyuan/orca-plugin-official-themes) 各配色下的查询块列表视图
 - [v2.3.0](https://github.com/cordinGH/orca-tune-theme/releases/tag/v2.3.0)
