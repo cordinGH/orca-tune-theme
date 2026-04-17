@@ -117,13 +117,21 @@
             }
 
             &::-webkit-scrollbar:horizontal {
-                height: 6px;
+                height: 7px;
             }
 
             &::-webkit-scrollbar-thumb:horizontal {
                 border: 1px solid var(--orca-color-bg-2);
             }
         }
+    }
+
+    /* 预览视图的底部横向滚动条扁化 */
+    .orca-code-preview::-webkit-scrollbar:horizontal {
+        height: 7px;
+    }
+    .orca-code-preview::-webkit-scrollbar-thumb:horizontal {
+        border: 1px solid var(--orca-color-bg-2);
     }
 
 
