@@ -262,3 +262,6 @@
 .orca-panel-drag-handle-stateful::before {
     content: "\eae2"!important;
 }
+.orca-panel-drag-handle-stateful{
+    opacity: 1;
+}

@@ -257,3 +257,11 @@
     margin-left: 0em;
 }
 /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
+
+/* 锁定跳转后，右上角icon同步变更为锁 */
+.orca-panel-drag-handle-stateful::before {
+    content: "\eae2"!important;
+}
+.orca-panel-drag-handle-stateful{
+    opacity: 1;
+}
