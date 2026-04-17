@@ -93,21 +93,6 @@
 }
 
 /* ———————————————————————————————————————————————————————————————————————————— */
-/* 优化不可编辑块的按钮位置，单位em可以在预览窗口也有不错的体验 */
-.orca-no-editable-btn.orca-button.orca-insert-top {
-    left: 2.25em;
-}
-
-.orca-no-editable-btn.orca-button.orca-fold {
-    left: 4.25em;
-}
-
-.orca-no-editable-btn.orca-button.orca-insert-bottom {
-    left: unset;
-    right: 2.25em;
-}
-
-/* ———————————————————————————————————————————————————————————————————————————— */
 /* 列表视图，优化无面包屑时的单元格上边距（补齐main:after） */
 .orca-query-table-row:not(.orca-query-table-row-add,.orca-query-table-row-stats) .orca-query-table-cell:not(:has(>.orca-query-card-breadcrumb)){
     padding-top:calc(var(--orca-spacing-sm) + .35em);
