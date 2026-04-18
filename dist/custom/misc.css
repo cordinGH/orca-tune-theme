@@ -86,14 +86,12 @@
 
     /* —————————————————————————————————————————————————————————————————————— */
     /* 【重定义】父块被激活不需要变色，影响判断 */
-    .orca-block.orca-active-parent>.orca-repr>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle:before {
+    /* 
+        fix，2026-04-18，不再直接给:before配色，因为虎鲸块标的颜色是通过载体元素继承给:before的，尽可能遵循这个设计。 
+        典型场景就是从标签上继承过来的颜色，也是写在handle这个载体上的（内联style）
+    */
+    .orca-block.orca-active-parent>.orca-repr>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle {
         color: var(--orca-block-handle-passive-color);
-    }
-
-    /* 适配ul */
-    /* 被ul-list.css覆盖 */
-    .orca-block.orca-active-parent>.orca-repr-ul>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle:before {
-        color: var(--orca-color-text-1);
     }
 
     /* —————————————————————————————————————————————————————————————————————— */

@@ -25,7 +25,12 @@
 .orca-repr-ul-content+.orca-repr-main-none-editable .orca-block-handle:not(.orca-block-handle-collapsed, :hover):before {
     content: "\eb6b";
     scale: 1;
-    color: var(--orca-block-handle-passive-color) !important;
+    color: unset!important; /* 颜色继承 */
+}
+
+/* ul块标折叠颜色和其他块一致 */
+.orca-repr-ul>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle-collapsed:not(:hover):before{
+    color: unset!important; /* 颜色继承 */
 }
 
 /* —————————————————————————————————————————————————————————————————————— */
