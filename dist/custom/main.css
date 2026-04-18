@@ -264,4 +264,5 @@
 }
 .orca-panel-drag-handle-stateful{
     opacity: 1;
+    outline: .5px var(--orca-color-primary-5) solid;
 }
