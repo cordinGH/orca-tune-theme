@@ -85,7 +85,13 @@ async function registerSettings() {
             label: '斜体英文采用更为流畅的字体',
             description: '关闭后显示默认的斜体字体',
             defaultValue: true
-        }
+        },
+        'tune-heading-font-family': {
+            type: "boolean",
+            label: '由Tune决定标题块字体',
+            description: '启用后，Tune会将标题块字体改为宋体',
+            defaultValue: true
+        },
     };
 
     await orca.plugins.setSettingsSchema(currentPluginName, settingsSchema);

@@ -14,7 +14,7 @@
 
 
 /* 标题块尺寸微调 */
-:is(h1, h2, h3, h4).orca-repr-heading-content {
+.tune-heading-font-family :is(h1, h2, h3, h4).orca-repr-heading-content {
     font-family: "Songti SC", "SimSun", serif;
 }
 
@@ -40,10 +40,14 @@ body.tune-heading-decoration {
     h1.orca-repr-heading-content>span {
         &:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
             background-image: linear-gradient(to right, var(--my-color-heading) 100%, transparent);
-            background-position: 0 bottom;
+            
+            /* background-position: 0 bottom; */
+            /* 统一从中间开始定位，以适配不同字体 */
+            background-position: 0 calc(50%);
+            padding-bottom: 16px;
+
             background-size: 100% 9px;
             background-repeat: no-repeat;
-            padding-bottom: 2px;
         }
 
         &:nth-last-child(1 of :is(.orca-inline, .orca-repr-title:not(.orca-input))) {
@@ -102,7 +106,12 @@ body.tune-heading-decoration {
         padding-bottom: 2px;
         padding-bottom: 4.5px;
         background-image: linear-gradient(to right, var(--my-color-heading) 60%, transparent 60%);
-        background-position: 0 bottom;
+
+        /* background-position: 0 bottom; */
+        /* 统一从中间开始定位，以适配不同字体 */
+        background-position: 0 calc(50%);
+        padding-bottom: 25px;
+
         background-size: 7px 2px;
         background-repeat: repeat-x;
     }
