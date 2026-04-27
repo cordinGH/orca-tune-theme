@@ -157,7 +157,6 @@
 
         &>.orca-button.orca-code-editor-copy {
             font-size: 12px;
-            color: var(--my-color-code-editor-header);
         }
 
         &>.orca-button.orca-code-editor-delete {
