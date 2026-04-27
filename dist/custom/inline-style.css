@@ -46,7 +46,7 @@
         }   
     }
     body.tune-block-ref-brackets [data-type="r"]>.orca-inline-r-content {
-        border-bottom: none;
+        text-decoration: unset;
     }
     /* —————————————————————————————————————————————————————————————————————— */
     /* 行内代码 */
