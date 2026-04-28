@@ -180,7 +180,7 @@ export async function load(pluginName) {
         // 注册设置选项
         await registerSettings();
 
-        await startThemeSwitcher()
+        startThemeSwitcher()
         
         // 最后启动设置监听器，确保所有初始化都完成
         setupSettingsWatcher();
