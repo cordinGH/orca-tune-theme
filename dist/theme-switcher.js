@@ -17,82 +17,76 @@ const log = {
 }
 
 let officialThemesUnSubscribe = null;
-let officialThemesSettingUnSubscribe = null;
-let officialThemesPlugin = null;
 /** @type {string[]} 主题名称数组 */
 let superThemes = null;
+
+let officialThemesTimer;
 
 export function start() {
     // 检查官方主题是否就位并监听其状态以抵消用户不当操作（切换圆角按钮）
     checkOfficialThemesReady()
-    officialThemesUnSubscribe = window.Valtio.subscribe(orca.state.plugins, checkOfficialThemesReady)
+    officialThemesUnSubscribe = window.Valtio.subscribe(orca.state.plugins, ()=>{
+        officialThemesTimer && clearTimeout(officialThemesTimer)
+        // 避免连续的操作记录重复触发
+        officialThemesTimer = setTimeout(()=>{
+            checkOfficialThemesReady()
+            officialThemesTimer = null
+        }, 0)
+    })
 }
 
 export function cleanup() {
     orca.headbar.unregisterHeadbarButton(`pluginTuneTheme.themeSwitcher`)
-    clearAllSubscribe()
-    officialThemesPlugin = null;
+    if (officialThemesUnSubscribe) {
+        officialThemesUnSubscribe()
+        officialThemesUnSubscribe = null
+    }
+    officialThemesTimer = null
     superThemes = null;
     log.info("主题切换器已清理")
 }
 
 
+// 订阅传入的通知更新
 function checkOfficialThemesReady() {
-    if (officialThemesPlugin) return
+
+    // 读取插件列表后的下一步操作
+    let nextOp = '';
 
     const pluginInfoArray = Object.values(orca.state.plugins)
-
     for (const pluginInfo of pluginInfoArray) {
-        // 未启用或不存在settings
-        if (!Object.hasOwn(pluginInfo, "module") || !pluginInfo.settings) continue
+        // 不存在该shcema说明本次不是目标插件
+        if (!pluginInfo.schema?.enableRoundShell) continue;
 
-        // 目标正确
-        if (Object.hasOwn(pluginInfo.settings, "enableRoundShell")) {
-            officialThemesPlugin = pluginInfo
+        // 查看切换器存在与否，用于决定下一步是否应当清理切换器或注册切换器
+        const isNotExist = !orca.state.headbarButtons['pluginTuneTheme.themeSwitcher']
+
+        if (pluginInfo?.enabled) {
+            // 确保任意状态都具有正确的圆角class
+            setVaildRoundShell()
+            // 启用状态，则解析应当执行什么操作
+            nextOp = isNotExist ? 'register' : 'none'
+            break;
+        } else {
+            // 停用状态
+            nextOp = isNotExist ? 'none' : 'unregister'
             break;
         }
-        officialThemesPlugin = null
     }
 
-    // 清理
-    !officialThemesPlugin && clearAllSubscribe();
-
-    // 检查到插件后，等待执行栈清空后，则去注册切换按钮，并确保配色适配
-    if (officialThemesPlugin) {
-
-        setTimeout(() => {
-
-            // 消除无意义的class
-            const roundShell = document.querySelector('head>link[data-role="official-themes"]')
-            if (roundShell) roundShell.remove();
-
-            const currentTheme = orca.state.settings[11]
-            const isDefaultTheme = !currentTheme || currentTheme === 'default'
-            // 设置主题所需的class
-            isDefaultTheme ? document.body.classList.remove("kef-round-shell") : document.body.classList.add("kef-round-shell")
-
-            // 准备主题切换名单
-            superThemes = ['default', ...Object.keys(orca.state.themes)]
-
-            // 创建切换按钮
-            orca.headbar.registerHeadbarButton(`pluginTuneTheme.themeSwitcher`, () => React.createElement(
-                orca.components.Button,
-                { variant: "plain", onClick: () => switchToTheme() },
-                React.createElement("i", { className: "ti ti-color-swatch orca-headbar-icon" }))
-            )
-
-            // 订阅officialThemes插件的设置变更，用于抵消一些不希望发生的用户操作
-            officialThemesSettingUnSubscribe = window.Valtio.subscribe(officialThemesPlugin, () => {
-                setTimeout(() => {
-                    if (officialThemesPlugin.settings.enableRoundShell === true) setVaildRoundShell();
-                }, 0)
-            })
-        }, 0)
+    switch (nextOp) {
+        case 'register': registerSwitcher();break;
+        case 'unregister': orca.headbar.unregisterHeadbarButton(`pluginTuneTheme.themeSwitcher`);break;
     }
 }
 
-// 设置一个有效的roundShell
-function setVaildRoundShell() {
+/**
+ * 识别到了启用了官方主题，则注册主题切换器，并确保配色适配
+ * @param {boolean} needClearRoundShell - 是否应当清理掉被启用的圆角外壳
+ */
+function registerSwitcher() {
+
+    // 消除无意义的link
     const roundShell = document.querySelector('head>link[data-role="official-themes"]')
     if (roundShell) roundShell.remove();
 
@@ -100,18 +94,33 @@ function setVaildRoundShell() {
     const currentTheme = orca.state.settings[11]
     const isDefaultTheme = !currentTheme || currentTheme === 'default'
     isDefaultTheme ? document.body.classList.remove("kef-round-shell") : document.body.classList.add("kef-round-shell")
+
+    // 准备主题切换名单
+    superThemes = ['default', ...Object.keys(orca.state.themes)]
+
+    // 创建切换按钮
+    orca.headbar.registerHeadbarButton(`pluginTuneTheme.themeSwitcher`, () => React.createElement(
+        orca.components.Button,
+        { variant: "plain", onClick: () => switchToTheme() },
+        React.createElement("i", { className: "ti ti-color-swatch orca-headbar-icon" }))
+    )
 }
 
-// 插件不存在，清理所有订阅
-function clearAllSubscribe() {
-    if (officialThemesUnSubscribe) {
-        officialThemesUnSubscribe()
-        officialThemesUnSubscribe = null
-    }
-    if (officialThemesSettingUnSubscribe) {
-        officialThemesSettingUnSubscribe()
-        officialThemesSettingUnSubscribe = null
-    }
+
+
+/**
+ * 根据监听到启用状态，设置圆角外壳有效性
+ * @param {*} enableRoundShell 
+ */
+function setVaildRoundShell(enableRoundShell) {
+    if (enableRoundShell) {}
+    const roundShell = document.querySelector('head>link[data-role="official-themes"]')
+    if (roundShell) roundShell.remove();
+
+    // 设置当前主题所需的class
+    const currentTheme = orca.state.settings[11]
+    const isDefaultTheme = !currentTheme || currentTheme === 'default'
+    isDefaultTheme ? document.body.classList.remove("kef-round-shell") : document.body.classList.add("kef-round-shell")
 }
 
 
