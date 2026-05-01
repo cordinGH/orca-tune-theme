@@ -7,7 +7,7 @@ let isThemeCurrentlyActive = false; // 主题是否激活
 let settingsSchema = null
 let commands = null
 
-let settingsUnsubscribe = null; // 设置变更的退订
+let settingsUnsubscribe = null; // 设置变更的退订函数
 
 // 日志工具
 const log = {
@@ -108,25 +108,20 @@ async function registerSettings() {
  * 监听设置选项变更
  */
 function setupSettingsWatcher() {
-    try {
-        // 清理旧的订阅
-        if (settingsUnsubscribe) {
-            settingsUnsubscribe();
-            settingsUnsubscribe = null;
-        }
-
-        // 监听设置变化
-        settingsUnsubscribe = window.Valtio.subscribe(orca.state.plugins[currentPluginName], () => {
-            const settings = orca.state.plugins[currentPluginName].settings;
-            // 加载新的settings
-            Object.keys(settingsSchema).forEach(className => {
-                settings[className] ? document.body.classList.add(className) : document.body.classList.remove(className)
-            })
-        });
-
-    } catch (error) {
-        log.error(`❌ 设置监听器启动失败: ${error.message}`);
+    // 清理旧的订阅
+    if (settingsUnsubscribe) {
+        settingsUnsubscribe();
+        settingsUnsubscribe = null;
     }
+
+    // 监听设置变化
+    settingsUnsubscribe = window.Valtio.subscribe(orca.state.plugins[currentPluginName], () => {
+        const settings = orca.state.plugins[currentPluginName].settings;
+        // 加载新的settings
+        Object.keys(settingsSchema).forEach(className => {
+            settings[className] ? document.body.classList.add(className) : document.body.classList.remove(className)
+        })
+    });
 }
 
 
@@ -166,8 +161,10 @@ export async function load(pluginName) {
 
         currentPluginName = pluginName;
 
-        // 初始化多语言
         setupL10N(orca.state.locale);
+
+        // 注册设置选项
+        await registerSettings();
         
         // 应用主题样式
         await applyStyles();
@@ -177,12 +174,9 @@ export async function load(pluginName) {
 
         console.log("[tune-theme] 样式已生效")
 
-        // 注册设置选项
-        await registerSettings();
-
         startThemeSwitcher()
         
-        // 最后启动设置监听器，确保所有初始化都完成
+        // 启动设置监听器
         setupSettingsWatcher();
 
     } catch (error) {
@@ -206,6 +200,7 @@ export async function unload() {
         // 移除所有自定义class
         Object.keys(settingsSchema).forEach(className => document.body.classList.remove(className))
         settingsSchema = null
+
         log.info('所有自定义class清理完成');
 
         // 清理设置订阅
@@ -215,10 +210,10 @@ export async function unload() {
             log.info('已退订设置选项监听');
         }
 
-        await cleanupThemeSwitcher();
+        cleanupThemeSwitcher();
 
         // 清理本插件的全局变量
-        currentPluginName = '';
+        currentPluginName = null;
         isThemeCurrentlyActive = false;
         log.info(t('插件卸载完成'));
 

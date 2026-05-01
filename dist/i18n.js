@@ -72,20 +72,11 @@ const translations = {
 // 设置本地语言
 export function setupL10N(currentLocale) {
     locale = currentLocale;
-    
-    // 检查目标语言是否存在翻译集合
-    if (currentLocale !== "zh-CN" && !translations[currentLocale]) {
-        // orca.notify("warn", `语言 "${currentLocale}" 的翻译集合不存在，将显示中文原文`, {
-        //     title: "Tune Theme 多语言警告"
-        // });
-    }
 }
 
 // 翻译函数
 export function t(key) {
-    // 如果当前语言是中文，直接返回原消息
-    if (locale === "zh-CN") {
-        return key;
-    }
+    // 当前语言是中文直接返回原消息
+    if (locale === "zh-CN") return key;
     return translations[locale]?.[key] ?? key;
 }
