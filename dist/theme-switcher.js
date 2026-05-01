@@ -16,7 +16,7 @@ const log = {
     error: (message) => console.error(`[Tune-theme] ${message}`)
 }
 
-let pluginOfficialThemes = null // 发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本官方主题的情况）。
+let officialThemesInfo = null // 发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本官方主题的情况）。
 
 let officialThemesUnSubscribe = null;
 /** @type {string[]} 主题名称数组 */
@@ -43,7 +43,7 @@ export function cleanup() {
         officialThemesUnSubscribe()
         officialThemesUnSubscribe = null
     }
-    pluginOfficialThemes = null
+    officialThemesInfo = null
     officialThemesTimer = null
     superThemes = null;
     log.info("主题切换器已清理")
@@ -54,6 +54,9 @@ export function cleanup() {
 function checkOfficialThemesReady() {
     const pluginInfoArray = Object.values(orca.state.plugins)
     for (const pluginInfo of pluginInfoArray) {
+        // 如果不是登记启动的目标插件，则跳过
+        if (officialThemesInfo && pluginInfo !== officialThemesInfo) continue;
+
         // 不存在该shcema说明本次不是目标插件
         if (!pluginInfo.schema?.enableRoundShell) continue;
 
@@ -61,16 +64,16 @@ function checkOfficialThemesReady() {
         const isNotExist = !orca.state.headbarButtons['pluginTuneTheme.themeSwitcher']
 
         // 用户可能不止安装了一个版本的官方主题，因此有必要保存一下触发启用的插件版本。
-        if (!pluginOfficialThemes && pluginInfo?.enabled) {
+        if (!officialThemesInfo && pluginInfo?.enabled) {
             // 检测到官方主题，且之前没有登记，则登记并注册切换器
-            pluginOfficialThemes = pluginInfo
+            officialThemesInfo = pluginInfo
             // 确保任意状态都具有正确的圆角class
             setVaildRoundShell()
             isNotExist && registerSwitcher()
             break;
-        } else if (pluginOfficialThemes && !pluginInfo?.enabled){
+        } else if (officialThemesInfo && !officialThemesInfo?.enabled){
             // 登记了官方主题，才需要移除
-            pluginOfficialThemes = null
+            officialThemesInfo = null
             // 停用状态如果注册了则移除
             !isNotExist && orca.headbar.unregisterHeadbarButton(`pluginTuneTheme.themeSwitcher`)
             break;
