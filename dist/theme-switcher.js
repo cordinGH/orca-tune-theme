@@ -16,6 +16,8 @@ const log = {
     error: (message) => console.error(`[Tune-theme] ${message}`)
 }
 
+let pluginOfficialThemes = null // 发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本官方主题的情况）。
+
 let officialThemesUnSubscribe = null;
 /** @type {string[]} 主题名称数组 */
 let superThemes = null;
@@ -41,6 +43,7 @@ export function cleanup() {
         officialThemesUnSubscribe()
         officialThemesUnSubscribe = null
     }
+    pluginOfficialThemes = null
     officialThemesTimer = null
     superThemes = null;
     log.info("主题切换器已清理")
@@ -49,34 +52,29 @@ export function cleanup() {
 
 // 订阅传入的通知更新
 function checkOfficialThemesReady() {
-
-    // 读取插件列表后的下一步操作
-    let nextOp = '';
-
     const pluginInfoArray = Object.values(orca.state.plugins)
     for (const pluginInfo of pluginInfoArray) {
         // 不存在该shcema说明本次不是目标插件
         if (!pluginInfo.schema?.enableRoundShell) continue;
 
-        // 查看切换器存在与否，用于决定下一步是否应当清理切换器或注册切换器
+        // 查看切换器存在与否，用于决定下一步是清理/注册切换器
         const isNotExist = !orca.state.headbarButtons['pluginTuneTheme.themeSwitcher']
 
-        if (pluginInfo?.enabled) {
+        // 用户可能不止安装了一个版本的官方主题，因此有必要保存一下触发启用的插件版本。
+        if (!pluginOfficialThemes && pluginInfo?.enabled) {
+            // 检测到官方主题，且之前没有登记，则登记并注册切换器
+            pluginOfficialThemes = pluginInfo
             // 确保任意状态都具有正确的圆角class
             setVaildRoundShell()
-            // 启用状态，则解析应当执行什么操作
-            nextOp = isNotExist ? 'register' : 'none'
+            isNotExist && registerSwitcher()
             break;
-        } else {
-            // 停用状态
-            nextOp = isNotExist ? 'none' : 'unregister'
+        } else if (pluginOfficialThemes && !pluginInfo?.enabled){
+            // 登记了官方主题，才需要移除
+            pluginOfficialThemes = null
+            // 停用状态如果注册了则移除
+            !isNotExist && orca.headbar.unregisterHeadbarButton(`pluginTuneTheme.themeSwitcher`)
             break;
         }
-    }
-
-    switch (nextOp) {
-        case 'register': registerSwitcher();break;
-        case 'unregister': orca.headbar.unregisterHeadbarButton(`pluginTuneTheme.themeSwitcher`);break;
     }
 }
 
