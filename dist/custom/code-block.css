@@ -138,46 +138,44 @@
 
     /* header栏配色和尺寸处理 */
     .orca-code-editor-header {
-        /* 适配虎鲸1.50样式变化 */
-        /* background-color: rgba(from var(--my-bgcolor-cm-editor) r g b / .3); */
-        /* backdrop-filter: blur(5px); */
-        /* 为边框线预留空间 */
-        /* top: .5px; */
-        /* right: 1px; */
-        /* left: 1px; */
 
+        /* 左右边距对等 */
+        padding-left:var(--orca-spacing-sm);
+        padding-right:var(--orca-spacing-sm);
 
         /* header栏中的文字  不自动换行 */
         white-space: nowrap;
+        
+        /* 优化代码块顶部栏缩进按钮交互区域，以及字体颜色 */
+        /* 扩充缩进按钮的可点击区域 */
+        .orca-code-editor-wrap-l+.orca-select-button{
+            position:relative;
+            &:before{
+                content:'';
+                position:absolute;
+                top: 0;
+                bottom: 0;
+                left: -3em;
+                right: 0;
+            }
+        }
 
-        &>.orca-button.orca-select-button {
-            color: var(--my-color-code-editor-header);
-            font-size: 12px;
+        &>:is(.orca-button.orca-select-button, .orca-code-editor-wrap-l, .orca-checkbox.orca-code-editor-wrap-r){
+            color: var(--orca-color-text-2);
+            font-family: var(--orca-fontfamily-ui);
+            font-size: var(--orca-fontsize-2xs);
         }
 
         &>.orca-button.orca-code-editor-copy {
-            font-size: 12px;
+            font-size: var(--orca-fontsize-xs);
+        }
+        &>.orca-checkbox.orca-code-editor-wrap-r{
+            margin-right: .25em;
+        }
+        &>.orca-button:is(.orca-code-editor-delete, .orca-button.orca-code-editor-mode-toggle){
+            font-size: var(--orca-fontsize-sm);   
         }
 
-        &>.orca-button.orca-code-editor-delete {
-            font-size: 13px;
-        }
-
-        &>.orca-checkbox.orca-code-editor-wrap {
-            font-size: 12px;
-            color: var(--my-color-code-editor-header);
-
-            &>.orca-checkbox-box {
-                width: 13px;
-                height: 13px;
-                border-width: .5px;
-                background-color: unset;
-
-                &>.ti-check.orca-checkbox-checked {
-                    font-size: 12px;
-                }
-            }
-        }
     }
 
     /* 【重定义】顺滑光标 */
@@ -201,4 +199,3 @@
         border-left-color: var(--my-bdcolor-cm-cursor);
         animation: new-cm-blink2 1s infinite ease-in-out;
     }
-
