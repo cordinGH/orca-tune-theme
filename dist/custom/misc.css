@@ -194,4 +194,18 @@
             height: 0px;
         }
     }
-        
+    
+    /* ———————————————————————————————————  优化命令面板及其滚动条  ——————————————————————————————————————————— */
+    .orca-menu-text.orca-command-modal-command-item{
+        border-radius:0;
+    }
+    .orca-command-modal-command-list {
+        padding-left: 1.5px;
+        &::-webkit-scrollbar {
+            width: 8px !important;
+        }
+        &::-webkit-scrollbar-thumb {
+            border: 1.5px solid transparent!important;
+            background-clip: padding-box;
+        }
+    }
