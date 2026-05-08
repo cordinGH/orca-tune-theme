@@ -38,12 +38,14 @@
     .orca-tags-list-list,
     .orca-aliased-list,
     .orca-block-editor,
+    .orca-aichat-messages,
+    .orca-settings>.sections,
     .orca-select-menu-options {
         /* 阻止因为滚动条导致的压缩 */
         scrollbar-gutter: stable;
 
         &::-webkit-scrollbar {
-            width: 4px !important;
+            width: 4.5px !important;
         }
 
         &::-webkit-scrollbar-thumb {
