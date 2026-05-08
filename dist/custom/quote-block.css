@@ -321,17 +321,33 @@
     display:none;
 }
 
-/* text块尺寸和single-quote一致 */
+/* 顶层text块尺寸和single-quote一致 */
 .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main>.orca-repr-main-content{
     padding-top: 10px;
     padding-bottom: 1px;
     padding-left: 1em;
 }
 
+
+
 /* 子级缩进缩小 */
 .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-children{
     margin-left: -1.25em;
 }
+/* 长文下子级缩进 */
+.orca-long-form .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-children{
+    margin-left: -.75em;
+}   
+/* 虎鲸长文下，抹平单块引述的外底边距，使块尾和引述卡片间距正常 */
+.orca-long-form .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child{
+    margin-bottom: 0;
+}
+/* 虎鲸长文下，抹平单块引述的内子块的上边距，因为官方的列表上边距给的很大 */
+.orca-long-form .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-children>.orca-block{
+    margin-top: 0;
+}
+
+
 
 /* text块圆点隐藏 */
 .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-handle{
@@ -349,4 +365,3 @@
         font-size:1rem;
     }
 }
-/* —————————————————————————————————————————————————— */
