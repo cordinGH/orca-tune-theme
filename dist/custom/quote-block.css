@@ -223,6 +223,11 @@
         content: "\f089";
     }
 
+    /* 统一引述块图标字体尺寸 */
+    .orca-repr-quote2-type-selector i.orca-repr-quote2-icon{
+        font-size: var(--orca-fontsize-lg);
+    }
+
     /* 【新增】所有类型的quote背景卡片定义配色和边框 */
     .orca-repr-quote2 {
         &.orca-repr-quote2-quote::before {
@@ -303,39 +308,46 @@
         bottom: .625em;
     }
 
-/* ——————————————————————— 非quote-quote的quote块，也支持单块简化显示 ——————————————————————————— */
+
+/* ————————————————————————————— 引述块只有一个子块时将简化显示（覆盖类型文本） ——————————————————————————— */
 /* selector脱离 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector {
+.orca-repr-quote2:not(.orca-repr-quote2-single):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector {
     position: absolute;
     padding: 0;
-    top: 10px;
+    top: 12px;
     left: var(--orca-spacing-lg);
     z-index:1;
 }
 /* 卡片背景尺寸缩短 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child)::before{
+.orca-repr-quote2:not(.orca-repr-quote2-single):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child)::before{
     bottom:.625em;
 }
 
 /* 隐藏selector文本 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector>.orca-repr-quote2-type-text {
+.orca-repr-quote2:not(.orca-repr-quote2-single):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector>.orca-repr-quote2-type-text {
     display:none;
 }
 
 /* text块尺寸和single-quote一致 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main>.orca-repr-main-content{
-    padding-top: 8px;
+.orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main>.orca-repr-main-content{
+    padding-top: 10px;
+    padding-bottom: 1px;
     padding-left: 1em;
 }
 
+/* 子级缩进缩小 */
+.orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-children{
+    margin-left: -1.25em;
+}
+
 /* text块圆点隐藏 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-handle{
+.orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-handle{
     display:none;
     pointer-events:none
 }
 
 /* 单行引述块折叠时，优化折叠按钮的尺寸、位置和颜色 */
-.orca-repr-quote2:not(.orca-repr-quote2-quote)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-folding-handle{
+.orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-main .orca-block-folding-handle{
     top: 9px;
     margin-left:.75em;
     color:unset;
