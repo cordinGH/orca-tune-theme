@@ -48,11 +48,11 @@
             width: 4.5px !important;
         }
 
-        &::-webkit-scrollbar-thumb {
+        /* &::-webkit-scrollbar-thumb { */
             /* 必须！important才能覆写，暂时没必要覆写 */
             /* border-radius: 4px; */
             /* box-shadow: 0px 10px var(--orca-color-bg-1) inset; */
-        }
+        /* } */
     }
 
 

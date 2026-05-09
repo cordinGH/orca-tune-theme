@@ -62,10 +62,10 @@
     .orca-code-editor-container{
          padding:unset;
     }
-    .orca-code-editor {
+    /* .orca-code-editor { */
         /* padding: unset; */
         /* border: .5px solid var(--my-bdcolor-code-editor); */
-    }
+    /* } */
 
 
     /* 【新增】新风格的cm-editor */

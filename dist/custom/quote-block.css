@@ -335,9 +335,9 @@
     margin-left: -1.25em;
 }
 /* 长文下子级缩进 */
-.orca-long-form .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-children{
+/* .orca-long-form .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child>.orca-repr>.orca-repr-children{
     margin-left: -.75em;
-}   
+}    */
 /* 虎鲸长文下，抹平单块引述的外底边距，使块尾和引述卡片间距正常 */
 .orca-long-form .orca-repr-quote2:not(.orca-repr-quote2-single)>.orca-repr-children>.orca-block[data-type="text"]:only-child{
     margin-bottom: 0;

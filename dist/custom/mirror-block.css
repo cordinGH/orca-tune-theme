@@ -59,9 +59,9 @@
             background-color:unset;
         }
         /* 包裹色和原生折叠包裹色一致 */
-        &.orca-block-handle-collapsed {
+        /* &.orca-block-handle-collapsed { */
             /* background-color: var(--my-bgcolor-mirror-block-handle); */
-        }
+        /* } */
 
 
     }
