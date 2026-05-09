@@ -1,6 +1,11 @@
-.orca-repr-ul-content {
-    /* 控制光标起始位置 */
-    padding-left: 1.1em;
+.orca-repr-ul-content::before {
+    font-family: tabler-icons;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    font-variant: normal;
 }
 
 .orca-repr-ul-content:before {
@@ -12,17 +17,13 @@
     width: 1.35em;
 }
 
-.orca-repr-ul-content::before {
-    font-family: tabler-icons;
-    speak: none;
-    font-style: normal;
-    font-weight: 400;
-    text-transform: none;
-    -webkit-font-smoothing: antialiased;
-    font-variant: normal;
+.orca-repr-ul-content {
+    /* 控制光标起始位置 */
+    padding-left: 1.1em;
 }
 
-.orca-repr-ul-content+.orca-repr-main-none-editable .orca-block-handle:not(.orca-block-handle-collapsed, :hover):before {
+/* 为无序列表装配块标 */
+.orca-repr-ul-content+.orca-repr-main-none-editable .orca-block-handle:not(.orca-block-handle-collapsed, [data-icon], :hover):before {
     content: "\eb6b";
     scale: 1;
     /* color: var(--orca-block-handle-passive-color) !important; */
@@ -33,10 +34,3 @@
 .orca-repr-ul>.orca-repr-main>.orca-repr-main-none-editable>.orca-block-handle-collapsed:not(:hover):before{
     color: unset!important; /* 列表块标（折叠）的颜色自动继承上层颜色 */
 }
-
-/* —————————————————————————————————————————————————————————————————————— */
-/* 【重定义】ul圆点折叠后颜色不变 */
-/* 如果需要启用新块标就注释掉下面这条css，反之则注释掉上方的所有css */
-/* .orca-repr-ul-content~div .orca-block-handle-collapsed:not(:hover) {
-    color: var(--orca-color-text-1);
-} */
