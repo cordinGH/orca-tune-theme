@@ -96,7 +96,7 @@ async function registerSettings() {
             type: "boolean",
             label: '生动风格时编辑区不再设置背景色',
             description: '仅在生动风格下生效。请前往 设置->主题->生动风格 进行更改',
-            defaultValue: false
+            defaultValue: true
         },
     };
 
@@ -178,7 +178,7 @@ export async function load(pluginName) {
         // 注册主题激活命令
         registerCommands();
 
-        console.log("[tune-theme] 样式已生效")
+        console.log(`[tune-theme] ${pluginName}已启动，样式已生效`)
 
         startThemeSwitcher()
         

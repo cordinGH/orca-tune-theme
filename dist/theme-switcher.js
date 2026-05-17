@@ -16,13 +16,19 @@ const log = {
     error: (message) => console.error(`[Tune-theme] ${message}`)
 }
 
-let officialThemesInfo = null // 发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本官方主题的情况）。
+const c = React.createElement
+
+let officialThemesInfo = null // 插件对象，发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本官方主题的情况）。
 
 let officialThemesUnSubscribe = null;
+
 /** @type {string[]} 主题名称数组 */
 let superThemes = null;
 
 let officialThemesTimer;
+
+// 生动风格初始状态
+let enableVibrant;
 
 export function start() {
     // 检查官方主题是否就位并监听其状态以抵消用户不当操作（切换圆角按钮）
@@ -35,6 +41,8 @@ export function start() {
             officialThemesTimer = null
         }, 0)
     })
+
+    enableVibrant = !!orca.state.settings[52]
 }
 
 export function cleanup() {
@@ -100,10 +108,24 @@ function registerSwitcher() {
     superThemes = ['default', ...Object.keys(orca.state.themes)]
 
     // 创建切换按钮
-    orca.headbar.registerHeadbarButton(`pluginTuneTheme.themeSwitcher`, () => React.createElement(
-        orca.components.Button,
-        { variant: "plain", onClick: () => switchToTheme() },
-        React.createElement("i", { className: "ti ti-color-swatch orca-headbar-icon" }))
+    orca.headbar.registerHeadbarButton(`pluginTuneTheme.themeSwitcher`, () => c(
+        orca.components.Tooltip,
+        {
+            text: c('div',{}, '左键 叠加其他主题（部分主题需刷新）', c('br'), '右键 切换生动风格', c('br'), '中键 切换Dark/Light')
+        },
+        c(
+            orca.components.Button,
+            { 
+                variant: "plain",
+                onClick: () => switchToTheme(),
+                onContextMenu: ()=> switchVibrant(),
+                onAuxClick: (e) => {
+                    if (e.button !== 1) return
+                    orca.commands.invokeCommand("core.toggleThemeMode")
+                }
+            },
+            c("i", { className: "ti ti-color-swatch orca-headbar-icon" }))
+        )
     )
 }
 
@@ -169,4 +191,12 @@ function switchToTheme() {
     // 持久化
     orca.state.settings[11] = themeName
     orca.invokeBackend("set-config", 11, themeName)
+}
+
+
+function switchVibrant() {
+    enableVibrant = !enableVibrant
+    document.body.classList.toggle('orca-vibrant', enableVibrant)
+    orca.invokeBackend("set-config", 52, enableVibrant)
+    
 }
