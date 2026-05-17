@@ -199,7 +199,7 @@
 .orca-favorites-items,
 .orca-tags-list-list,
 .orca-aliased-list {
-    padding-right: .375rem;
+    padding-right: .125rem;
 }
 
 
@@ -215,7 +215,7 @@
 .sidebar-closed #sidebar{
     width:var(--orca-sidebar-width);
     /* 补上main的6px外边距 */
-    margin-left:calc(-1 * var(--orca-sidebar-width) + 6px);
+    margin-left:calc(-1 * var(--orca-sidebar-width) + .5rem);
 }
 
 

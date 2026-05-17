@@ -41,7 +41,7 @@ body.windows #app{
 
 #main {
     /* 改用虎鲸官方的上外边距设计 */
-    margin: var(--orca-height-headbar) .375rem .375rem 0 !important;
+    margin: var(--orca-height-headbar) .5rem .5rem 0 !important;
     border-radius: 6px!important;
     /* 过分贴边滚动时不太好看，2px刚好，还能拉开滚动条和边框距离 */
     padding: 2px!important;
