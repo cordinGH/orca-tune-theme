@@ -174,7 +174,7 @@
 
 /* 退出hover时，等待折叠图标消失了再显现块标 */
 .orca-aliased-block-item:has( :is(.ti-chevron-right, .ti-chevron-down)) :is(.orca-aliased-block-icon, .orca-aliased-block-icon-emoji),
-.orca-tags-tag-item:has( :is(.ti-chevron-right, .ti-chevron-down)) .orca-tags-tag-icon,
+.orca-tags-tag-item:has( :is(.ti-chevron-right, .ti-chevron-down)) :is(.orca-tags-tag-icon, .orca-tags-tag-icon-emoji),
 .orca-fav-item-item:not(.plugin-tabsman-item-item):has( :is(.ti-chevron-right, .ti-chevron-down)) .orca-fav-item-icon {
     /* 可折叠的条目不需要旋转放大的动画 */
     animation: unset;
@@ -185,7 +185,7 @@
 
 /* hover时，块标立马透明，让折叠图标显现出来 */
 .orca-aliased-block-item:has( :is(.ti-chevron-right, .ti-chevron-down)):hover :is(.orca-aliased-block-icon, .orca-aliased-block-icon-emoji),
-.orca-tags-tag-item:has( :is(.ti-chevron-right, .ti-chevron-down)):hover .orca-tags-tag-icon,
+.orca-tags-tag-item:has( :is(.ti-chevron-right, .ti-chevron-down)):hover :is(.orca-tags-tag-icon, .orca-tags-tag-icon-emoji),
 .orca-fav-item-item:not(.plugin-tabsman-item-item):has( :is(.ti-chevron-right, .ti-chevron-down)):hover .orca-fav-item-icon {
     /* hover时透明掉color，让折叠按钮露出来，并穿透 */
     color: transparent !important;
