@@ -92,6 +92,12 @@ async function registerSettings() {
             description: '启用后，Tune会将标题块字体改为宋体',
             defaultValue: true
         },
+        'tune-orca-vibrant-background': {
+            type: "boolean",
+            label: '生动风格时编辑区不再设置背景色',
+            description: '仅在生动风格下生效。请前往 设置->主题->生动风格 进行更改',
+            defaultValue: false
+        },
     };
 
     await orca.plugins.setSettingsSchema(currentPluginName, settingsSchema);

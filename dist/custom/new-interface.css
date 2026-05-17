@@ -63,6 +63,10 @@ body.windows #app{
     }
 }
 
+.orca-vibrant.tune-orca-vibrant-background #main {
+    background-color: transparent;
+}
+
 /* 优化侧边栏拖拽条样式 */
 #sidebar>.orca-sidebar-resizer {
     width: 4px;
