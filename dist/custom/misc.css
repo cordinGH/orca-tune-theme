@@ -46,7 +46,7 @@
         scrollbar-gutter: stable;
 
         &::-webkit-scrollbar {
-            width: 8.5px !important;
+            width: 8px !important;
         }
 
         &::-webkit-scrollbar-thumb {
@@ -208,13 +208,18 @@
     .orca-command-modal-command-list {
         padding-left: 1.5px;
         &::-webkit-scrollbar {
-            width: 8.5px !important;
+            width: 8px !important;
         }
         &::-webkit-scrollbar-thumb {
             border: 2px solid transparent!important;
             background-clip: padding-box;
         }
         &::-webkit-scrollbar-thumb:hover {
-            border-width: 0 !important;
+            border-width: 1px !important;
         }
+    }
+
+    /* —————————————————————————— 优化lcars插件的宽度调节把手位置 —————————————————————————————————— */
+    .orca-lcars-width-handle-left{
+        translate:-2rem;   
     }
