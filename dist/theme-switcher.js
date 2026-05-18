@@ -8,7 +8,7 @@
 // ['Aurora Borealis', 'Catppuccin', 'Mono Mint', 'Moonlit Sakura', 'Pastel Garden', 'Sandstone Dusk']
 // 默认主题时，disable官方主题的link标签，再移除圆角class，即可自由切换tune和官方主题
 
-// 笔记 2026-04-29-至今：推倒重构版本。
+// 笔记 2026-04-29：推倒重构。
 
 // 日志工具
 const log = {
@@ -18,110 +18,159 @@ const log = {
 
 const c = React.createElement
 
-let officialThemesInfo = null // 插件对象，发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本官方主题的情况）。
+let officialThemesInfo = null // 插件对象，发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本的情况）。
+let startrekInfo = null // 插件对象，发现插件启用后被赋予，用于正确处理插件关闭行为（预防存在多个版本的情况）。
+let enableStartrek;
+let fakeStartrekLink = null;
 
-let officialThemesUnSubscribe = null;
+let unsubscribeList = []
 
 /** @type {string[]} 主题名称数组 */
 let superThemes = null;
 
-let officialThemesTimer;
-
 // 生动风格初始状态
 let enableVibrant;
 
+function debounce(fn, delay = 0) {
+    let timer = null;
+    return (...args) => {
+        timer && clearTimeout(timer)
+        timer = setTimeout(() => {
+            fn(...args);
+            timer = null;
+        }, delay)
+    }
+}
+
 export function start() {
-    // 检查官方主题是否就位并监听其状态以抵消用户不当操作（切换圆角按钮）
-    checkOfficialThemesReady()
-    officialThemesUnSubscribe = window.Valtio.subscribe(orca.state.plugins, ()=>{
-        officialThemesTimer && clearTimeout(officialThemesTimer)
-        // 避免连续的操作记录重复触发
-        officialThemesTimer = setTimeout(()=>{
-            checkOfficialThemesReady()
-            officialThemesTimer = null
-        }, 0)
-    })
+
+    // 主题列表
+    superThemes = ['default', ...Object.keys(orca.state.themes)]
+    unsubscribeList.push(
+        window.Valtio.subscribe(orca.state.themes, debounce(() => superThemes = ['default', ...Object.keys(orca.state.themes)]))
+    )
+
+    // 适配officialThemes主题
+    handleOfficialThemes()
+    unsubscribeList.push(
+        // 避免连续的操作记录导致重复触发
+        window.Valtio.subscribe(orca.state.plugins, debounce(() => handleOfficialThemes()))
+    )
+
+    // 适配startrek主题
+    handleStartrek()
+    unsubscribeList.push(
+        // 避免连续的操作记录导致重复触发
+        window.Valtio.subscribe(orca.state.plugins, debounce(() => handleStartrek()))
+    )
 
     enableVibrant = !!orca.state.settings[52]
+    registerSwitcher()
 }
 
 export function cleanup() {
     orca.headbar.unregisterHeadbarButton(`pluginTuneTheme.themeSwitcher`)
-    if (officialThemesUnSubscribe) {
-        officialThemesUnSubscribe()
-        officialThemesUnSubscribe = null
-    }
+    unsubscribeList.forEach(us => us())
+    unsubscribeList.length = 0
+
     officialThemesInfo = null
-    officialThemesTimer = null
-    superThemes = null;
+    startrekInfo = null;
+    superThemes.length = 0
+    if (fakeStartrekLink) {
+        fakeStartrekLink.remove()
+        fakeStartrekLink = null
+    }
+    
     log.info("主题切换器已清理")
 }
 
+/**
+ * 处理officialThemes的适配兼容
+ */
+function handleOfficialThemes() {
 
-// 订阅传入的通知更新
-function checkOfficialThemesReady() {
-    const pluginInfoArray = Object.values(orca.state.plugins)
-    for (const pluginInfo of pluginInfoArray) {
-        // 如果不是登记启动的目标插件，则跳过
-        if (officialThemesInfo && pluginInfo !== officialThemesInfo) continue;
+    if (!officialThemesInfo) {
+        for (const pluginInfo of Object.values(orca.state.plugins)) {
 
-        // 不存在该shcema说明本次不是目标插件
-        if (!pluginInfo.schema?.enableRoundShell) continue;
-
-        // 查看切换器存在与否，用于决定下一步是清理/注册切换器
-        const isNotExist = !orca.state.headbarButtons['pluginTuneTheme.themeSwitcher']
-
-        // 用户可能不止安装了一个版本的官方主题，因此有必要保存一下触发启用的插件版本。
-        if (!officialThemesInfo && pluginInfo?.enabled) {
-            // 检测到官方主题，且之前没有登记，则登记并注册切换器
+            if (!pluginInfo.enabled || !pluginInfo.schema?.enableRoundShell) continue;
+            
+            // 首次登记启用的officialTheme
             officialThemesInfo = pluginInfo
-            // 确保任意状态都具有正确的圆角class
-            setVaildRoundShell()
-            isNotExist && registerSwitcher()
-            break;
-        } else if (officialThemesInfo && !officialThemesInfo?.enabled){
-            // 登记了官方主题，才需要移除
-            officialThemesInfo = null
-            // 停用状态如果注册了则移除
-            !isNotExist && orca.headbar.unregisterHeadbarButton(`pluginTuneTheme.themeSwitcher`)
+            setVaildRoundShell();
             break;
         }
+
+    } else {
+
+        // 关闭插件（单次）
+        if (!officialThemesInfo.enabled) {
+            officialThemesInfo = null; 
+            return
+        }
+        
+        setVaildRoundShell()
     }
 }
 
 /**
- * 识别到了启用了官方主题，则注册主题切换器，并确保配色适配
- * @param {boolean} needClearRoundShell - 是否应当清理掉被启用的圆角外壳
+ * 处理startrek的适配兼容(星星特效)
+ */
+function handleStartrek() {
+
+    if (!startrekInfo) {
+        for (const pluginInfo of Object.values(orca.state.plugins)) {
+    
+            if (!pluginInfo.enabled || !pluginInfo.schema?.fullMode) continue;
+            
+            // 首次登记启用的officialTheme
+            startrekInfo = pluginInfo
+            enableStartrek = startrekInfo.settings.fullMode;
+            setStartrek()
+            break;
+        }
+    
+    } else {
+    
+        if (!startrekInfo.enabled) {
+            startrekInfo = null; 
+            return
+        }
+        
+        enableStartrek = startrekInfo.settings.fullMode;
+        setStartrek()
+    }
+}
+
+
+
+/**
+ * 注册切换器按钮
  */
 function registerSwitcher() {
-
-    // 消除无意义的link
-    const roundShell = document.querySelector('head>link[data-role="official-themes"]')
-    if (roundShell) roundShell.remove();
-
-    // 设置当前主题所需的class
-    const currentTheme = orca.state.settings[11]
-    const isDefaultTheme = !currentTheme || currentTheme === 'default'
-    isDefaultTheme ? document.body.classList.remove("kef-round-shell") : document.body.classList.add("kef-round-shell")
-
-    // 准备主题切换名单
-    superThemes = ['default', ...Object.keys(orca.state.themes)]
 
     // 创建切换按钮
     orca.headbar.registerHeadbarButton(`pluginTuneTheme.themeSwitcher`, () => c(
         orca.components.Tooltip,
         {
-            text: c('div',{}, '左键 叠加其他主题（部分主题需刷新）', c('br'), '右键 切换生动风格', c('br'), '中键 切换Dark/Light')
+            text: c('div',{}, '左键 叠加其他主题(推荐官方主题)', c('br'), '右键 切换生动风格', c('br'), '中键 切换星空特效(推荐Dark模式)')
         },
         c(
             orca.components.Button,
             { 
                 variant: "plain",
-                onClick: () => switchToTheme(),
+                onClick: () => {
+                    if (superThemes.length === 1) orca.notify('info', "[tune-theme] 当前未安装其他主题插件")
+                    switchToTheme()
+                },
                 onContextMenu: ()=> switchVibrant(),
                 onAuxClick: (e) => {
                     if (e.button !== 1) return
-                    orca.commands.invokeCommand("core.toggleThemeMode")
+                    if (!startrekInfo) {
+                        orca.notify("info", "[tune-theme] 请先安装启用oh-StarTrek主题")
+                        return;
+                    }
+                    enableStartrek = !enableStartrek
+                    setStartrek()
                 }
             },
             c("i", { className: "ti ti-color-swatch orca-headbar-icon" }))
@@ -132,18 +181,14 @@ function registerSwitcher() {
 
 
 /**
- * 根据监听到启用状态，设置圆角外壳有效性
- * @param {*} enableRoundShell 
+ * 为officialThemes设置正确的class以及link
  */
-function setVaildRoundShell(enableRoundShell) {
-    if (enableRoundShell) {}
-    const roundShell = document.querySelector('head>link[data-role="official-themes"]')
-    if (roundShell) roundShell.remove();
-
-    // 设置当前主题所需的class
+function setVaildRoundShell() {    
     const currentTheme = orca.state.settings[11]
-    const isDefaultTheme = !currentTheme || currentTheme === 'default'
-    isDefaultTheme ? document.body.classList.remove("kef-round-shell") : document.body.classList.add("kef-round-shell")
+    const isNotDefaultTheme = currentTheme && currentTheme !== 'default'
+    document.body.classList.toggle('kef-round-shell', isNotDefaultTheme)
+    const roundShell = document.head.querySelector('link[data-role="official-themes"]')
+    if (roundShell) roundShell.remove();
 }
 
 
@@ -162,7 +207,7 @@ function switchToTheme() {
     const currentTheme = orca.state.settings[11] ? orca.state.settings[11] : 'default'
     const themeName = getNextTheme(currentTheme)
 
-    let themeLink = document.querySelector('head>link[data-role="theme"]')
+    let themeLink = document.head.querySelector('link[data-role="theme"]')
 
     // 确保link存在
     if (!themeLink) {
@@ -194,9 +239,20 @@ function switchToTheme() {
 }
 
 
+function setStartrek() {
+    if (!fakeStartrekLink) {
+        fakeStartrekLink = document.createElement('link')
+        fakeStartrekLink.rel = 'stylesheet';
+        fakeStartrekLink.href = 'data:text/css,/*startrek*/';
+    }
+
+    enableStartrek ? document.head.append(fakeStartrekLink) : fakeStartrekLink.remove();
+    orca.plugins.setSettings("repo", 'oh-StarTrek', {...orca.state.plugins['oh-StarTrek'].settings, fullMode: enableStartrek})
+}
+
+// 切换生动风格
 function switchVibrant() {
     enableVibrant = !enableVibrant
     document.body.classList.toggle('orca-vibrant', enableVibrant)
-    orca.invokeBackend("set-config", 52, enableVibrant)
-    
+    orca.invokeBackend("set-config", 52, enableVibrant)   
 }
