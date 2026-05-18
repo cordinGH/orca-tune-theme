@@ -9,6 +9,9 @@
         --my-bdcolor-cm-cursor: #58A6FF;
 
         --my-color-code-editor-header: #7d8799;
+
+        --my-bdcolor-code-editor-container: rgba(235, 235, 235, .08)
+
     }
 }
 
@@ -23,6 +26,9 @@
         --my-bdcolor-cm-cursor: #0B69DA;
 
         --my-color-code-editor-header: #9ca3af;
+
+        --my-bdcolor-code-editor-container: rgba(15, 15, 15, .08);
+
     }
 }
 
@@ -54,25 +60,26 @@
 
 /* 顺滑光标+显示优化（卡片风） */
 
-
     /* cm编辑器颜色和圆角 */
 
-
-    /* 适配虎鲸1.50样式变化 */
     .orca-code-editor-container{
-         padding:unset;
+        padding: 0;
+        border-radius: var(--orca-radius-sm);
+        border: 1px solid var(--my-bdcolor-code-editor-container);
+        background-color: var(--orca-color-bg-2);
     }
-    /* .orca-code-editor { */
-        /* padding: unset; */
-        /* border: .5px solid var(--my-bdcolor-code-editor); */
-    /* } */
 
+    .orca-code-editor-container:has(>.orca-code-preview) {
+        background-color: transparent;
+    }
+    .orca-code-preview {
+        text-shadow: unset!important;
+    }
 
     /* 【新增】新风格的cm-editor */
     .orca-code-editor .cm-editor {
-        border-radius: var(--orca-radius-sm);
-        background-color: var(--orca-color-bg-2);
-
+        background-color: transparent;
+        
         /* 行槽 追加模糊背景色 */
         & .cm-gutters {
             background-color: var(--orca-color-bg-2);
