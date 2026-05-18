@@ -70,24 +70,6 @@
 
     }
 }
-        & .orca-repr-quote2-info .orca-block{
-            color: #0771ad;
-        }
-        & .orca-repr-quote2-info .orca-block{
-            color: #cb912f;
-        }
-        & .orca-repr-quote2-info .orca-block{
-            color: #d44c47;
-        }
-        & .orca-repr-quote2-info .orca-block{
-            color: #468c66;
-        }
-        & .orca-repr-quote2-info .orca-block{
-            color: #6b46c1;
-        }
-        & .orca-repr-quote2-info .orca-block{
-            color: #4a5568;
-        }
 
 /* 卡片风格引述块，并优化了嵌套引述的显示效果 */
 
