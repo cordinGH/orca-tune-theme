@@ -45,7 +45,6 @@ body.windows #app{
     border-radius: 6px!important;
     /* 过分贴边滚动时不太好看，2px刚好，还能拉开滚动条和边框距离 */
     padding: 2px!important;
-    background-color: var(--orca-color-bg-1);
     overflow-x:auto !important;
     overflow-y:hidden !important;
 
@@ -63,9 +62,21 @@ body.windows #app{
     }
 }
 
-.orca-vibrant.tune-orca-vibrant-background #main {
-    background-color: transparent;
+body:not(.orca-vibrant) #main::before {
+  content: "";
+  background: var(--orca-color-bg-1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
+
+
+/* .orca-vibrant.tune-orca-vibrant-background #main {
+    background-color: transparent;
+} */
 
 /* 优化侧边栏拖拽条样式 */
 #sidebar>.orca-sidebar-resizer {
