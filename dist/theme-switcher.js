@@ -105,6 +105,7 @@ function handleOfficialThemes() {
         // 关闭插件（单次）
         if (!officialThemesInfo.enabled) {
             officialThemesInfo = null; 
+            document.body.classList.remove('kef-round-shell')
             return
         }
         
@@ -133,6 +134,7 @@ function handleStartrek() {
     
         if (!startrekInfo.enabled) {
             startrekInfo = null; 
+            fakeStartrekLink?.remove()
             return
         }
         
@@ -220,7 +222,7 @@ function switchToTheme() {
     if (themeName !== 'default') {
         // 目标主题不是默认，则载载入对应href和class
         const themePath = orca.state.themes[themeName]
-        if (!themePath) log.info("不存在主题：", themeName)
+        if (!themePath) log.info(`不存在主题：${themeName}`)
         document.body.classList.add('kef-round-shell')
         themeLink.disabled = false
         themeLink.href = themePath
