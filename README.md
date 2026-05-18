@@ -2,12 +2,18 @@
 
 ## 使用说明
 
-- 因为是基于**非生动风格**编写，所以**关闭生动风格**可能表现更好  
-    <img width="850" height="281" alt="image" src="https://github.com/user-attachments/assets/dc5b9b41-8a35-49b4-9860-52b8e5be50e8" />
-- 本插件可以与[官方主题插件](https://github.com/sethyuan/orca-plugin-official-themes)联动，遵循下图配置即可。  
-     <img width="716" height="225" alt="image" src="https://github.com/user-attachments/assets/75bc056b-e111-4e51-847f-a91d2fbc288c" />
-     
-   https://github.com/user-attachments/assets/e5e28e5b-57e7-4d07-a708-c3c2cd5b1e28
+本插件可以与[官方主题插件](https://github.com/sethyuan/orca-plugin-official-themes)叠加生效，遵循下图配置即可。
+
+<img width="450" height="150" alt="image" src="https://github.com/user-attachments/assets/75bc056b-e111-4e51-847f-a91d2fbc288c" />
+  
+也可与其他主题进行特效叠加，如ohStarTrek的星空特效
+
+<img width="300" height="130" alt="image" src="https://github.com/user-attachments/assets/1c6c6fff-827d-48e2-953a-64cbfaef1be3" />
+
+  
+<!-- https://github.com/user-attachments/assets/e5e28e5b-57e7-4d07-a708-c3c2cd5b1e28 -->
+  
+https://github.com/user-attachments/assets/949e8fa2-c687-4278-821e-3dc6ed12f34a
 
 ---
 
