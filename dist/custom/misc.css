@@ -223,3 +223,10 @@
     .orca-lcars-width-handle-left{
         translate:-2rem;   
     }
+
+
+    /* ———————————————————————————————————— 标签另起一行 ——————————————————————————————————————— */
+    .tune-tags-wrap .orca-tags::before {
+        content: "\A"; /* 换行符 */
+        white-space: pre; /* 使换行符生效 */
+    }

@@ -92,6 +92,12 @@ async function registerSettings() {
             description: '启用后，Tune会将标题块字体改为宋体',
             defaultValue: true
         },
+        'tune-tags-wrap': {
+            type: "boolean",
+            label: "标签独占一行",
+            description: "开启后，块内的标签会换到新行显示，而不是紧跟在块内容后面。",
+            defaultValue: true
+        },
     };
 
     await orca.plugins.setSettingsSchema(currentPluginName, settingsSchema);
