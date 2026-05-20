@@ -258,11 +258,15 @@
 }
 /* ———————————————————————————————————————————————————————————————————————————————————————————————————————————————— */
 
-/* 锁定跳转后，右上角icon同步变更为锁 */
-.orca-panel-drag-handle-stateful::before {
+/* 锁定跳转后，右上角icon同步变更为锁，同时覆盖取消状态色（勾选不可编辑、不可跳转后，会被设置颜色） */
+.orca-panel.orca-locked .orca-panel-drag-handle::before {
     content: "\eae2"!important;
 }
-.orca-panel-drag-handle-stateful{
+.orca-panel.orca-locked .orca-panel-drag-handle{
     opacity: 1;
     outline: .5px var(--orca-color-primary-5) solid;
+    color: var(--orca-color-primary-5);
+}
+.orca-panel .orca-panel-drag-handle{
+    color: unset;
 }
