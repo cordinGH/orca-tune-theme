@@ -267,21 +267,19 @@
             --bg: var(--my-bgcolor-quote-note);
             --bd: var(--my-bdcolor-quote-note);
         }
+        
         /* 应用最近的颜色声明 */
-        &.orca-repr::before {
+        &::before {
             background-color: var(--bg);
             border-color: var(--bd);
         }
 
         /* 应用最近的颜色声明 */
-        &,
-        & .orca-repr-quote2,
-        & .orca-repr .orca-repr-quote2 {
-            &>.orca-repr-main .orca-repr-quote2-type-selector,
-            &>.orca-repr-children .orca-block {
-                color: var(--qc) !important;
-            }
+        &>.orca-repr-main .orca-repr-quote2-type-selector,
+        &>.orca-repr-children .orca-block {
+            color: var(--qc) !important;
         }
+
     }
 
     /* 虎鲸1.56 - 1.57 多行引述块的main多处了padding */
