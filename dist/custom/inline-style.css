@@ -51,11 +51,9 @@
     /* —————————————————————————————————————————————————————————————————————— */
     /* 行内代码 */
     .orca-inline.c{
-        padding-top: .1em;
-        padding-bottom: .1em;
-        padding-left: .35em;
-        padding-right: .35em;
         border-bottom: none;
+        font-size: .8125em;
+        padding: .125em .25em;
     }
 
     /* 链接下划线延续到图标 */
