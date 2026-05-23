@@ -123,23 +123,23 @@ function handleStartrek() {
     
             if (!pluginInfo.enabled || !pluginInfo.schema?.fullMode) continue;
             
-            // 首次登记启用的officialTheme
+            // 首次登记启用的startrek
             startrekInfo = pluginInfo
-            enableStartrek = startrekInfo.settings.fullMode;
-            setStartrek()
+
+            // 设置伪造的link，使得星空js特效生效
+            if (!fakeStartrekLink) {
+                fakeStartrekLink = document.createElement('link')
+                fakeStartrekLink.rel = 'stylesheet';
+                fakeStartrekLink.href = 'data:text/css,/*startrek*/';
+            }
+            document.head.append(fakeStartrekLink);
             break;
         }
     
-    } else {
-    
-        if (!startrekInfo.enabled) {
-            startrekInfo = null; 
-            fakeStartrekLink?.remove()
-            return
-        }
-        
-        enableStartrek = startrekInfo.settings.fullMode;
-        setStartrek()
+    } else if (!startrekInfo.enabled){
+        // 存在，则只处理处理关闭
+        startrekInfo = null;
+        fakeStartrekLink?.remove()
     }
 }
 
@@ -171,8 +171,11 @@ function registerSwitcher() {
                         orca.notify("info", "[tune-theme] 请先安装启用oh-StarTrek主题")
                         return;
                     }
-                    enableStartrek = !enableStartrek
-                    setStartrek()
+                    // 持久化变更
+                    orca.plugins.setSettings("repo", 'oh-StarTrek', {
+                        ...startrekInfo.settings,
+                        fullMode: !startrekInfo.settings.fullMode
+                    });
                 }
             },
             c("i", { className: "ti ti-color-swatch orca-headbar-icon" }))
@@ -240,17 +243,6 @@ function switchToTheme() {
     orca.invokeBackend("set-config", 11, themeName)
 }
 
-
-function setStartrek() {
-    if (!fakeStartrekLink) {
-        fakeStartrekLink = document.createElement('link')
-        fakeStartrekLink.rel = 'stylesheet';
-        fakeStartrekLink.href = 'data:text/css,/*startrek*/';
-    }
-
-    enableStartrek ? document.head.append(fakeStartrekLink) : fakeStartrekLink.remove();
-    orca.plugins.setSettings("repo", 'oh-StarTrek', {...orca.state.plugins['oh-StarTrek'].settings, fullMode: enableStartrek})
-}
 
 // 切换生动风格
 function switchVibrant() {
