@@ -62,7 +62,6 @@ body.tune-heading-decoration {
     h1.orca-repr-heading-content>span:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
         display: inline-block;
         position: relative;
-        z-index: -1;
         
         &.bc {
             translate:0 -3px;
@@ -113,7 +112,6 @@ body.tune-heading-decoration {
 
     h3.orca-repr-heading-content>span:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
         position: relative;
-        z-index: -1;
         display: inline-block;
 
         &:before {
@@ -130,7 +128,7 @@ body.tune-heading-decoration {
             vertical-align: bottom;
             /* 基于strut初始行盒的底部对齐 */
             /* font-family: inherit !important; */
-            display: inline-box;
+            display: inline-block;
 
             box-shadow:
                 inset 0 -2px 0 0 var(--my-color-heading);
@@ -139,8 +137,6 @@ body.tune-heading-decoration {
 
     h4.orca-repr-heading-content>span:is(.orca-inline, .orca-repr-title:not(.orca-input)) {
         position: relative;
-        /* relative会独立渲染层级，得下沉防止元素背景色遮挡行盒上的caret */
-        z-index: -1;
         /* 基于strut初始行盒的底部对齐 */
         display: inline-block;
 
