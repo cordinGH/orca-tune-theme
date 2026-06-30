@@ -206,3 +206,12 @@
         border-left-color: var(--my-bdcolor-cm-cursor);
         animation: new-cm-blink2 1s infinite ease-in-out;
     }
+
+
+    /* 虎鲸1.8左右的代码块上下多了个margin，看着有点不适，间距拉的有点大 */
+    .orca-no-editable-container>.orca-code-editor-container {
+        margin: 0;
+    }
+    .orca-repr-code-content>.orca-no-editable-container>.orca-no-editable-btn {
+        translate: 8.5em;
+    }
