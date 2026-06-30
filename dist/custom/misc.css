@@ -225,8 +225,8 @@
     }
 
 
-    /* ———————————————————————————————————— 标签另起一行 ——————————————————————————————————————— */
-    .tune-tags-wrap .orca-tags::before {
+    /* ———————————————————————————————————— 可编辑的块中的标签另起一行 ——————————————————————————————————————— */
+    .tune-tags-wrap .orca-block:not([data-editable="false"])>.orca-repr>.orca-repr-main .orca-tags::before {
         content: "\A"; /* 换行符 */
         white-space: pre; /* 使换行符生效 */
     }
