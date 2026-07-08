@@ -234,38 +234,61 @@
 
 
 /* 表格视图 */
-/* 提供结果计数 */
 
+    /* ——————————————————————————————— 每一行的最左端提供当前序号 ———————————————————————————— */
     .orca-query-table-table {
         counter-reset: result-id 0;
     }
 
-    .orca-query-table-row:not(.orca-query-table-row-add, .orca-query-table-row-stats) .orca-query-table-cell:first-child:before {
-        --my-color-gray-1: hsl(0 0% 85% / 1);
-        counter-increment: result-id;
-        content: counter(result-id);
-        width: 1.5em;
-        height: 1em;
-        line-height: 1;
-        font-size: .6125rem;
-        font-family: var(--orca-fontfamily-code);
-        white-space: nowrap;
+    /* 表格结果的右上角提供计数器 */
+    .orca-query-table-row:not(.orca-query-table-row-add, .orca-query-table-row-stats) {
+        position: relative;
 
-        position: absolute;
-        z-index: 3;
-        left: 0;
-        top: 0;
+        & .orca-query-table-cell:first-child:before {
+            counter-increment: result-id;
+            content: counter(result-id);
+            
+            /* 背景色和文字色采用引用计数器的配色方案 */
+            background-color:var(--orca-color-bg-2);
+            color:var(--orca-color-text-2);
 
-        background-color: var(--orca-color-border);
-        border-bottom-right-radius: 1em;
-        border: 1px solid var(--orca-color-border);
-        border-right-width: .5em;
-        box-sizing: content-box;
-        text-align: center;
-        opacity: .3;
+            /* 背景外形 */
+            box-sizing: content-box;
+            width: 2em;
+            height: 1.25em;
+            padding-right: .125em;
+            border-bottom-right-radius: 1em;
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            /* 计数器文字 */
+            font-size: .6125rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            /* 边框 */
+            border:var(--orca-border-general);
+            border-width:.5px;
+            border-top: unset;
+            border-left: unset;
+            font-family: var(--orca-fontfamily-code);
+            white-space: nowrap;
+        }
+        
     }
 
-    /* 对齐header第一栏的icon */
+    /* ————————————————————————————————————— 表头样式优化 ————————————————————————————————————————— */
+
+    
+    /* 表头配色 */
+    .orca-table-header-cell {
+        color: var(--orca-color-text-2);
+        background-color: rgb(from var(--orca-color-bg-2) r g b / .4);
+    }
+    
+    /* 表头第一个单元格中的icon与下方的内容块标对齐 */
     .orca-table-header-cell:first-child {
         padding-left: 1.125em;
 
@@ -273,40 +296,22 @@
             padding-right: .25em;
         }
     }
+    /* 表头第一个单元格模糊背景（作用场景：老板本中可固定第一列，然后拖动滚动条可以让右侧列移动至第一列下） */
+    .orca-table-header-cell:first-child {
+        backdrop-filter: blur(1px);
 
-    /* 表头第一个单元格模糊背景 */
-    .orca-table-header-cell {
-        background-color: rgb(from var(--orca-color-bg-2) r g b / .4);
-
-        /* 模糊背景 */
-        &:first-child {
-            backdrop-filter: blur(1px);
-        }
-
-        /* header第一个cell缺少了圆角设置，且因为是定位元素，因此会影响边框线，得提供一个圆角 */
-        &:first-child {
-            border-top-left-radius: var(--orca-radius-sm);
-        }
-
-        &:first-child:last-child {
+        /* 缺少圆角 */
+        border-top-left-radius: var(--orca-radius-sm);
+        &:last-child {
             border-top-right-radius: var(--orca-radius-sm);
         }
     }
 
-    .orca-query-table-table {
-        box-shadow: none;
-        border-left-width: .5px;
-        border-right-width: .5px;
-    }
-
-    .orca-table-resizer {
-        background: center top / .5px 100% linear-gradient(var(--orca-color-separator), var(--orca-color-separator)) no-repeat;
-    }
-
-    /* 2026年1月13日，查询列表中日志块移除margin，以使得卡片背景上下等距 */
-    .orca-query-list-block-block>.orca-repr-journal{
-        margin-top: 0;
-    }
-    .orca-query-list-block-block>.orca-repr-journal>.orca-repr-main>.orca-repr-main-content{
-        margin:0;
-    }
+/* ———————————————————————————————————————————————————————————————————————————————————————————————————— */
+/* 2026年1月13日，查询列表中日志块移除margin，以使得卡片背景上下等距 */
+.orca-query-list-block-block>.orca-repr-journal{
+    margin-top: 0;
+}
+.orca-query-list-block-block>.orca-repr-journal>.orca-repr-main>.orca-repr-main-content{
+    margin:0;
+}
