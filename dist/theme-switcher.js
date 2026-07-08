@@ -154,7 +154,7 @@ function registerSwitcher() {
     orca.headbar.registerHeadbarButton(`pluginTuneTheme.themeSwitcher`, () => c(
         orca.components.Tooltip,
         {
-            text: c('div',{}, '左键 叠加其他主题(推荐官方主题)', c('br'), '右键 切换生动风格', c('br'), '中键 切换星空特效(推荐Dark模式)')
+            text: c('div',{}, '左键 叠加其他主题(推荐官方主题)', c('br'), '右键 切换生动风格', c('br'), '中键 切换星空特效(推荐Dark模式)', c('br'), '（无中键的鼠标 可Alt+右键切换星空特效）'),
         },
         c(
             orca.components.Button,
@@ -164,18 +164,16 @@ function registerSwitcher() {
                     if (superThemes.length === 1) orca.notify('info', "[tune-theme] 当前未安装其他主题插件")
                     switchToTheme()
                 },
-                onContextMenu: ()=> switchVibrant(),
+                onContextMenu: (e)=> {
+                    if (e.altKey) {
+                        switchFullmode()
+                        return
+                    };
+                    switchVibrant();
+                },
                 onAuxClick: (e) => {
                     if (e.button !== 1) return
-                    if (!startrekInfo) {
-                        orca.notify("info", "[tune-theme] 请先安装启用oh-StarTrek主题")
-                        return;
-                    }
-                    // 持久化变更
-                    orca.plugins.setSettings("repo", 'oh-StarTrek', {
-                        ...startrekInfo.settings,
-                        fullMode: !startrekInfo.settings.fullMode
-                    });
+                    switchFullmode()
                 }
             },
             c("i", { className: "ti ti-color-swatch orca-headbar-icon" }))
@@ -183,6 +181,17 @@ function registerSwitcher() {
     )
 }
 
+function switchFullmode() {
+    if (!startrekInfo) {
+        orca.notify("info", "[tune-theme] 请先安装启用oh-StarTrek主题")
+        return;
+    }
+    // 持久化变更
+    orca.plugins.setSettings("repo", 'oh-StarTrek', {
+        ...startrekInfo.settings,
+        fullMode: !startrekInfo.settings.fullMode
+    });
+}
 
 
 /**
