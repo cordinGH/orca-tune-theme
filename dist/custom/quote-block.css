@@ -356,3 +356,8 @@
         font-size:1rem;
     }
 }
+
+/* 优化引述类型引述块的切换器字体大小，使之与其他类型一致 */
+.orca-repr-quote2-quote .orca-repr-quote2-type-selector {
+    font-size: unset;
+}
