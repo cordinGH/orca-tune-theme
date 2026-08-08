@@ -31,8 +31,8 @@
         padding: var(--orca-spacing-sm) 0;
     }
 
-    .orca-image-caption {
-        margin-top: var(--orca-spacing-sm);
+    .orca-input.orca-block-caption {
+        margin-top: var(--orca-spacing-xs);
     }
 
     .orca-video {
