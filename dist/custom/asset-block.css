@@ -20,7 +20,7 @@
     .orca-image-wrapper {
         padding: 5px;
 
-        &>img {
+        & img.orca-image {
             box-shadow: var(--my-shadow-img);
             border-radius: 3px;
         }
