@@ -233,6 +233,7 @@
         /* 引述块固化颜色（适配三层嵌套） */
         /* 每种 type 声明颜色变量 */
         &.orca-repr-quote2-quote {
+            --qc: var(--orca-color-text-2);
             --bg: rgb(from var(--my-color-text-1) R G B / 0.05);
             --bd: var(--my-bdcolor-quote-quote);
         }
@@ -294,22 +295,30 @@
 
 
 /* ————————————————————————————— 引述块只有一个子块时将简化显示（覆盖类型文本） ——————————————————————————— */
-/* selector脱离 */
-.orca-repr-quote2:not(.orca-repr-quote2-single):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector {
-    position: absolute;
-    padding: 0;
-    top: 12px;
-    left: var(--orca-spacing-lg);
-    z-index:1;
+
+/* 适配selector */
+.orca-repr-quote2:not(.orca-repr-quote2-single):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child)>.orca-repr-main{
+    /* 修复虎鲸css变更，1.88版本开始，自带的content-visibility会导致切换器不可见，在1.91版本中，issue523修法相同 */
+    &>.orca-container {
+        content-visibility:visible;
+    }
+
+    /* selector脱离 */
+    & .orca-repr-quote2-type-selector {
+        position: absolute;
+        padding: 0;
+        top: 12px;
+        left: var(--orca-spacing-lg);
+        z-index: 1;
+    }
+    /* 隐藏selector文本 */
+    & .orca-repr-quote2-type-selector>.orca-repr-quote2-type-text {
+        display:none;
+    }
 }
-/* 卡片背景尺寸缩短 */
+/* 引述卡片背景尺寸缩短 */
 .orca-repr-quote2:not(.orca-repr-quote2-single):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child)::before{
     bottom:.625em;
-}
-
-/* 隐藏selector文本 */
-.orca-repr-quote2:not(.orca-repr-quote2-single):has(>.orca-repr-children>.orca-block[data-type="text"]:only-child) .orca-repr-quote2-type-selector>.orca-repr-quote2-type-text {
-    display:none;
 }
 
 /* 顶层text块尺寸和single-quote一致 */
@@ -318,7 +327,6 @@
     padding-bottom: 1px;
     padding-left: 1em;
 }
-
 
 
 /* 子级缩进缩小 */
