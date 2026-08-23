@@ -68,6 +68,10 @@
 
     /* —————————————————————————————————————————————————————————————————————— */
     /* 下划线文本中，下划线往下偏移不遮挡qypgj */
-    .orca-inline.u{
-        text-underline-offset: .15625em;  /* 16px下 == 2.5px */
+    .orca-inline.u {
+        text-underline-offset: .15625em;  /* 1em == 16px下，值 == 2.5px */
+    }
+    /* 保留 content-visibility: auto 的性能优化，扩大裁剪区域，从而避免裁掉超出父元素边界的绘制内容。 */
+    .orca-container {
+        overflow-clip-margin: .15625em;
     }
