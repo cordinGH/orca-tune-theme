@@ -251,9 +251,13 @@
         position: absolute;
         position-anchor: --block-label;
         top: anchor(top);
-        left: 2.25rem;
+        left: calc(anchor(right) - var(--orca-spacing-md));
         /* 上下边距1和--block-label同步 */
         padding: var(--orca-spacing-md) 0 var(--orca-spacing-sm);
+    }
+    /* 取消计数器锚点的最小尺寸，以使得锚点定位在中英文下都能正常显示 */
+    .orca-menu-title.orca-search-modal-title {
+        min-width: unset;
     }
 }
 
