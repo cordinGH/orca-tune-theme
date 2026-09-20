@@ -208,9 +208,9 @@
     }
 
 
-    /* 虎鲸1.8左右的代码块上下多了个margin，看着有点不适，间距拉的有点大 */
-    .orca-no-editable-container>.orca-code-editor-container {
-        margin: 0;
+    /* 虎鲸1.80后的某一版本开始，代码块上下多了个边距，看着有点不适，间距拉的有点大 */
+    .orca-repr-main-content>.orca-no-editable-container:has(>.orca-repr-code-container) {
+        padding: 0;
     }
     .orca-repr-code-content>.orca-no-editable-container>.orca-no-editable-btn {
         translate: 8.5em;
